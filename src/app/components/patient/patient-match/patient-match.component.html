@@ -1,0 +1,269 @@
+<div class="content">
+    <mat-toolbar class="page-header-bar" color="primary">
+    <span>Patient Match</span>       
+    </mat-toolbar>
+
+
+    <mat-accordion>
+        <mat-expansion-panel style="box-shadow: none" [expanded]="true">
+            <mat-expansion-panel-header style="margin-left: -8px">
+                <mat-panel-title>Patient Information</mat-panel-title>
+            </mat-expansion-panel-header>
+    
+            <div>
+                <form [formGroup]="patientForm" class="dialog-form">                  
+       
+                    <div formGroupName="name" class="input-container">
+                        <mat-form-field appearance="outline" class="form-input ">
+                            <mat-label>Given Name</mat-label>
+                            <input matInput formControlName="given">
+                            <mat-error *ngIf="givenNameControl.hasError('required')">
+                              Given Name is <strong>required</strong>
+                            </mat-error>
+                        </mat-form-field>        
+                
+                        <mat-form-field appearance="outline" class="form-input ">
+                            <mat-label>Family Name</mat-label>
+                            <input matInput formControlName="family">
+                            <mat-error *ngIf="familyNameControl.hasError('required')">
+                              Family Name is <strong>required</strong>
+                            </mat-error>
+                        </mat-form-field>
+                    </div>     
+            
+                    <div class="input-container">            
+                        <mat-form-field class="form-select" appearance="outline">
+                            <mat-label>Gender</mat-label>
+                            <mat-select formControlName="gender">
+                                <mat-option>None</mat-option>
+                                <mat-option *ngFor="let gender of genderOptions" [value]="gender">
+                                    {{gender}}
+                                </mat-option>
+                            </mat-select>
+                            <mat-error *ngIf="genderControl.hasError('required')">
+                                Gender is <strong>required</strong>
+                            </mat-error>
+                        </mat-form-field>        
+                    
+                        <mat-form-field appearance="outline">
+                            <mat-label>Birth Date</mat-label>
+                            <input matInput formControlName="birthDate" [matDatepicker]="birthDatePicker">
+                            <mat-hint>MM/DD/YYYY</mat-hint>
+                            <mat-datepicker-toggle matIconSuffix [for]="birthDatePicker"></mat-datepicker-toggle>
+                            <mat-datepicker #birthDatePicker></mat-datepicker>
+                            <mat-error *ngIf="familyNameControl.hasError('required')">
+                                Birth Date is <strong>required</strong>
+                              </mat-error>
+                        </mat-form-field>                        
+                    </div>            
+                  
+                    <h4>Patient's Addess</h4>
+                    <div formGroupName="address">
+                        <div class="input-container"> 
+                            <mat-form-field appearance="outline">
+                                <mat-label>Address</mat-label>
+                                <textarea matInput formControlName="line" placeholder="Ex. 100 Main St"></textarea>
+                                <mat-error *ngIf="addressLineControl.hasError('required')">
+                                    Address is <strong>required</strong>
+                                  </mat-error>
+                            </mat-form-field>               
+                        </div>            
+                        <div class="input-container">
+                            <mat-form-field appearance="outline">
+                                <mat-label>City</mat-label>
+                                <input matInput formControlName="city" placeholder="Ex. San Francisco">
+                                <mat-error *ngIf="cityControl.hasError('required')">
+                                    City is <strong>required</strong>
+                                  </mat-error>
+                            </mat-form-field>
+                  
+                            <mat-form-field appearance="outline">
+                                <mat-label>State</mat-label>
+                                <input matInput formControlName="state" placeholder="Ex. California">
+                                <mat-error *ngIf="stateControl.hasError('required')">
+                                    State is <strong>required</strong>
+                                  </mat-error>
+                            </mat-form-field>
+                      
+                            <mat-form-field appearance="outline">
+                                <mat-label>Postal Code</mat-label>
+                                <input matInput #postalCode formControlName="postalCode" maxlength="5" placeholder="Ex. 94105">
+                                <mat-hint align="end">{{postalCodeControl.value.length}} / 5</mat-hint>
+                                <mat-error *ngIf="postalCodeControl.hasError('required')">
+                                    Postal Code is <strong>required</strong>
+                                  </mat-error>
+                            </mat-form-field>
+                        </div>                           
+                    </div>     
+                    
+                    <h4>Patient Telecom(s)</h4>
+                    <div formArrayName="telecom">
+                      <div *ngFor="let telecom of telecomForms.controls; let i=index">
+                        <div class="input-container" [formGroupName]="i">
+                            <mat-form-field class="form-select" appearance="outline">
+                                <mat-label>System</mat-label>
+                                <mat-select formControlName="system" [compareWith]="compareTelecomTypes">
+                                    <mat-option>None</mat-option>
+                                    <mat-option *ngFor="let system of telecomSystems" [value]="system">
+                                        {{system}}
+                                    </mat-option>
+                                </mat-select>                    
+                            </mat-form-field>  
+            
+                            <mat-form-field class="form-select" appearance="outline">
+                                <mat-label>Use</mat-label>
+                                <mat-select formControlName="use" [compareWith]="compareTelecomTypes">
+                                    <mat-option>None</mat-option>
+                                    <mat-option *ngFor="let use of telecomUseCases" [value]="use">
+                                        {{use}}
+                                    </mat-option>
+                                </mat-select>                    
+                            </mat-form-field>                 
+              
+                            <mat-form-field appearance="outline">
+                                <mat-label>Value</mat-label>
+                                <input matInput formControlName="value">
+                            </mat-form-field>
+            
+                            <button mat-icon-button aria-label="Remove telecom" (click)="removeTelecom(i)">
+                                <mat-icon>delete_outline</mat-icon>           
+                            </button>
+                        </div>
+                      </div>
+                    </div>
+                    <button mat-icon-button aria-label="Add a new patient telecom" (click)="addTelecom()">
+                        <mat-icon>add_box</mat-icon>           
+                    </button>
+                  
+                    <h4>Patient Identifier(s)</h4>
+                    <div formArrayName="identifier">
+                      <div *ngFor="let identifier of identifierForms.controls; let i=index">
+                        <div class="input-container" [formGroupName]="i">
+                            <mat-form-field class="form-select" appearance="outline">
+                                <mat-label>Type</mat-label>
+                                <mat-select formControlName="type" [compareWith]="compareIdentifierTypes">
+                                    <mat-option>None</mat-option>
+                                    <mat-option *ngFor="let type of identifierTypes" [value]="type.value">
+                                        {{type.key}}
+                                    </mat-option>
+                                </mat-select>                    
+                            </mat-form-field>  
+            
+                            <mat-form-field appearance="outline">
+                                <mat-label>System</mat-label>
+                                <input matInput formControlName="system">
+                            </mat-form-field>
+              
+                            <mat-form-field appearance="outline">
+                                <mat-label>Value</mat-label>
+                                <input matInput formControlName="value">
+                            </mat-form-field>
+            
+                            <button mat-icon-button aria-label="Remove patient identifier" (click)="removeIdentifier(i)">
+                                <mat-icon>delete_outline</mat-icon>           
+                            </button>
+                        </div>
+                      </div>
+                    </div>
+                    <button mat-icon-button aria-label="Add a new patient identifier" (click)="addIdentifier()">
+                        <mat-icon>add_box</mat-icon>          
+                    </button>
+                  </form> 
+            </div>
+            <div class="form-bar">                
+                <button mat-raised-button color="primary" [disabled]="patientForm.invalid" (click)="onSubmit()">
+                    <mat-icon>search</mat-icon>
+                    Find Patient matches
+                </button>       
+                <button mat-raised-button (click)="clearSearchParameters()">
+                    <mat-icon>clear</mat-icon>
+                    Clear Patient Info
+                </button>     
+            </div>
+          
+        </mat-expansion-panel>
+      </mat-accordion>    
+
+      <mat-tab-group animationDuration="500ms" *ngIf="matchResults && patients && patients">
+        <mat-tab label="Match Results"> 
+            
+            <table mat-table [dataSource]="patients">
+
+                <!-- Id Column -->
+                <ng-container matColumnDef="id">
+                  <th mat-header-cell *matHeaderCellDef> FHIR Id </th>
+                  <td mat-cell *matCellDef="let patient"> {{patient.resource.id}} </td>
+                </ng-container>
+        
+                <!-- MRN Column -->
+                <ng-container matColumnDef="mrn">
+                  <th mat-header-cell *matHeaderCellDef> MRN </th>
+                  <td mat-cell *matCellDef="let patient"> {{getMRN(patient.resource.identifier)}} </td>
+                </ng-container>
+          
+                <!-- Given Name Column -->
+                <ng-container matColumnDef="givenName">
+                  <th mat-header-cell *matHeaderCellDef> Given Name </th>
+                  <td mat-cell *matCellDef="let patient"> {{getGivenName(patient.resource.name)}} </td>
+                </ng-container>
+        
+                 <!-- Family Name Column -->
+                 <ng-container matColumnDef="familyName">
+                  <th mat-header-cell *matHeaderCellDef> Family Name </th>
+                  <td mat-cell *matCellDef="let patient"> {{getFamilyName(patient.resource.name)}} </td>
+                </ng-container>
+        
+                 <!-- Gender Column -->
+                 <ng-container matColumnDef="gender">
+                  <th mat-header-cell *matHeaderCellDef> Gender </th>
+                  <td mat-cell *matCellDef="let patient"> {{patient.resource.gender}} </td>
+                </ng-container>
+        
+                <!-- Birthdate Column -->
+                <ng-container matColumnDef="birthDate">
+                  <th mat-header-cell *matHeaderCellDef> Birth Date </th>
+                  <td mat-cell *matCellDef="let patient"> {{patient.resource.birthDate | date : 'mediumDate'}} </td>
+                </ng-container>
+        
+                <ng-container matColumnDef="score">
+                    <th mat-header-cell *matHeaderCellDef> Score </th>
+                    <td mat-cell *matCellDef="let patient"> {{patient.search.score}} </td>
+                </ng-container>
+          
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="showPatientViewDialog($event, row)"></tr>
+          
+              </table>   
+              <!-- <mat-paginator [length]="paginationMetadata.totalCount"
+                         [pageIndex]="paginationMetadata.pageNumber"
+                         [pageSize]="paginationMetadata.pageSize"
+                         [pageSizeOptions]="[5, 10, 20]"
+                         (page)="pagedEvent($event)"
+                         showFirstLastButtons
+                         aria-label="Select page of facilities">
+              </mat-paginator>   -->
+       
+            <ng-template #no_patients_found>
+              <div class="no-results-found-container">
+                <span>No patients found.</span>
+              </div>    
+            </ng-template>
+ 
+        </mat-tab>
+        <mat-tab label="JSON">  
+            <mat-card class="resource-card">
+                <mat-card-header>                    
+                    <button mat-icon-button (click)="copyResults()">
+                        <mat-icon>content_copy</mat-icon>
+                    </button>                                    
+                  </mat-card-header>
+                <mat-card-content>
+                    <pre>{{ matchResults | json }}</pre>
+                </mat-card-content>
+            </mat-card>   
+        </mat-tab>
+      </mat-tab-group>
+      
+
+</div>    
+

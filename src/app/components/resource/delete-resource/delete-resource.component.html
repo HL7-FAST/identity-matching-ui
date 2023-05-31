@@ -1,0 +1,39 @@
+<div class="content">
+    <mat-toolbar class="page-header-bar" color="primary">
+        <span>Delete Resources</span>       
+      </mat-toolbar>
+
+      <div class="resource-container">
+        <div class="resource-form-grid">
+            <form [formGroup]="resourceForm">
+                
+                <mat-form-field class="form-select" appearance="outline" class="resource-input">
+                    <mat-label>Resource Type</mat-label>
+                    <mat-select formControlName="resourceType">
+                        <mat-option>None</mat-option>
+                        <mat-option *ngFor="let type of resourceTypes" [value]="type">
+                            {{type}}
+                        </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="resourceTypeControl.hasError('required')">
+                        Resource Type is <strong>required</strong>
+                    </mat-error>
+                </mat-form-field>       
+                
+                <mat-form-field appearance="outline" class="form-input" class="resource-input">
+                    <mat-label>Id</mat-label>
+                    <input matInput formControlName="id">
+                    <mat-error *ngIf="resourceIdControl.hasError('required')">
+                      Resource Id is <strong>required</strong>
+                    </mat-error>
+                </mat-form-field>         
+            </form>
+            <button mat-raised-button color="primary" [disabled]="resourceForm.invalid" (click)="deleteResource()">
+                <mat-icon>delete_outline</mat-icon>
+                Delete {{resourceTypeControl.value}}
+            </button>
+        </div>
+    </div>
+
+</div>
+

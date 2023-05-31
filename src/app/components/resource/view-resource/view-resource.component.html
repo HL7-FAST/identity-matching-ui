@@ -1,0 +1,52 @@
+<div class="content">
+    <mat-toolbar class="page-header-bar" color="primary">
+        <span>View Resources</span>       
+      </mat-toolbar>
+
+      <div class="resource-container">
+        <div class="resource-form-grid">
+            <form [formGroup]="resourceForm">
+                
+                <mat-form-field class="form-select" appearance="outline" class="resource-input">
+                    <mat-label>Resource Type</mat-label>
+                    <mat-select formControlName="resourceType">
+                        <mat-option>None</mat-option>
+                        <mat-option *ngFor="let type of resourceTypes" [value]="type">
+                            {{type}}
+                        </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="resourceTypeControl.hasError('required')">
+                        Resource Type is <strong>required</strong>
+                    </mat-error>
+                </mat-form-field>       
+                
+                <mat-form-field appearance="outline" class="form-input" class="resource-input">
+                    <mat-label>Id</mat-label>
+                    <input matInput formControlName="id">
+                    <mat-error *ngIf="resourceIdControl.hasError('required')">
+                      Resource Id is <strong>required</strong>
+                    </mat-error>
+                </mat-form-field>         
+            </form>
+            <button mat-raised-button color="primary" [disabled]="resourceForm.invalid" (click)="getResource()">
+                <mat-icon>search</mat-icon>
+                Get {{resourceTypeControl.value}}
+            </button>
+        </div>
+        <div class="resource-grid">            
+            <mat-card class="resource-card" *ngIf="resource">
+                <mat-card-header>
+                    <mat-card-title>{{resourceTypeControl.value}} Resource</mat-card-title> 
+                    <button mat-icon-button (click)="copyResource()">
+                        <mat-icon>content_copy</mat-icon>
+                    </button>                                    
+                  </mat-card-header>
+                <mat-card-content>
+                    <pre>{{ resource | json }}</pre>
+                </mat-card-content>
+            </mat-card>              
+        </div>
+    </div>
+
+</div>
+

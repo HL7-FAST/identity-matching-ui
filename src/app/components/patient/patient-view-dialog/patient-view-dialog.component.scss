@@ -1,0 +1,82 @@
+@use '../../../../styles/core.scss';
+
+.dialog-form-header {
+  font-size: large;
+  font-weight: 600;
+}
+
+.dialog-form {
+  margin-top: 1em;
+}
+
+.dialog-container {
+  margin-top: 1em;
+}
+
+.chip-list {
+  width: 100%;
+}
+
+.input-container {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
+  grid-column-gap: 0.5em;
+}
+
+.input-container p {
+ margin-left: 1em; 
+}
+
+.select-container mat-form-field {
+  margin-bottom: 1em;
+  width: 100%;
+}
+
+.form-input {
+    margin-bottom: 1em;
+}
+
+.notification-type-input {
+    width: 50%;
+}
+
+.facility-input {
+  width: 50%;
+}
+
+.subject-input {
+  width: 100%;
+}
+
+.body-input {
+    min-height: 50px;
+    width: 100%;
+}
+
+.user-icon {
+  float: right;
+  font-size: 200px;
+  height: 200px;
+  //margin-right: .5em;
+  width: 200px;
+}
+
+.telecom-entries {
+  border: 1px solid rgba(0,0,0,.80);
+  list-style-type: none;
+  margin-top: 1em;
+  margin-bottom: 1em;
+}
+
+.identifier-entries {
+  border: 1px solid rgba(0,0,0,.80);
+  list-style-type: none;
+  margin-top: 1em;
+  margin-bottom: 1em;
+}
+
+.patient-resource-card {
+  border: 1px solid rgba(0,0,0,.15);
+  margin-bottom: 1em;
+}

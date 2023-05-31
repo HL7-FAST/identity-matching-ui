@@ -1,0 +1,44 @@
+@use '../../../../styles/core.scss';
+
+.content {
+  margin: 2em;
+}
+
+.page-header-bar button {
+  margin-left: auto;
+}
+
+.resource-container {
+  display: grid;
+  column-gap: 1em;
+  grid-template-columns: [col1] 25% [col2] auto;
+}
+
+.resource-form-grid {
+  margin-top: 1em;
+  //max-width: 25em;
+}
+
+.resource-grid {
+  //npm sflex-grow: 1;  
+  margin-top: 1em;
+}
+
+.resource-input {
+    margin-bottom: 1em;
+    width: 100%;
+}
+
+.resource-card {
+  border: 1px solid rgba(0,0,0,.15);  
+  width: 100%;
+}
+
+.resource-card .mdc-icon-button {
+  margin-left: auto;
+}
+
+pre {
+    white-space: pre-wrap;
+}
+  

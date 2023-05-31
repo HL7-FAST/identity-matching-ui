@@ -1,0 +1,50 @@
+<h1 mat-dialog-title class="dialog-form-header">{{data.dialogTitle}}</h1>
+<div mat-dialog-content>
+    <mat-card class="patient-resource-card">
+        <mat-card-content>
+            <div class="input-container">
+                <div>
+                    <p><strong>ID:</strong> {{ patient.id }}</p>
+                    <p><strong>Name:</strong> {{patient.name ? patient.name[0].given : ''}}  {{patient.name ? patient.name[0].family : ''}}</p>
+                    <p><strong>Gender:</strong> {{ patient.gender }}</p>
+                    <p><strong>Birth Date:</strong> {{ patient.birthDate | date : 'mediumDate' }}</p>
+                </div>
+                <div>
+                    <p><strong>Address:</strong></p>
+                    <p>{{patient.address ? patient.address[0].line : '' }}</p>
+                    <p>{{patient.address ?  patient.address[0].city : ''}}, {{patient.address ? patient.address[0].state : ''}} {{patient.address ?  patient.address[0].postalCode : ''}}</p>
+                </div>
+                <div>
+                    <mat-icon class="user-icon">account_circle</mat-icon>
+                </div>
+            </div>  
+        </mat-card-content>
+    </mat-card>    
+    <div>    
+        <p><strong>Telecom(s):</strong></p>
+        <mat-card class="patient-resource-card" *ngFor="let telecom of patient.telecom">
+            <mat-card-content>
+                <div class="input-container">
+                    <p><strong>System:</strong> {{ telecom.system }}</p>
+                    <p><strong>Use:</strong> {{telecom.use}}</p>
+                    <p><strong>Value:</strong> {{ telecom.value }}</p>
+                </div>   
+            </mat-card-content>
+        </mat-card>        
+    </div>
+    <div>    
+        <p><strong>Identifier(s):</strong></p>
+        <mat-card class="patient-resource-card" *ngFor="let identifier of patient.identifier">
+            <mat-card-content>
+                <div class="input-container">
+                    <p><strong>Type:</strong> {{ identifier.type ? identifier.type.text : '' }}</p>
+                    <p><strong>System:</strong> &nbsp;<a href="{{identifier.system}}" target="_blank">{{ identifier.system }}</a></p>
+                    <p><strong>Value:</strong> {{ identifier.value }}</p>
+                </div>   
+            </mat-card-content>
+        </mat-card>
+    </div>
+</div>
+<div mat-dialog-actions align="end">
+    <button mat-raised-button mat-dialog-close>Close</button>
+</div>
