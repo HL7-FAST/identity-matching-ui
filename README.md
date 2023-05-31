@@ -51,7 +51,17 @@ OAuthModule.forRoot({
 })
 ```
 
-You will probably also want to remove the `AuthBypassInterceptor` from `interceptor.barrel.ts`.
+You will probably also want to remove the `AuthBypassInterceptor` from `interceptor.barrel.ts`. This interceptor is related to the `auth-bypass` component which allows requests to ignore the sceurity settings of the FAST Identity Matching FHIR server. If you are using this against your own fhir server that does not have security enabled this will be uncessary and can be removed as well. The component can be found in the `app.module` imports as well as `app.component`.
+
+```
+<span class="toolbar-divider">
+    <app-auth-bypass></app-auth-bypass>
+</span>
+```
+
+```
+
+```
 
 ## Development server
 
