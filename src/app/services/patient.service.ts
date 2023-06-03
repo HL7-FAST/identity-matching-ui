@@ -13,8 +13,18 @@ export class PatientService {
 
   constructor(private http: HttpClient) { }
 
-  list(): Observable<Bundle<Patient>> {
-    return this.http.get<Bundle<Patient>>(`${this.baseApiUrl}/Patient`)
+  list(queryString: string): Observable<Bundle<Patient>> {
+
+    let requestUrl = `${this.baseApiUrl}/Patient`;
+
+    if (queryString.startsWith(`${this.baseApiUrl}`)) {
+      requestUrl = queryString;
+    }  
+    else {
+      requestUrl = requestUrl.concat(queryString);
+    }
+
+    return this.http.get<Bundle<Patient>>(`${requestUrl}`)
     .pipe(
       tap(_ => console.log(`fetched audit logs.`)),
       map((response: Bundle<Patient>) => {        

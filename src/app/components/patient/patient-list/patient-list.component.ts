@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
-import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatExpansionModule } from '@angular/material/expansion';
@@ -18,6 +18,7 @@ import { PatientFormDialogComponent } from '../patient-form-dialog/patient-form-
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { DeleteItemDialogComponent } from '../../core/delete-item-dialog/delete-item-dialog.component';
 import { PatientViewDialogComponent } from '../patient-view-dialog/patient-view-dialog.component';
+import { PaginationMetadata } from 'src/app/models/pagination-metadata.model';
 
 @Component({
   selector: 'app-patient-list',
@@ -42,23 +43,53 @@ import { PatientViewDialogComponent } from '../patient-view-dialog/patient-view-
   styleUrls: ['./patient-list.component.scss']
 })
 export class PatientListComponent {
-  private initPageSize: number = 10;
-  private initPageNumber: number = 0;
+  pageSize: number = 20;
+  pageNumber: number = 0;
+  totalCount: number = 0;
+  defaultLink: string = `?_count=${this.pageSize}`;
+  nextLink: string = '';
+  prevLink: string = '';
   patientBundle!: Bundle<Patient>;
   patients: BundleEntry<Patient>[] | undefined = [];
+  paginationMetadata: PaginationMetadata = new PaginationMetadata;
 
   displayedColumns: string[] = [ "id", 'mrn', 'givenName', 'familyName', 'gender', 'birthDate', 'actions' ];
   dataSource = new MatTableDataSource<BundleEntry<Patient>>(this.patients);
 
   constructor(private patientService: PatientService, private dialog: MatDialog, private snackBar: MatSnackBar) {
-    this.getPatients();
+    this.getPatients(this.defaultLink);
   }
 
-  getPatients() {
-    this.patientService.list().subscribe(data => {
+  getPatients(queryString: string) {
+    this.patientService.list(queryString).subscribe(data => {
       this.patientBundle = data;
-      this.patients = data.entry;
+      this.patients = data.entry; 
+
+      this.totalCount = data.total ? data.total : 0;
+      
+      if(data.link) {
+        let next = data.link.find(x => x.relation === "next");
+        this.nextLink = next ? next.url : '';
+
+        let prev = data.link.find(x => x.relation === "previous");
+        this.prevLink = prev ? prev.url : '';
+      }
     });
+  }
+
+  pagedEvent(event: PageEvent) {
+    if(this.pageSize != event.pageSize) {
+      this.pageNumber = 0;
+      this.pageSize = event.pageSize;
+      this.defaultLink = `?_count=${this.pageSize}`;
+      this.getPatients(this.defaultLink);
+    }
+    else if(this.pageNumber < event.pageSize) {
+      this.getPatients(this.nextLink);
+    }
+    else {
+      this.getPatients(this.prevLink);
+    }
   }
 
   getMRN(identifiers: Identifier[]) {
@@ -124,7 +155,7 @@ export class PatientListComponent {
       }).afterClosed().subscribe(res => {
         console.log(res)
         if (res) {
-          this.getPatients();
+          this.getPatients(this.defaultLink);
           this.snackBar.open(`${res}`, '', {
             duration: 3500,
             panelClass: 'success-snackbar',
@@ -149,7 +180,7 @@ export class PatientListComponent {
           data: { dialogTitle: `Edit patient record for ${patient && patient.name ? patient.name[0]._given + ' ' +  patient.name[0].family : 'unknown'}`, patient: patient }
         }).afterClosed().subscribe(res => {       
           if (res) {
-            this.getPatients();
+            this.getPatients(this.defaultLink);
             this.snackBar.open(`${res}`, '', {
               duration: 3500,
               panelClass: 'success-snackbar',
@@ -189,7 +220,7 @@ export class PatientListComponent {
         }).afterClosed().subscribe(res => {
           if (res) {
             this.patientService.delete(patientId).subscribe(outcome => {
-              this.getPatients();
+              this.getPatients(this.defaultLink);
               this.snackBar.open(`Successfully deleted the notification configuration for ${patient && patient.name ? patient.name[0]._given + ' ' +  patient.name[0].family : 'unknown'}`, '', {
                 duration: 3500,
                 panelClass: 'success-snackbar',
