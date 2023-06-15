@@ -14,7 +14,7 @@ $hl7-blue-theme: mat.define-light-theme((
     )
   ));
 
-//@include mat.all-component-themes($hl7-blue-theme);
+@include mat.all-component-themes($hl7-blue-theme);
 
 .hl7-blue {
   @include mat.all-component-colors($hl7-blue-theme);
