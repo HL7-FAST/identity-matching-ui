@@ -1,24 +1,25 @@
 import { AuthConfig } from 'angular-oauth2-oidc';
+import { environment } from 'src/environments/environment';
 
 export const authCodeFlowConfig: AuthConfig = {
   // Url of the Identity Provider
-  issuer: '',
+  issuer: environment.idpIssuer,
 
   // URL of the SPA to redirect the user to after login
-  redirectUri: window.location.origin + '/',
+  redirectUri: environment.redirectUri,
 
-  loginUrl: window.location.origin + '/',
+  loginUrl:  environment.loginUrl,
 
   // The SPA's id. The SPA is registerd with this id at the auth-server
   // clientId: 'server.code',
-  clientId: '',
+  clientId: environment.idpClientId,
 
   // Just needed if your auth server demands a secret. In general, this
   // is a sign that the auth server is not configured with SPAs in mind
   // and it might not enforce further best practices vital for security
   // such applications.
   // dummyClientSecret: 'secret',
-  dummyClientSecret: '',
+  dummyClientSecret: environment.idpClientSecret,
 
   responseType: 'code',
 
@@ -26,7 +27,9 @@ export const authCodeFlowConfig: AuthConfig = {
   // The first four are defined by OIDC.
   // Important: Request offline_access to get a refresh token
   // The api scope is a usecase specific one
-  scope: 'openid profile email',
+  scope: environment.idpScope,
 
   showDebugInformation: true,
+
+  requireHttps: false
 };
