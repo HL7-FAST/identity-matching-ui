@@ -1,0 +1,22 @@
+FROM node:18-alpine as build
+
+RUN mkdir /project
+WORKDIR /project
+
+COPY package.json package-lock.json ./
+RUN npm ci
+
+COPY . .
+RUN npm run build
+
+
+
+FROM nginx:stable-alpine
+
+RUN rm -rf /usr/share/nginx/html
+COPY --from=build /project/dist/fhir-client /usr/share/nginx/html
+
+RUN chown -R nginx:nginx /usr/share/nginx/html
+EXPOSE 80
+
+CMD ["nginx", "-g", "daemon off;"]

@@ -2,6 +2,61 @@
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 16.0.0.
 
+
+## Running locally
+1. Install [Node.js](https://nodejs.org) (tested on Node.js 18+)
+2. Clone the repository
+    ```sh
+    git clone https://github.com/HL7-FAST/identity-matching-ui/
+    ```
+3. Install node-modules:
+    ```sh
+    npm ci
+    ```
+4. Run the application
+    ```sh
+    npm start
+    ```
+5. The application is now running on http://localhost:4200
+
+
+## Running in Docker
+
+1. Install [Docker](https://docs.docker.com/get-docker/)
+2. Clone the repository
+    ```sh
+    git clone https://github.com/HL7-FAST/identity-matching-ui/
+    ```
+3. Use Docker Compose or build and run the Docker image
+
+### Using Docker Compose
+
+1. Build and run:
+    ```sh
+    docker compose up
+    ```
+    or detached:
+    ```sh
+    docker compose up -d
+    ```
+
+### Building and running Docker image
+
+1. Build the identity-matching-ui image:
+    ```sh
+    docker build -t identity-matching-ui .
+    ```
+2. Run identity-matching-ui in Docker:
+    ```sh
+    docker run -p 80:80 identity-matching-ui
+    ``` 
+    or detached: 
+    ```sh
+    docker run -dp 80:80 identity-matching-ui
+    ``` 
+3. The application is now running on http://localhost
+
+
 ## Auth Code Flow Config
 You will need to configure your identity provider or remove the security from the project
 
@@ -59,13 +114,6 @@ You will probably also want to remove the `AuthBypassInterceptor` from `intercep
 </span>
 ```
 
-```
-
-```
-
-## Development server
-
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
 
 ## Code scaffolding
 
