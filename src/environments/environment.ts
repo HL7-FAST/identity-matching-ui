@@ -4,14 +4,15 @@
 
 export const environment = {
   production: false,
-  baseApiUrl: "https://identity-matching.fast.hl7.org/fhir",
-  authBypassSessionKey: "auth-bypass-header-enabled",
-  idpIssuer: "https://oauth.lantanagroup.com/auth/realms/Connectathon",
-  idpClientId: 'fast-identity-matching',
+  baseApiUrl: 'http://localhost:8080/fhir',
+  authBypassSessionKey: 'auth-bypass-header-enabled',
+  idpIssuer: '',
+  idpClientId: '',
   idpClientSecret: '',
-  idpScope: 'openid profile email',
-  redirectUri: window.location.origin + '/',
-  loginUrl: window.location.origin + '/',
+  idpScope: 'openid user/*.read user/*.rs',
+  clientName: 'Identity Matching Client',
+  redirectUri: window.location.origin,
+  // loginUrl: 'https://localhost:5001/connect/authorize',
 };
 
 /*

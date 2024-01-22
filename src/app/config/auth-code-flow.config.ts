@@ -3,12 +3,12 @@ import { environment } from 'src/environments/environment';
 
 export const authCodeFlowConfig: AuthConfig = {
   // Url of the Identity Provider
-  issuer: environment.idpIssuer,
+  // issuer: environment.idpIssuer,
 
   // URL of the SPA to redirect the user to after login
   redirectUri: environment.redirectUri,
 
-  loginUrl:  environment.loginUrl,
+  // loginUrl:  environment.loginUrl,
 
   // The SPA's id. The SPA is registerd with this id at the auth-server
   // clientId: 'server.code',
@@ -28,6 +28,8 @@ export const authCodeFlowConfig: AuthConfig = {
   // Important: Request offline_access to get a refresh token
   // The api scope is a usecase specific one
   scope: environment.idpScope,
+
+  disablePKCE: true,
 
   showDebugInformation: true,
 
