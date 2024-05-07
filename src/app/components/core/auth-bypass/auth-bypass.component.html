@@ -1,4 +1,5 @@
-<mat-checkbox class="auth-bypass-cb"                                    
+<mat-checkbox class="auth-bypass-cb"
+    [checked]="enableBypass"
     (change)="setBypassStatus($event.checked)">
     Auth Bypass {{enableBypass ? 'Enabled' : 'Disabled'}}
 </mat-checkbox>
