@@ -4,6 +4,8 @@ import { Breakpoints, BreakpointObserver } from '@angular/cdk/layout';
 import { Observable, map, shareReplay } from 'rxjs';
 import { UserProfileService } from './services/core/user-profile.service';
 import { AuthenticationService } from './services/auth/authentication.service';
+import { MatDialog } from '@angular/material/dialog';
+import { SessionDialogComponent } from './components/core/session-dialog/session-dialog.component';
 
 @Component({
   selector: 'app-root',
@@ -21,7 +23,7 @@ export class AppComponent {
       shareReplay()
     );
 
-  constructor(private breakpointObserver: BreakpointObserver, private authService: AuthenticationService, private profileService: UserProfileService) {
+  constructor(private breakpointObserver: BreakpointObserver, private authService: AuthenticationService, private profileService: UserProfileService, private dialog: MatDialog) {
 
     this.profileService.userProfileUpdated.subscribe(profile => {
       this.userProfile = profile;
@@ -39,6 +41,16 @@ export class AppComponent {
 
   toggleMenuText() {
     this.showMenuText = !this.showMenuText;
+  }
+
+  showSessionDialog($event: Event) {
+    $event.stopPropagation();
+
+    this.dialog.open(SessionDialogComponent, { minWidth: '50vw' }).afterClosed().subscribe(res => {
+      if (res) {
+        window.location.reload();
+      }
+    });
   }
 
 }

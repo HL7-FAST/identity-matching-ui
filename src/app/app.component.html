@@ -10,6 +10,11 @@
   <span class="toolbar-divider">FAST Identity Matching</span>
   <span class="example-spacer"></span>
   <span class="toolbar-divider">
+    <button mat-icon-button matTooltip="Session Info" (click)="showSessionDialog($event)">
+      <mat-icon>info</mat-icon>
+    </button>
+  </span>
+  <span class="toolbar-divider">
     <app-auth-bypass></app-auth-bypass>
   </span>
   <span class="toolbar-divider">

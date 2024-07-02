@@ -24,6 +24,8 @@ import { LoadingIndicatorComponent } from './components/core/loading-indicator/l
 import { StyleManagerService } from './services/core/style-manager-service';
 
 import { environment } from '../environments/environment';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 
 
@@ -50,8 +52,10 @@ import { environment } from '../environments/environment';
         AppRoutingModule,
         LayoutModule,
         MatToolbarModule,
+        MatTooltipModule,
         MatExpansionModule,
         MatButtonModule,
+        MatDialogModule,
         MatSidenavModule,
         MatIconModule,
         MatListModule,
