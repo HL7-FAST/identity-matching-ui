@@ -2,6 +2,8 @@
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 16.0.0.
 
+## Foundry
+A live demo is hosted by [HL7 FHIR Foundry](https://foundry.hl7.org/products/25085a28-345a-48b9-9b5c-4d3b857b5d5a), where you may also download curated configurations to run yourself.
 
 ## Running locally
 1. Install [Node.js](https://nodejs.org) (tested on Node.js 18+)
