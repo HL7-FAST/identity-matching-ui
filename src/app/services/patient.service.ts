@@ -68,7 +68,7 @@ export class PatientService {
   }
 
   match(parameters: Parameters) : Observable<Bundle> {
-    return this.http.post<Bundle>(`${this.baseApiUrl}/Patient/$match`, parameters)
+    return this.http.post<Bundle>(`${this.baseApiUrl}/Patient/$idi-match`, parameters)
     .pipe(
       tap(_ => console.log(`submit patient for deletion`)),
       map((response: any) => {

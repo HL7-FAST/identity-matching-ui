@@ -224,11 +224,6 @@
                   <th mat-header-cell *matHeaderCellDef> Birth Date </th>
                   <td mat-cell *matCellDef="let patient"> {{patient.resource.birthDate | date : 'mediumDate'}} </td>
                 </ng-container>
-        
-                <ng-container matColumnDef="score">
-                    <th mat-header-cell *matHeaderCellDef> Score </th>
-                    <td mat-cell *matCellDef="let patient"> {{patient.search.score}} </td>
-                </ng-container>
           
                 <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                 <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="showPatientViewDialog($event, row)"></tr>

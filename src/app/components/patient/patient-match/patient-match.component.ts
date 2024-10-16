@@ -51,7 +51,7 @@ export class PatientMatchComponent implements OnInit {
   matchResults!: Bundle;
   patients: BundleEntry<Patient>[] | undefined = [];
 
-  displayedColumns: string[] = [ "id", 'mrn', 'givenName', 'familyName', 'gender', 'birthDate', 'score' ];
+  displayedColumns: string[] = [ "id", 'mrn', 'givenName', 'familyName', 'gender', 'birthDate' ];
   dataSource = new MatTableDataSource<BundleEntry<Patient>>(this.patients);
   
   genderOptions: string[] = ['male', 'female', 'other', 'uknown'];
@@ -252,7 +252,7 @@ export class PatientMatchComponent implements OnInit {
       let matchParam: Parameters = { resourceType: "Parameters" };
       matchParam.parameter = [];
       matchParam.parameter = [
-        { name: "resource", resource: patientData },
+        { name: "patient", resource: patientData },
         { name: "count", valueInteger: 5 },
         { name: "onlyCertainMatches", valueBoolean: false }
       ];   
@@ -261,13 +261,13 @@ export class PatientMatchComponent implements OnInit {
         if(data) {
           this.matchResults = data; 
           if(data.entry != undefined && data.entry.length > 0) {
-            this.patients = data.entry as BundleEntry<Patient>[];
+            this.patients = data.entry.filter(e => e.resource && e.resource.resourceType === "Patient") as BundleEntry<Patient>[];
           } 
           else {
             this.patients = [];
           }          
                   
-          this.snackBar.open(`${this.matchResults.entry ? this.matchResults.entry.length : 0} possible matches found.`, '', {
+          this.snackBar.open(`${this.patients ? this.patients.length : 0} possible matches found.`, '', {
             duration: 3500,
             panelClass: 'success-snackbar',
             horizontalPosition: 'end',
@@ -275,7 +275,7 @@ export class PatientMatchComponent implements OnInit {
           });
         }        
         else {
-          this.snackBar.open(`Failed to create patient, see console for details.`, '', {
+          this.snackBar.open(`Match operation failed, see console for details.`, '', {
             duration: 3500,
             panelClass: 'error-snackbar',
             horizontalPosition: 'end',

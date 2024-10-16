@@ -131,7 +131,7 @@ export class CapabilityStatementComponent implements OnInit {
 
   serverHasFastIdentityMatchingOperation() : boolean {
     if(this.patientReourceCapabilities?.operation) {
-      return this.serverHasOperation(this.patientReourceCapabilities?.operation, "$match");
+      return this.serverHasOperation(this.patientReourceCapabilities?.operation, "idi-match");
     }
     else
     {
