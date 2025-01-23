@@ -16,9 +16,8 @@ export class ErrorInterceptor implements HttpInterceptor {
         this.router.navigate(['unauthorized']);
       }
 
-      const error = err.error?.message || err.statusText;
       console.error(err);
-      return throwError(() => error);
+      return throwError(() => err);
     }))
   }
 }

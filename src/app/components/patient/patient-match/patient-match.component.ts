@@ -257,32 +257,43 @@ export class PatientMatchComponent implements OnInit {
         { name: "onlyCertainMatches", valueBoolean: false }
       ];   
 
-      this.patientService.match(matchParam).subscribe(data => {          
-        if(data) {
-          this.matchResults = data; 
-          if(data.entry != undefined && data.entry.length > 0) {
-            this.patients = data.entry.filter(e => e.resource && e.resource.resourceType === "Patient") as BundleEntry<Patient>[];
-          } 
+      this.patientService.match(matchParam).subscribe({
+        next: data => {
+          if(data) {
+            this.matchResults = data; 
+            if(data.entry != undefined && data.entry.length > 0) {
+              this.patients = data.entry.filter(e => e.resource && e.resource.resourceType === "Patient") as BundleEntry<Patient>[];
+            } 
+            else {
+              this.patients = [];
+            }          
+                    
+            this.snackBar.open(`${this.patients ? this.patients.length : 0} possible matches found.`, '', {
+              duration: 3500,
+              panelClass: 'success-snackbar',
+              horizontalPosition: 'end',
+              verticalPosition: 'top'
+            });
+          }        
           else {
-            this.patients = [];
-          }          
-                  
-          this.snackBar.open(`${this.patients ? this.patients.length : 0} possible matches found.`, '', {
-            duration: 3500,
-            panelClass: 'success-snackbar',
-            horizontalPosition: 'end',
-            verticalPosition: 'top'
-          });
-        }        
-        else {
-          this.snackBar.open(`Match operation failed, see console for details.`, '', {
-            duration: 3500,
+            this.snackBar.open(`Match operation failed, see console for details.`, '', {
+              duration: 3500,
+              panelClass: 'error-snackbar',
+              horizontalPosition: 'end',
+              verticalPosition: 'top'
+            });
+          }
+        },
+        error: error => {
+          console.error('Match error:', error);
+          this.snackBar.open(`Match operation failed: ${error}`, 'Close', {
+            // duration: 3500,
             panelClass: 'error-snackbar',
             horizontalPosition: 'end',
             verticalPosition: 'top'
           });
         }
-      });             
+      });        
     }
   }
 

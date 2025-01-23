@@ -80,9 +80,11 @@ export class PatientService {
 
   private handleError(err: HttpErrorResponse) {
     let errorMessage = '';
-
     if (err.error instanceof ErrorEvent) {
       errorMessage = `An error occured: ${err.error.message}`;
+    }
+    else if (err.error instanceof Object && err.error.issue instanceof Array) {
+      errorMessage = (err.error.issue || []).filter((issue: any) => issue.severity === 'error').map((issue: any) => issue.diagnostics).join('\n');
     }
     else {
       errorMessage = `Server returned code: ${err.status}, error message is: ${err.message}`;
