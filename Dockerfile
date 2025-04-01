@@ -20,4 +20,4 @@ COPY --from=build /project/dist/fhir-client /usr/share/nginx/html
 RUN chown -R nginx:nginx /usr/share/nginx/html
 EXPOSE 80
 
-CMD ["nginx", "-g", "daemon off;"]
+CMD ["/bin/sh",  "-c",  "envsubst < /usr/share/nginx/html/assets/env.template.js > /usr/share/nginx/html/assets/env.js && exec nginx -g 'daemon off;'"]

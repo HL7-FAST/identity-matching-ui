@@ -23,7 +23,7 @@
       "ES2022",
       "dom"
     ],
-    "typeRoots": ["node_modules/@angular/material", "@types/fhir"]
+    "typeRoots": ["node_modules/@types"]
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,

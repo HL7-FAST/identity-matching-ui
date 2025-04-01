@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  baseApiUrl: 'http://localhost:8080/fhir',
+  baseApiUrl: (window as any)['env']['baseApiUrl'] || 'http://localhost:8080/fhir',
   authBypassSessionKey: 'auth-bypass-header-enabled',
   idpIssuer: '',
   idpClientId: '',
