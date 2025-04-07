@@ -79,10 +79,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "fhir-client:build:production"
+              "buildTarget": "fhir-client:build:production"
             },
             "development": {
-              "browserTarget": "fhir-client:build:development"
+              "buildTarget": "fhir-client:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -90,7 +90,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "fhir-client:build"
+            "buildTarget": "fhir-client:build"
           }
         },
         "test": {
