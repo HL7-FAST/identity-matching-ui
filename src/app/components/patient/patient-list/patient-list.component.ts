@@ -21,26 +21,25 @@ import { PatientViewDialogComponent } from '../patient-view-dialog/patient-view-
 import { PaginationMetadata } from 'src/app/models/pagination-metadata.model';
 
 @Component({
-  selector: 'app-patient-list',
-  standalone: true,
-  imports: [
-    CommonModule,
-    MatTableModule,
-    MatPaginatorModule,
-    MatExpansionModule,
-    FormsModule,
-    MatFormFieldModule,
-    MatSelectModule,
-    MatInputModule,
-    MatIconModule,
-    MatButtonModule,
-    MatTooltipModule,
-    MatToolbarModule,
-    MatDialogModule,
-    MatSnackBarModule
-  ],
-  templateUrl: './patient-list.component.html',
-  styleUrls: ['./patient-list.component.scss']
+    selector: 'app-patient-list',
+    imports: [
+        CommonModule,
+        MatTableModule,
+        MatPaginatorModule,
+        MatExpansionModule,
+        FormsModule,
+        MatFormFieldModule,
+        MatSelectModule,
+        MatInputModule,
+        MatIconModule,
+        MatButtonModule,
+        MatTooltipModule,
+        MatToolbarModule,
+        MatDialogModule,
+        MatSnackBarModule
+    ],
+    templateUrl: './patient-list.component.html',
+    styleUrls: ['./patient-list.component.scss']
 })
 export class PatientListComponent {
   pageSize: number = 20;

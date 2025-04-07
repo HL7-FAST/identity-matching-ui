@@ -4,11 +4,10 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 
 @Component({
-  selector: 'app-theme-showcase-dialog',
-  standalone: true,
-  imports: [CommonModule, MatDialogModule, MatButtonModule],
-  templateUrl: './theme-showcase-dialog.component.html',
-  styleUrls: ['./theme-showcase-dialog.component.css']
+    selector: 'app-theme-showcase-dialog',
+    imports: [CommonModule, MatDialogModule, MatButtonModule],
+    templateUrl: './theme-showcase-dialog.component.html',
+    styleUrls: ['./theme-showcase-dialog.component.css']
 })
 export class ThemeShowcaseDialogComponent {
 

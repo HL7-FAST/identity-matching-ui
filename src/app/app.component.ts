@@ -8,9 +8,10 @@ import { MatDialog } from '@angular/material/dialog';
 import { SessionDialogComponent } from './components/core/session-dialog/session-dialog.component';
 
 @Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+    selector: 'app-root',
+    templateUrl: './app.component.html',
+    styleUrls: ['./app.component.scss'],
+    standalone: false
 })
 export class AppComponent {
   title = 'fhir-client';

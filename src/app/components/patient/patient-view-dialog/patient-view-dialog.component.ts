@@ -11,20 +11,19 @@ import { MatListModule } from '@angular/material/list';
 import { MatCardModule } from '@angular/material/card';
 
 @Component({
-  selector: 'app-patient-view-dialog',
-  standalone: true,
-  imports: [
-    CommonModule,
-    MatDialogModule,
-    MatButtonModule,  
-    MatIconModule,
-    MatToolbarModule,
-    MatListModule,
-    MatCardModule,
-    MatSnackBarModule
-  ],
-  templateUrl: './patient-view-dialog.component.html',
-  styleUrls: ['./patient-view-dialog.component.scss']
+    selector: 'app-patient-view-dialog',
+    imports: [
+        CommonModule,
+        MatDialogModule,
+        MatButtonModule,
+        MatIconModule,
+        MatToolbarModule,
+        MatListModule,
+        MatCardModule,
+        MatSnackBarModule
+    ],
+    templateUrl: './patient-view-dialog.component.html',
+    styleUrls: ['./patient-view-dialog.component.scss']
 })
 export class PatientViewDialogComponent {
   patient!: Patient;

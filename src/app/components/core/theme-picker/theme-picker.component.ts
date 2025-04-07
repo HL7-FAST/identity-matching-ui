@@ -19,13 +19,12 @@ import { DocsSiteTheme, ThemeStorage } from './theme-storage/theme-storage';
 import { StyleManagerService } from 'src/app/services/core/style-manager-service';
 
 @Component({
-  selector: 'theme-picker',
-  templateUrl: 'theme-picker.component.html',
-  styleUrls: ['theme-picker.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  encapsulation: ViewEncapsulation.None,
-  standalone: true,
-  imports: [MatButtonModule, MatTooltipModule, MatMenuModule, MatIconModule, NgFor]
+    selector: 'theme-picker',
+    templateUrl: 'theme-picker.component.html',
+    styleUrls: ['theme-picker.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    encapsulation: ViewEncapsulation.None,
+    imports: [MatButtonModule, MatTooltipModule, MatMenuModule, MatIconModule, NgFor]
 })
 export class ThemePickerComponent implements OnInit, OnDestroy {
   private _queryParamSubscription = Subscription.EMPTY;

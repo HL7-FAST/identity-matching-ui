@@ -14,24 +14,23 @@ import { Resource } from 'fhir/r4';
 import { ResourceService } from 'src/app/services/core/resource.service';
 
 @Component({
-  selector: 'app-update-resource',
-  standalone: true,
-  imports: [
-    CommonModule,
-    FormsModule,
-    ReactiveFormsModule,
-    MatFormFieldModule,
-    MatSelectModule,
-    MatInputModule,
-    MatIconModule,
-    MatButtonModule,
-    MatTooltipModule,
-    MatToolbarModule,
-    MatCardModule,
-    MatSnackBarModule
-  ],
-  templateUrl: './update-resource.component.html',
-  styleUrls: ['./update-resource.component.scss']
+    selector: 'app-update-resource',
+    imports: [
+        CommonModule,
+        FormsModule,
+        ReactiveFormsModule,
+        MatFormFieldModule,
+        MatSelectModule,
+        MatInputModule,
+        MatIconModule,
+        MatButtonModule,
+        MatTooltipModule,
+        MatToolbarModule,
+        MatCardModule,
+        MatSnackBarModule
+    ],
+    templateUrl: './update-resource.component.html',
+    styleUrls: ['./update-resource.component.scss']
 })
 export class UpdateResourceComponent {
   resourceForm!: FormGroup;

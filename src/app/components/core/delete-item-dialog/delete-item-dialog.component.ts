@@ -5,16 +5,15 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 
 @Component({
-  selector: 'app-delete-item-dialog',
-  standalone: true,
-  imports: [
-    CommonModule,
-    MatDialogModule,
-    MatButtonModule,
-    MatIconModule,
-  ],
-  templateUrl: './delete-item-dialog.component.html',
-  styleUrls: ['./delete-item-dialog.component.scss']
+    selector: 'app-delete-item-dialog',
+    imports: [
+        CommonModule,
+        MatDialogModule,
+        MatButtonModule,
+        MatIconModule,
+    ],
+    templateUrl: './delete-item-dialog.component.html',
+    styleUrls: ['./delete-item-dialog.component.scss']
 })
 export class DeleteItemDialogComponent implements OnInit {
   dialogTitle: string = 'Are you sure you want to delete this item';

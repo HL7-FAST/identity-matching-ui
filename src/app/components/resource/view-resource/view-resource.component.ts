@@ -14,24 +14,23 @@ import { MatCardModule } from '@angular/material/card';
 import {Clipboard} from '@angular/cdk/clipboard';
 
 @Component({
-  selector: 'app-view-resource',
-  standalone: true,
-  imports: [
-    CommonModule,
-    FormsModule,
-    ReactiveFormsModule,
-    MatFormFieldModule,
-    MatSelectModule,
-    MatInputModule,
-    MatIconModule,
-    MatButtonModule,
-    MatTooltipModule,
-    MatToolbarModule,
-    MatCardModule,
-    MatSnackBarModule
-  ],
-  templateUrl: './view-resource.component.html',
-  styleUrls: ['./view-resource.component.scss']
+    selector: 'app-view-resource',
+    imports: [
+        CommonModule,
+        FormsModule,
+        ReactiveFormsModule,
+        MatFormFieldModule,
+        MatSelectModule,
+        MatInputModule,
+        MatIconModule,
+        MatButtonModule,
+        MatTooltipModule,
+        MatToolbarModule,
+        MatCardModule,
+        MatSnackBarModule
+    ],
+    templateUrl: './view-resource.component.html',
+    styleUrls: ['./view-resource.component.scss']
 })
 export class ViewResourceComponent implements OnInit {
   resourceForm!: FormGroup;

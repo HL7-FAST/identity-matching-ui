@@ -22,29 +22,28 @@ import { PatientViewDialogComponent } from '../patient-view-dialog/patient-view-
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 
 @Component({
-  selector: 'app-patient-match',
-  standalone: true,
-  imports: [
-    CommonModule,
-    FormsModule,
-    ReactiveFormsModule,
-    MatFormFieldModule,
-    MatSelectModule,
-    MatInputModule,
-    MatIconModule,
-    MatButtonModule,
-    MatTooltipModule,
-    MatToolbarModule,
-    MatCardModule,
-    MatSnackBarModule,
-    MatDatepickerModule,
-    MatExpansionModule,
-    MatTabsModule,
-    MatTableModule,
-    MatDialogModule
-  ],
-  templateUrl: './patient-match.component.html',
-  styleUrls: ['./patient-match.component.scss']
+    selector: 'app-patient-match',
+    imports: [
+        CommonModule,
+        FormsModule,
+        ReactiveFormsModule,
+        MatFormFieldModule,
+        MatSelectModule,
+        MatInputModule,
+        MatIconModule,
+        MatButtonModule,
+        MatTooltipModule,
+        MatToolbarModule,
+        MatCardModule,
+        MatSnackBarModule,
+        MatDatepickerModule,
+        MatExpansionModule,
+        MatTabsModule,
+        MatTableModule,
+        MatDialogModule
+    ],
+    templateUrl: './patient-match.component.html',
+    styleUrls: ['./patient-match.component.scss']
 })
 export class PatientMatchComponent implements OnInit {
   patientForm!: FormGroup;

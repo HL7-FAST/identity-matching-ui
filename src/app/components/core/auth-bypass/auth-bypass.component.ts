@@ -5,14 +5,13 @@ import { SessionStorageService } from 'src/app/services/core/session.service';
 import { environment } from 'src/environments/environment';
 
 @Component({
-  selector: 'app-auth-bypass',
-  standalone: true,
-  imports: [
-    CommonModule,
-    MatCheckboxModule
-  ],
-  templateUrl: './auth-bypass.component.html',
-  styleUrls: ['./auth-bypass.component.scss']
+    selector: 'app-auth-bypass',
+    imports: [
+        CommonModule,
+        MatCheckboxModule
+    ],
+    templateUrl: './auth-bypass.component.html',
+    styleUrls: ['./auth-bypass.component.scss']
 })
 export class AuthBypassComponent implements OnInit {
   enableBypass: boolean = false;

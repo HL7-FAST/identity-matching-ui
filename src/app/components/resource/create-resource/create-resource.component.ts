@@ -14,24 +14,23 @@ import { ResourceService } from 'src/app/services/core/resource.service';
 import { Resource } from 'fhir/r4';
 
 @Component({
-  selector: 'app-create-resource',
-  standalone: true,
-  imports: [
-    CommonModule,
-    FormsModule,
-    ReactiveFormsModule,
-    MatFormFieldModule,
-    MatSelectModule,
-    MatInputModule,
-    MatIconModule,
-    MatButtonModule,
-    MatTooltipModule,
-    MatToolbarModule,
-    MatCardModule,
-    MatSnackBarModule
-  ],
-  templateUrl: './create-resource.component.html',
-  styleUrls: ['./create-resource.component.scss']
+    selector: 'app-create-resource',
+    imports: [
+        CommonModule,
+        FormsModule,
+        ReactiveFormsModule,
+        MatFormFieldModule,
+        MatSelectModule,
+        MatInputModule,
+        MatIconModule,
+        MatButtonModule,
+        MatTooltipModule,
+        MatToolbarModule,
+        MatCardModule,
+        MatSnackBarModule
+    ],
+    templateUrl: './create-resource.component.html',
+    styleUrls: ['./create-resource.component.scss']
 })
 export class CreateResourceComponent implements OnInit {  
   resourceForm!: FormGroup;

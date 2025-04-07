@@ -10,20 +10,19 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { environment } from 'src/environments/environment';
 
 @Component({
-  selector: 'fc-admin-dashboard',
-  standalone: true,
-  imports: [
-    CommonModule,
-    MatButtonModule,
-    MatCardModule,
-    MatGridListModule,
-    MatIconModule,
-    MatListModule,
-    MatToolbarModule,
-    MatTooltipModule
-  ],
-  templateUrl: './admin-dashboard.component.html',
-  styleUrls: ['./admin-dashboard.component.css']
+    selector: 'fc-admin-dashboard',
+    imports: [
+        CommonModule,
+        MatButtonModule,
+        MatCardModule,
+        MatGridListModule,
+        MatIconModule,
+        MatListModule,
+        MatToolbarModule,
+        MatTooltipModule
+    ],
+    templateUrl: './admin-dashboard.component.html',
+    styleUrls: ['./admin-dashboard.component.css']
 })
 export class AdminDashboardComponent implements OnInit {
 

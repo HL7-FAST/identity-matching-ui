@@ -10,19 +10,18 @@ import { Clipboard } from '@angular/cdk/clipboard';
 import { MatTooltipModule } from '@angular/material/tooltip';
 
 @Component({
-  selector: 'app-session-dialog',
-  standalone: true,
-  imports: [
-    CommonModule,
-    MatButtonModule,
-    MatCardModule,
-    MatDialogModule,
-    MatIconModule,
-    MatSnackBarModule,
-    MatTooltipModule
-  ],
-  templateUrl: './session-dialog.component.html',
-  styleUrls: ['./session-dialog.component.scss']
+    selector: 'app-session-dialog',
+    imports: [
+        CommonModule,
+        MatButtonModule,
+        MatCardModule,
+        MatDialogModule,
+        MatIconModule,
+        MatSnackBarModule,
+        MatTooltipModule
+    ],
+    templateUrl: './session-dialog.component.html',
+    styleUrls: ['./session-dialog.component.scss']
 })
 export class SessionDialogComponent implements OnInit {
 

@@ -16,25 +16,24 @@ import { ThemeShowcaseDialogComponent } from './theme-showcase-dialog/theme-show
 import { MatChipsModule } from '@angular/material/chips';
 
 @Component({
-  selector: 'fc-theme-showcase',
-  standalone: true,
-  imports: [
-    CommonModule,
-    MatToolbarModule,
-    MatSlideToggleModule,
-    ReactiveFormsModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatButtonModule,
-    MatCheckboxModule,
-    MatExpansionModule,
-    MatCardModule,
-    MatIconModule,
-    MatDialogModule,
-    MatChipsModule
-  ],
-  templateUrl: './theme-showcase.component.html',
-  styleUrls: ['./theme-showcase.component.scss']
+    selector: 'fc-theme-showcase',
+    imports: [
+        CommonModule,
+        MatToolbarModule,
+        MatSlideToggleModule,
+        ReactiveFormsModule,
+        MatFormFieldModule,
+        MatInputModule,
+        MatButtonModule,
+        MatCheckboxModule,
+        MatExpansionModule,
+        MatCardModule,
+        MatIconModule,
+        MatDialogModule,
+        MatChipsModule
+    ],
+    templateUrl: './theme-showcase.component.html',
+    styleUrls: ['./theme-showcase.component.scss']
 })
 export class ThemeShowcaseComponent {
 

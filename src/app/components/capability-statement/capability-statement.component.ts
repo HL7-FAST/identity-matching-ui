@@ -15,24 +15,23 @@ import { MatInputModule } from '@angular/material/input';
 import { MatExpansionModule } from '@angular/material/expansion';
 
 @Component({
-  selector: 'app-capability-statement',
-  standalone: true,
-  imports: [
-    CommonModule,
-    MatSnackBarModule,
-    FormsModule,
-    ReactiveFormsModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatToolbarModule,
-    MatCardModule,
-    MatTabsModule,
-    MatButtonModule,
-    MatIconModule,
-    MatExpansionModule
-  ],
-  templateUrl: './capability-statement.component.html',
-  styleUrls: ['./capability-statement.component.scss']
+    selector: 'app-capability-statement',
+    imports: [
+        CommonModule,
+        MatSnackBarModule,
+        FormsModule,
+        ReactiveFormsModule,
+        MatFormFieldModule,
+        MatInputModule,
+        MatToolbarModule,
+        MatCardModule,
+        MatTabsModule,
+        MatButtonModule,
+        MatIconModule,
+        MatExpansionModule
+    ],
+    templateUrl: './capability-statement.component.html',
+    styleUrls: ['./capability-statement.component.scss']
 })
 export class CapabilityStatementComponent implements OnInit {
   fhirServerForm!: FormGroup;

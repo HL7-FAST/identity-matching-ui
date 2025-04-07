@@ -15,23 +15,22 @@ import { PatientService } from 'src/app/services/patient.service';
 import { FormMode } from 'src/app/models/FormMode.enum';
 
 @Component({
-  selector: 'app-patient-form-dialog',
-  standalone: true,
-  imports: [
-    CommonModule,
-    MatDialogModule,
-    MatButtonModule,
-    MatFormFieldModule,
-    MatSelectModule,
-    MatInputModule,
-    MatDatepickerModule,    
-    MatIconModule,
-    ReactiveFormsModule,
-    MatToolbarModule,
-    MatSnackBarModule    
-  ],
-  templateUrl: './patient-form-dialog.component.html',
-  styleUrls: ['./patient-form-dialog.component.scss']
+    selector: 'app-patient-form-dialog',
+    imports: [
+        CommonModule,
+        MatDialogModule,
+        MatButtonModule,
+        MatFormFieldModule,
+        MatSelectModule,
+        MatInputModule,
+        MatDatepickerModule,
+        MatIconModule,
+        ReactiveFormsModule,
+        MatToolbarModule,
+        MatSnackBarModule
+    ],
+    templateUrl: './patient-form-dialog.component.html',
+    styleUrls: ['./patient-form-dialog.component.scss']
 })
 export class PatientFormDialogComponent implements OnInit { 
   patientForm!: FormGroup;

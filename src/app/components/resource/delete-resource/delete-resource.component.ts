@@ -13,24 +13,23 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { ResourceService } from 'src/app/services/core/resource.service';
 
 @Component({
-  selector: 'app-delete-resource',
-  standalone: true,
-  imports: [
-    CommonModule,
-    FormsModule,
-    ReactiveFormsModule,
-    MatFormFieldModule,
-    MatSelectModule,
-    MatInputModule,
-    MatIconModule,
-    MatButtonModule,
-    MatTooltipModule,
-    MatToolbarModule,
-    MatCardModule,
-    MatSnackBarModule
-  ],
-  templateUrl: './delete-resource.component.html',
-  styleUrls: ['./delete-resource.component.scss']
+    selector: 'app-delete-resource',
+    imports: [
+        CommonModule,
+        FormsModule,
+        ReactiveFormsModule,
+        MatFormFieldModule,
+        MatSelectModule,
+        MatInputModule,
+        MatIconModule,
+        MatButtonModule,
+        MatTooltipModule,
+        MatToolbarModule,
+        MatCardModule,
+        MatSnackBarModule
+    ],
+    templateUrl: './delete-resource.component.html',
+    styleUrls: ['./delete-resource.component.scss']
 })
 export class DeleteResourceComponent {
   resourceForm!: FormGroup;
