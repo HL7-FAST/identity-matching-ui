@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { OAuthModule } from 'angular-oauth2-oidc';
 import { BrowserModule } from '@angular/platform-browser';
-import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -29,17 +29,10 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 
 
 
-@NgModule({
-    declarations: [
+@NgModule({ declarations: [
         AppComponent
     ],
-    providers: [
-        StyleManagerService,
-        httpInterceptorProviders
-    ],
-    bootstrap: [AppComponent],
-    imports: [
-        OAuthModule.forRoot({
+    bootstrap: [AppComponent], imports: [OAuthModule.forRoot({
             resourceServer: {
                 allowedUrls: [`${environment.baseApiUrl}`],
                 sendAccessToken: true
@@ -48,7 +41,6 @@ import { MatTooltipModule } from '@angular/material/tooltip';
         BrowserModule,
         AppRoutingModule,
         BrowserAnimationsModule,
-        HttpClientModule,
         AppRoutingModule,
         LayoutModule,
         MatToolbarModule,
@@ -63,7 +55,9 @@ import { MatTooltipModule } from '@angular/material/tooltip';
         MatMenuModule,
         MatNativeDateModule,
         LoadingIndicatorComponent,
-        AuthBypassComponent
-    ]
-})
+        AuthBypassComponent], providers: [
+        StyleManagerService,
+        httpInterceptorProviders,
+        provideHttpClient(withInterceptorsFromDi())
+    ] })
 export class AppModule { }
