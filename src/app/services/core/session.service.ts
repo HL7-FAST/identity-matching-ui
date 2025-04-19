@@ -1,52 +1,83 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
 import { environment } from 'src/environments/environment';
-import { AES, enc } from 'crypto-js';
-
+import { isPlatformBrowser } from '@angular/common';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SessionStorageService {
-  private phrase: string = "randomPhrase"
-  // private salt: any = CryptoJS.lib.WordArray.random(128 / 8);
-  //private sessionKey: any = this.generateKey(this.phrase, this.salt);
-  //private iv = CryptoJS.lib.WordArray.random(16).toString();
-  private sessionKey: any = "mySuperDuperSecureKey";
-  //TODO - work out actual secure way to implement this
+  private sessionKey: CryptoKey | null = null;
+  private keyString: string = 'mySuperDuperSecureKey';
+  private iv: Uint8Array = new Uint8Array(16);
 
-  constructor() { }
-
-  storeItem(key: string, value: any): void {
-    sessionStorage.setItem(key, AES.encrypt(value, this.sessionKey).toString())
-
-    //if not in production, also store if in plain text
-    if (!environment.production) {
-      sessionStorage.setItem(key.concat("-dev"), value);
+  constructor(@Inject(PLATFORM_ID) private platformId: Object) {
+    if (isPlatformBrowser(this.platformId)) {
+      this.initKey();
     }
-    
   }
 
-  getItem(key: string) {
-    let value = sessionStorage.getItem(key);
-    if (value) {
-      return AES.decrypt(value, this.sessionKey).toString(enc.Utf8)
-      //return value;
-    } else {
-      return null
+  private async initKey() {
+    // Use TextEncoder to convert string to Uint8Array
+    const enc = new TextEncoder();
+    const keyMaterial = enc.encode(this.keyString.padEnd(32, '0').slice(0, 32));
+    this.sessionKey = await window.crypto.subtle.importKey(
+      'raw',
+      keyMaterial,
+      { name: 'AES-CBC' },
+      false,
+      ['encrypt', 'decrypt']
+    );
+  }
+
+  async storeItem(key: string, value: any): Promise<void> {
+    if (!isPlatformBrowser(this.platformId)) return;
+    if (!this.sessionKey) await this.initKey();
+
+    const enc = new TextEncoder();
+    const data = enc.encode(value);
+
+    const encrypted = await window.crypto.subtle.encrypt(
+      { name: 'AES-CBC', iv: this.iv },
+      this.sessionKey as CryptoKey,
+      data
+    );
+    const encryptedBase64 = btoa(String.fromCharCode(...new Uint8Array(encrypted)));
+    sessionStorage.setItem(key, encryptedBase64);
+
+    if (!environment.production) {
+      sessionStorage.setItem(key.concat('-dev'), value);
+    }
+  }
+
+  async getItem(key: string): Promise<string | null> {
+    if (!isPlatformBrowser(this.platformId)) return null;
+    if (!this.sessionKey) await this.initKey();
+
+    const encryptedBase64 = sessionStorage.getItem(key);
+    if (!encryptedBase64) return null;
+
+    const encryptedBytes = Uint8Array.from(atob(encryptedBase64), c => c.charCodeAt(0));
+    try {
+      const decrypted = await window.crypto.subtle.decrypt(
+        { name: 'AES-CBC', iv: this.iv },
+        this.sessionKey as CryptoKey,
+        encryptedBytes
+      );
+      return new TextDecoder().decode(decrypted);
+    } catch {
+      return null;
     }
   }
 
   removeItem(key: string): void {
-    sessionStorage.removeItem(key);
+    if (isPlatformBrowser(this.platformId)) {
+      sessionStorage.removeItem(key);
+    }
   }
 
   clearSession(): void {
-    sessionStorage.clear();
+    if (isPlatformBrowser(this.platformId)) {
+      sessionStorage.clear();
+    }
   }
-
-  // private generateKey(pass: string, salt: any) {
-  //   return PBKDF2(pass, salt, { keySize: 512 / 32, iterations: 1000 });
-  // }
-  
-  
 }

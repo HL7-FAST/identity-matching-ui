@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { UserProfile } from './models/user-pofile.model';
+import { UserProfile } from './models/user-profile.model';
 import { Breakpoints, BreakpointObserver } from '@angular/cdk/layout';
 import { Observable, map, shareReplay } from 'rxjs';
 import { UserProfileService } from './services/core/user-profile.service';
@@ -32,8 +32,8 @@ export class AppComponent {
 
   }
 
-  ngOnInit(): void {
-    this.userProfile = this.profileService.getProfile(); 
+  async ngOnInit(): Promise<void> {
+    this.userProfile = await this.profileService.getProfile(); 
   }
 
   logout() {
@@ -47,11 +47,7 @@ export class AppComponent {
   showSessionDialog($event: Event) {
     $event.stopPropagation();
 
-    this.dialog.open(SessionDialogComponent, { minWidth: '50vw' }).afterClosed().subscribe(res => {
-      if (res) {
-        window.location.reload();
-      }
-    });
+    this.dialog.open(SessionDialogComponent, { minWidth: '50vw' });
   }
 
 }

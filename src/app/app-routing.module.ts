@@ -10,7 +10,6 @@ const routes: Routes = [
   { path: 'patient-list', loadComponent: () => import('./components/patient/patient-list/patient-list.component').then(comp => comp.PatientListComponent) },
   { path: 'patient-match', loadComponent: () => import('./components/patient/patient-match/patient-match.component').then(comp => comp.PatientMatchComponent) },
   { path: 'capability-statement', loadComponent: () => import('./components/capability-statement/capability-statement.component').then(comp => comp.CapabilityStatementComponent) },
-  { path: 'themes', loadComponent: () => import('./components/theme-showcase/theme-showcase.component').then(comp => comp.ThemeShowcaseComponent) },
   { path: 'unauthorized', loadComponent: () => import('./components/core/unauthorized/unauthorized.component').then(mod => mod.UnauthorizedComponent) },
   { path: '**', redirectTo: '' }
 ];

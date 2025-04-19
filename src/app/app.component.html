@@ -14,12 +14,9 @@
       <mat-icon>info</mat-icon>
     </button>
   </span>
-  <span class="toolbar-divider">
+  <!-- <span class="toolbar-divider">
     <app-auth-bypass></app-auth-bypass>
-  </span>
-  <span class="toolbar-divider">
-    <theme-picker></theme-picker>
-  </span>
+  </span> -->
   <!-- <span class="user-profile toolbar-divider">    
     <button mat-icon-button [matMenuTriggerFor]="userProfileMenu" aria-label="Access user profile options">
       <mat-icon class="profile-icon">account_circle</mat-icon>
@@ -80,10 +77,6 @@
       <a mat-list-item routerLink="capability-statement" routerLinkActive="active">
         <mat-icon matListItemIcon [ngClass]="{'close-menu-icon' : !showMenuText}">description</mat-icon>
         <div class="side-nav-menu-title" matListItemTitle *ngIf="showMenuText">Capability Statement</div>
-      </a>      
-      <a mat-list-item routerLink="themes" routerLinkActive="active">
-        <mat-icon matListItemIcon [ngClass]="{'close-menu-icon' : !showMenuText}">palette</mat-icon>
-        <div class="side-nav-menu-title" matListItemTitle *ngIf="showMenuText">Themes</div>
       </a>
     </mat-nav-list>
   </mat-drawer>

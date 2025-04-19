@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { OAuthService, UrlHelperService } from 'angular-oauth2-oidc';
-import { UserProfile } from 'src/app/models/user-pofile.model';
+import { UserProfile } from 'src/app/models/user-profile.model';
 import { UserProfileService } from '../core/user-profile.service';
 import { authCodeFlowConfig } from 'src/app/config/auth-code-flow.config';
 import { firstValueFrom } from 'rxjs';
@@ -43,10 +43,11 @@ export class AuthenticationService {
     // if (!this.sessionStorage.getItem('client_id') || !this.sessionStorage.getItem('auth_server')) {
     //   await this.registerClient();
     // }
+    return;
     await this.registerClient();
 
-    authCodeFlowConfig.clientId = <string>this.sessionStorage.getItem('client_id');
-    authCodeFlowConfig.issuer = <string>this.sessionStorage.getItem('auth_server');
+    authCodeFlowConfig.clientId = <string>await this.sessionStorage.getItem('client_id');
+    authCodeFlowConfig.issuer = <string>await this.sessionStorage.getItem('auth_server');
 
     this.oauthService.configure(authCodeFlowConfig);
 

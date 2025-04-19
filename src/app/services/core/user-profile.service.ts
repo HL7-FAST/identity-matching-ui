@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { OAuthService } from 'angular-oauth2-oidc';
 import { Subject } from 'rxjs';
 import { IUserProfile } from 'src/app/interfaces/user-profile.interface';
-import { UserProfile } from 'src/app/models/user-pofile.model';
+import { UserProfile } from 'src/app/models/user-profile.model';
 import { SessionStorageService } from './session.service';
 
 @Injectable({
@@ -22,8 +22,8 @@ export class UserProfileService {
     this._userProfileUpdatedSubject.next(profile);
   }
 
-  getProfile(): IUserProfile {
-    let profile = this.sessionStorageSrv.getItem(this.profileKey);
+  async getProfile(): Promise<IUserProfile> {
+    const profile = await this.sessionStorageSrv.getItem(this.profileKey);
 
     if (profile) {
       return JSON.parse(profile) as IUserProfile;

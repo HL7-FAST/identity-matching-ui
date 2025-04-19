@@ -19,8 +19,8 @@ export class AuthBypassComponent implements OnInit {
   constructor(private sessionService: SessionStorageService) {}
 
 
-  ngOnInit(): void {
-    if (this.sessionService.getItem(environment.authBypassSessionKey) === 'enabled') {
+  async ngOnInit(): Promise<void> {
+    if (await this.sessionService.getItem(environment.authBypassSessionKey) === 'enabled') {
       this.setBypassStatus(true);
     } else {
       this.setBypassStatus(false);
