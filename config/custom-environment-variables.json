@@ -1,0 +1,10 @@
+{
+  "env": "NODE_ENV",
+  "port": "PORT",
+  "defaultFhirBaseUrl": "DEFAULT_FHIR_BASE_URL",
+  "defaultCertPass": "DEFAULT_CERT_PASS",
+  "authSecret": "AUTH_SECRET",
+  "database": {
+    "url": "DATABASE_URL"
+  }
+}

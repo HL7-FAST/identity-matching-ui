@@ -11,8 +11,8 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatToolbarModule } from '@angular/material/toolbar';
-import { PatientService } from 'src/app/services/patient.service';
-import { FormMode } from 'src/app/models/FormMode.enum';
+import { PatientService } from '@/app/services/patient.service';
+import { FormMode } from '@/app/models/FormMode.enum';
 
 @Component({
     selector: 'app-patient-form-dialog',

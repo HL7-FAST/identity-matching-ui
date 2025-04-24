@@ -5,13 +5,31 @@ import {
   writeResponseToNodeResponse,
 } from '@angular/ssr/node';
 import express from 'express';
-import { dirname, resolve } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import 'dotenv/config';
+import config from '@/config';
+
+import session from 'express-session';
+
+import { dirname, resolve } from 'path';
+import { fileURLToPath } from 'url';
+import apiRouter from './api';
+
+import { createRequire } from 'module';
+import { initDatabase } from '@/db';
+const require = createRequire(import.meta.url);
+
 
 const serverDistFolder = dirname(fileURLToPath(import.meta.url));
 const browserDistFolder = resolve(serverDistFolder, '../browser');
 
-const app = express();
+
+/**
+ * Initialize the database
+ */
+await initDatabase();
+
+
+const server = express();
 const angularApp = new AngularNodeAppEngine();
 
 /**
@@ -26,10 +44,41 @@ const angularApp = new AngularNodeAppEngine();
  * ```
  */
 
+server.use(express.json());
+server.use(express.urlencoded({ extended: true }));
+
+
+/**
+ * Session management
+ */
+const SQLiteStore = require('connect-sqlite3')(session);
+server.use(session({
+  store: new SQLiteStore({
+    db: config.database.url.replace('file:', ''),
+    table: 'sessions',
+  }),
+  secret: config.authSecret,
+  resave: false,
+  saveUninitialized: false,
+  proxy: true,
+  cookie: {
+    httpOnly: true,
+    secure: config.env === 'production',
+    maxAge: 60 * 60 * 1000,
+  },
+}));
+
+
+/**
+ * Use the API router for all /api endpoints (things not to be handled by the Angular router).
+ */
+server.use('/api', apiRouter);
+
+
 /**
  * Serve static files from /browser
  */
-app.use(
+server.use(
   express.static(browserDistFolder, {
     maxAge: '1y',
     index: false,
@@ -37,10 +86,11 @@ app.use(
   }),
 );
 
+
 /**
  * Handle all other requests by rendering the Angular application.
  */
-app.all('/**', (req, res, next) => {
+server.all('/{*splat}', (req, res, next) => {
   angularApp
     .handle(req)
     .then((response) =>
@@ -53,9 +103,10 @@ app.all('/**', (req, res, next) => {
  * Start the server if this module is the main entry point.
  * The server listens on the port defined by the `PORT` environment variable, or defaults to 4000.
  */
+
 if (isMainModule(import.meta.url)) {
-  const port = process.env['PORT'] || 4000;
-  app.listen(port, () => {
+  const port = config.port || 4000;
+  server.listen(port, () => {
     console.log(`Node Express server listening on http://localhost:${port}`);
   });
 }
@@ -63,4 +114,4 @@ if (isMainModule(import.meta.url)) {
 /**
  * Request handler used by the Angular CLI (for dev-server and during build) or Firebase Cloud Functions.
  */
-export const reqHandler = createNodeRequestHandler(app);
+export const reqHandler = createNodeRequestHandler(server);

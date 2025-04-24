@@ -3,3 +3,10 @@ services:
     build: .
     ports:
       - 80:80
+    environment:
+      - NODE_ENV=production
+      - AUTH_SECRET=your_secret_key_here # openssl rand -base64 32
+
+      # overriding NODE_CONFIG will take prcedence
+      # - NODE_CONFIG={"authSecret":"actual_secret_key_here"}
+      

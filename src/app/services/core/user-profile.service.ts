@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { OAuthService } from 'angular-oauth2-oidc';
 import { Subject } from 'rxjs';
-import { IUserProfile } from 'src/app/interfaces/user-profile.interface';
-import { UserProfile } from 'src/app/models/user-profile.model';
+import { IUserProfile } from '@/app/interfaces/user-profile.interface';
+import { UserProfile } from '@/app/models/user-profile.model';
 import { SessionStorageService } from './session.service';
 
 @Injectable({

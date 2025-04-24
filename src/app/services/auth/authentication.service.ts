@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
 import { OAuthService, UrlHelperService } from 'angular-oauth2-oidc';
-import { UserProfile } from 'src/app/models/user-profile.model';
+import { UserProfile } from '@/app/models/user-profile.model';
 import { UserProfileService } from '../core/user-profile.service';
-import { authCodeFlowConfig } from 'src/app/config/auth-code-flow.config';
+import { authCodeFlowConfig } from '@/app/config/auth-code-flow.config';
 import { firstValueFrom } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { HttpClient } from '@angular/common/http';
-import { UdapMetadata, UdapSoftwareStatement } from 'src/app/models/udap';
+import { UdapMetadata, UdapSoftwareStatement } from '@/app/models/udap';
 import { SessionStorageService } from '../core/session.service';
 
 @Injectable({

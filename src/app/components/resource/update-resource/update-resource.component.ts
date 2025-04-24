@@ -11,7 +11,7 @@ import { MatSnackBarModule, MatSnackBar } from '@angular/material/snack-bar';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { Resource } from 'fhir/r4';
-import { ResourceService } from 'src/app/services/core/resource.service';
+import { ResourceService } from '@/app/services/core/resource.service';
 
 @Component({
     selector: 'app-update-resource',

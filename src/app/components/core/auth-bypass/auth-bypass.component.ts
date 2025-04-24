@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatCheckboxModule } from '@angular/material/checkbox';
-import { SessionStorageService } from 'src/app/services/core/session.service';
+import { SessionStorageService } from '@/app/services/core/session.service';
 import { environment } from 'src/environments/environment';
 
 @Component({

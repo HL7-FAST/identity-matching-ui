@@ -1,7 +1,7 @@
 import { AfterContentInit, AfterViewInit, Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
-import { LoadingService } from 'src/app/services/loading.service';
+import { LoadingService } from '@/app/services/loading.service';
 
 @Component({
     selector: 'app-loading-indicator',

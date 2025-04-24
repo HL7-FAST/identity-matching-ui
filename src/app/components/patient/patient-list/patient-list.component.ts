@@ -11,14 +11,14 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { PatientService } from 'src/app/services/patient.service';
+import { PatientService } from '@/app/services/patient.service';
 import { Bundle, BundleEntry, HumanName, Identifier, Patient } from 'fhir/r4';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { PatientFormDialogComponent } from '../patient-form-dialog/patient-form-dialog.component';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { DeleteItemDialogComponent } from '../../core/delete-item-dialog/delete-item-dialog.component';
 import { PatientViewDialogComponent } from '../patient-view-dialog/patient-view-dialog.component';
-import { PaginationMetadata } from 'src/app/models/pagination-metadata.model';
+import { PaginationMetadata } from '@/app/models/pagination-metadata.model';
 
 @Component({
     selector: 'app-patient-list',

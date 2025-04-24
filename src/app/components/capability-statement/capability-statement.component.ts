@@ -4,7 +4,7 @@ import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } 
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import {Clipboard} from '@angular/cdk/clipboard';
-import { ResourceService } from 'src/app/services/core/resource.service';
+import { ResourceService } from '@/app/services/core/resource.service';
 import { CapabilityStatement, CapabilityStatementRestResource, CapabilityStatementRestResourceOperation } from 'fhir/r4';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatCardModule } from '@angular/material/card';

@@ -15,7 +15,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatTabsModule } from '@angular/material/tabs';
 import {Clipboard} from '@angular/cdk/clipboard';
 
-import { PatientService } from 'src/app/services/patient.service';
+import { PatientService } from '@/app/services/patient.service';
 import { CodeableConcept, Patient, Parameters, Bundle, BundleEntry, Identifier, HumanName } from 'fhir/r4';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { PatientViewDialogComponent } from '../patient-view-dialog/patient-view-dialog.component';
