@@ -1,6 +1,6 @@
 import { Router } from 'express';
 
-const authRouter = Router();
+export const authRouter = Router();
 
 authRouter.get('/login', (req, res) => {
   // Implement login logic
@@ -19,5 +19,3 @@ authRouter.get('/userinfo', (req, res) => {
     res.status(401).json({ message: 'Unauthorized' });
   }
 });
-
-export default authRouter;

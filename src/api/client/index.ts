@@ -1,9 +1,8 @@
 import { Router } from 'express';
-import db from '@/db';
+import { db } from '@/db';
 import { clientsTable } from 'src/db/schema';
-import config from '@/config';
 
-const clientRouter = Router();
+export const clientRouter = Router();
 
 clientRouter.get('/list', async (req, res) => {
   const clients = await db.select().from(clientsTable);  
@@ -29,6 +28,3 @@ clientRouter.delete('/:id', (req, res) => {
   const { id } = req.params;
   res.json({ message: `Client ${id} deleted` });
 });
-
-
-export default clientRouter;

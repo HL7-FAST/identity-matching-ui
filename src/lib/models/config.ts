@@ -1,10 +1,11 @@
 import { CertGenerationProvider } from "./cert";
 import { ClientConfig } from "./client";
 
-export default interface AppConfig {
+export interface AppConfig {
 
   env: 'production' | 'development';
   port: number;
+  appUrl: string;
   defaultFhirBaseUrl: string;
   defaultCertPass: string;
   authSecret: string;

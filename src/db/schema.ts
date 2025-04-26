@@ -9,13 +9,27 @@ export const sessionsTable = sqliteTable("sessions", {
 
 export const clientsTable = sqliteTable("clients", {
   id: text().primaryKey().$default(() => crypto.randomUUID()),
+  fhirBaseUrl: text().notNull(),
+
+  // clientId on the auth server
   clientId: text().notNull(),
-  grantType: text().notNull(),
+  grantTypes: text().notNull(),
   scopes: text().notNull(),
+
+  // endpoints
+  authorizationEndpoint: text(),
+  userinfoEndpoint: text(),
+  tokenEndpoint: text().notNull(),
+
+  // certificate data
   certificate: text().notNull(),
   certificatePass: text(),
+
+  // current access token
   currentToken: text(),
-  createdAt: text().notNull().$default(() => new Date().toISOString()),
-  updatedAt: text().notNull().$default(() => new Date().toISOString()),
+
+  // timestamps
+  createdAt: text().notNull().$default(() => new Date().toUTCString()),
+  updatedAt: text().notNull().$default(() => new Date().toUTCString()),
   lastUsedAt: text()
 });

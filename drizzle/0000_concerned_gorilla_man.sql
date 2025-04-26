@@ -1,8 +1,12 @@
 CREATE TABLE `clients` (
 	`id` text PRIMARY KEY NOT NULL,
+	`fhirBaseUrl` text NOT NULL,
 	`clientId` text NOT NULL,
-	`grantType` text NOT NULL,
+	`grantTypes` text NOT NULL,
 	`scopes` text NOT NULL,
+	`authorizationEndpoint` text,
+	`userinfoEndpoint` text,
+	`tokenEndpoint` text NOT NULL,
 	`certificate` text NOT NULL,
 	`certificatePass` text,
 	`currentToken` text,

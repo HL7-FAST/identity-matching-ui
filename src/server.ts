@@ -6,13 +6,13 @@ import {
 } from '@angular/ssr/node';
 import express from 'express';
 import 'dotenv/config';
-import config from '@/config';
+import { appConfig } from '@/config';
 
 import session from 'express-session';
 
 import { dirname, resolve } from 'path';
 import { fileURLToPath } from 'url';
-import apiRouter from './api';
+import { apiRouter } from './api';
 
 import { createRequire } from 'module';
 import { initDatabase } from '@/db';
@@ -54,16 +54,16 @@ server.use(express.urlencoded({ extended: true }));
 const SQLiteStore = require('connect-sqlite3')(session);
 server.use(session({
   store: new SQLiteStore({
-    db: config.database.url.replace('file:', ''),
+    db: appConfig.database.url.replace('file:', ''),
     table: 'sessions',
   }),
-  secret: config.authSecret,
+  secret: appConfig.authSecret,
   resave: false,
   saveUninitialized: false,
   proxy: true,
   cookie: {
     httpOnly: true,
-    secure: config.env === 'production',
+    secure: appConfig.env === 'production',
     maxAge: 60 * 60 * 1000,
   },
 }));
@@ -105,7 +105,7 @@ server.all('/{*splat}', (req, res, next) => {
  */
 
 if (isMainModule(import.meta.url)) {
-  const port = config.port || 4000;
+  const port = appConfig.port || 4000;
   server.listen(port, () => {
     console.log(`Node Express server listening on http://localhost:${port}`);
   });

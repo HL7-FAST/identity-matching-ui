@@ -1,7 +1,7 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "20a284fd-e505-4124-b3f4-1c4b027af834",
+  "id": "34bb60f4-53a6-4ee4-a088-63a1bcc4ae52",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "clients": {
@@ -14,6 +14,13 @@
           "notNull": true,
           "autoincrement": false
         },
+        "fhirBaseUrl": {
+          "name": "fhirBaseUrl",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
         "clientId": {
           "name": "clientId",
           "type": "text",
@@ -21,8 +28,8 @@
           "notNull": true,
           "autoincrement": false
         },
-        "grantType": {
-          "name": "grantType",
+        "grantTypes": {
+          "name": "grantTypes",
           "type": "text",
           "primaryKey": false,
           "notNull": true,
@@ -30,6 +37,27 @@
         },
         "scopes": {
           "name": "scopes",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "authorizationEndpoint": {
+          "name": "authorizationEndpoint",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "userinfoEndpoint": {
+          "name": "userinfoEndpoint",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "tokenEndpoint": {
+          "name": "tokenEndpoint",
           "type": "text",
           "primaryKey": false,
           "notNull": true,

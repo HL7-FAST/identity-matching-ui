@@ -1,9 +1,9 @@
-import AppConfig from "@/lib/models/config"
+import { AppConfig } from "@/lib/models/config"
 
 
 const defaultFhirBaseUrl = 'https://identity-matching.fast.hl7.org/fhir';
 
-const config: Partial<AppConfig> = {
+export const config: Partial<AppConfig> = {
   env: 'production',
   port: 4000,
   defaultFhirBaseUrl: defaultFhirBaseUrl,

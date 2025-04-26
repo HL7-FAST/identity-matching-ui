@@ -1,8 +1,8 @@
 import { Router } from 'express';
-import authRouter from './auth';
-import clientRouter from './client';
+import { authRouter } from './auth';
+import { clientRouter } from './client';
 
-const apiRouter = Router();
+export const apiRouter = Router();
 
 
 // /api/auth endpoint
@@ -26,7 +26,3 @@ apiRouter.all<{ splat: string[] }>('/{*splat}', (req, res) => {
   console.log('Catch all api endpoint:', req.params.splat);
   res.status(404).json({ message: 'Not found' });
 });
-
-
-
-export default apiRouter;

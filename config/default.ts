@@ -1,11 +1,13 @@
-import AppConfig from "@/lib/models/config"
+import { AppConfig } from "@/lib/models/config"
 
 
+const defaultAppPort = 4200;
 const defaultFhirBaseUrl = 'http://localhost:8080/fhir';
 
-const config: AppConfig = {
+export const config: AppConfig = {
   env: 'development',
-  port: 4200,
+  port: defaultAppPort,
+  appUrl: `http://localhost:${defaultAppPort}`,
   defaultFhirBaseUrl: defaultFhirBaseUrl,
   defaultCertPass: 'udap-test',
   authSecret: 'secret_key_that_should_be_changed',
@@ -15,13 +17,13 @@ const config: AppConfig = {
 
   defaultClients: [
     {
-      fhirBaseUrl: defaultFhirBaseUrl,
-      grantType: 'client_credentials',
+      fhirServer: defaultFhirBaseUrl,
+      grantTypes: ['client_credentials'],
       scopes: 'system/*.read',
     },
     {
-      fhirBaseUrl: defaultFhirBaseUrl,
-      grantType: 'authorization_code',
+      fhirServer: defaultFhirBaseUrl,
+      grantTypes: ['authorization_code'],
       scopes: 'openid user/*.read',
     }
   ],

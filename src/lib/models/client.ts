@@ -1,22 +1,38 @@
 import { GrantType } from "./auth";
 
-export default interface Client {
-
-  id: string;
+export interface Client {
+  id: string | null;
+  fhirServer: string;
   clientId: string;
-  grantType: string;
+  grantTypes: GrantType[];
   scopes: string;
+
+  authorizationEndpoint?: string;
+  userinfoEndpoint?: string;
+  tokenEndpoint: string;
+
   certificate: string;
   certificatePass: string | null;
-  currentToken: string | null;
+
+  currentToken?: string;
+
   createdAt: Date;
   updatedAt: Date;
-  lastUsedAt: Date | null;
-
+  lastUsedAt?: Date | null;
 }
 
 export interface ClientConfig {
-  fhirBaseUrl: string;
-  grantType: GrantType;
-  scopes: string;
+  fhirServer: string;
+  grantTypes: GrantType[];  
+  clientName?: string;
+  issuer?: string;
+  contacts?: string[];
+  logoUri?: string;
+  scopes?: string;
+  redirectUris?: string[];
+
+  certificate?: string;
+  certificatePass?: string;
 }
+
+export type ClientRegistration = ClientConfig;
