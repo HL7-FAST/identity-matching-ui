@@ -8,6 +8,19 @@ export const config: Partial<AppConfig> = {
   port: 4000,
   defaultFhirBaseUrl: defaultFhirBaseUrl,
 
+  defaultClients: [
+    {
+      fhirServer: defaultFhirBaseUrl,
+      grantTypes: ['client_credentials'],
+      scopes: 'system/*.read',
+    },
+    {
+      fhirServer: defaultFhirBaseUrl,
+      grantTypes: ['authorization_code'],
+      scopes: 'openid user/*.read',
+    },
+  ],
+
   certGenerationProviders: [
     {
       name: "FAST Security Server (Foundry)",

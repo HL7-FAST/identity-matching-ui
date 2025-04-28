@@ -83,7 +83,7 @@ fhirRouter.use(
     next();
   },
   createProxyMiddleware({
-    // changeOrigin: true,
+    changeOrigin: true,
     // pathRewrite: (path, req) => path,
     ignorePath: true,
     router: (req) => {

@@ -20,28 +20,28 @@
             "outputPath": {
               "base": "dist/fhir-client"
             },
-            "index": "src/index.html",
+            "index": "src/ui/index.html",
             "polyfills": [
               "zone.js"
             ],
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",
             "assets": [
-              "src/favicon.ico",
-              "src/assets"
+              "src/ui/favicon.ico",
+              "src/ui/assets"
             ],
             "styles": [
-              "src/styles.scss",
+              "src/ui/styles.scss",
               {
                 "inject": false,
-                "input": "src/styles/custom-themes/hl7-blue-theme.scss",
+                "input": "src/ui/styles/custom-themes/hl7-blue-theme.scss",
                 "bundleName": "hl7-blue"
               }
             ],
             "stylePreprocessorOptions": {
               "includePaths": [
                 "src",
-                "src/styles"
+                "src/ui/styles"
               ]
             },
             "scripts": [],
@@ -69,8 +69,8 @@
               "outputHashing": "all",
               "fileReplacements": [
                 {
-                  "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.prod.ts"
+                  "replace": "src/ui/environments/environment.ts",
+                  "with": "src/ui/environments/environment.prod.ts"
                 }
               ]
             },

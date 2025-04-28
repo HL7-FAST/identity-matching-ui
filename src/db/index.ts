@@ -37,6 +37,8 @@ export async function initDatabase() {
   console.time('Default client initialization complete.');
   for (const client of appConfig.defaultClients) {
 
+    console.log(`Creating client for ${client.fhirServer} (${client.grantTypes.join(',')})`);
+
     // check if the client already exists in the database
     // still need to run registration in the event the auth server doesn't have this client anymore
     const existingClients = await getClientsByConfig(client);
