@@ -25,7 +25,7 @@ export const config: AppConfig = {
       fhirServer: defaultFhirBaseUrl,
       grantTypes: ['authorization_code'],
       scopes: 'openid user/*.read',
-    }
+    },
   ],
 
   certGenerationProviders: [

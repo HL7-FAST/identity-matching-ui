@@ -1,7 +1,7 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "34bb60f4-53a6-4ee4-a088-63a1bcc4ae52",
+  "id": "6a862418-44a9-4d97-a2fe-9d93e2b92b6f",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "clients": {
@@ -35,8 +35,15 @@
           "notNull": true,
           "autoincrement": false
         },
-        "scopes": {
-          "name": "scopes",
+        "scopesRequested": {
+          "name": "scopesRequested",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "scopesGranted": {
+          "name": "scopesGranted",
           "type": "text",
           "primaryKey": false,
           "notNull": true,

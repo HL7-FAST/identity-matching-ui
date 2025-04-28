@@ -1,33 +1,62 @@
 import 'dotenv/config';
-import { drizzle } from 'drizzle-orm/libsql';
+import { drizzle, LibSQLDatabase } from 'drizzle-orm/libsql';
 import { migrate } from 'drizzle-orm/libsql/migrator';
 import { appConfig } from '@/config';
 import drizzleConfig from 'drizzle.config';
 import { registerClient } from '@/lib/utils/udap';
-import { getGeneratedCertificate, loadCertificate } from '@/lib/utils/cert';
-import { P12Certificate } from '@/lib/models/auth';
+import { getGeneratedCertificate, getSubjectAltName, loadCertificate } from '@/lib/utils/cert';
 import { clientConfigToClientRequest } from '@/lib/utils/client';
-import { X509Certificate } from 'crypto';
-import { clientsTable } from './schema';
+import { getClientsByConfig } from './schema/client';
+import { isMainModule } from '@angular/ssr/node';
+import { isDevMode } from '@angular/core';
+import { GrantType, UdapClientRequest } from '@/lib/models/auth';
+import { Client } from '@/lib/models/client';
 
 export const db = getDatabase();
 
-export function getDatabase() {
+export function getDatabase(): LibSQLDatabase {
   // Return the database connection
-  return drizzle(appConfig.database.url);
+  if (isMainModule(import.meta.url) || isDevMode()) {
+    return drizzle(appConfig.database.url);
+  }
+
+  return drizzle(':memory:');
 }
 
 export async function initDatabase() {
   // apply any pending migrations
+  console.log('Applying database migrations...');
+  console.time('Database migrations complete.');
   await migrate(getDatabase(), {
     migrationsFolder: drizzleConfig.out || 'drizzle',
   });
+  console.timeEnd('Database migrations complete.');
 
   // create default clients
+  console.log('Creating default clients...');
+  console.time('Default client initialization complete.');
   for (const client of appConfig.defaultClients) {
 
+    // check if the client already exists in the database
+    // still need to run registration in the event the auth server doesn't have this client anymore
+    const existingClients = await getClientsByConfig(client);
+    let existingClient: Client | undefined = undefined;
+    if (existingClients.length > 0) {
+      existingClient = existingClients[0];
+
+      // client issuer needs to match the certificate subject alt name
+      const cert = await loadCertificate(existingClient.certificate, existingClient.certificatePass || appConfig.defaultCertPass);
+      const san = getSubjectAltName(cert);
+      console.log('Existing client SAN:', san);
+      if (san !== client.issuer) {
+        client.issuer = san.replace('URI:', '');
+      }
+    }
+    
+
     try {
-      let certString = client.certificate;
+      let certString = existingClient ? existingClient.certificate : client.certificate;
+      let certPassword = (existingClient ? existingClient.certificatePass : client.certificatePass) || appConfig.defaultCertPass;
 
       // if a certificate is provided, attempt to load it
       try {
@@ -51,7 +80,6 @@ export async function initDatabase() {
             appConfig.defaultCertPass,
             certProvider.endpoint
           );
-          console.log('New cert:', certString);
 
           if (!certString) {
             console.error(
@@ -75,25 +103,7 @@ export async function initDatabase() {
       }
 
       const request = clientConfigToClientRequest(client);
-      const newClient = await registerClient(request, certString, client.certificatePass || appConfig.defaultCertPass);
-
-      const res = await db.insert(clientsTable).values({
-        fhirBaseUrl: newClient.fhirServer,
-        clientId: newClient.clientId,
-        grantTypes: newClient.grantTypes.join(' '),
-        scopes: newClient.scopes,
-        authorizationEndpoint: newClient.authorizationEndpoint,
-        userinfoEndpoint: newClient.userinfoEndpoint,
-        tokenEndpoint: newClient.tokenEndpoint,
-        certificate: newClient.certificate,
-        certificatePass: newClient.certificatePass,
-        currentToken: newClient.currentToken,
-        createdAt: newClient.createdAt.toUTCString(),
-        updatedAt: newClient.updatedAt.toUTCString(),
-      }).returning({ id: clientsTable.id });
-
-      newClient.id = res[0].id;
-
+      const newClient = await registerClient(request, certString, certPassword, existingClient);
       console.log(`Client ${newClient.id} with client ID ${newClient.clientId} registered for ${client.fhirServer}`);
       
     } catch (error) {
@@ -103,4 +113,6 @@ export async function initDatabase() {
       );
     }
   }
+  console.timeEnd('Default client initialization complete.');
+
 }

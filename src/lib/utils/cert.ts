@@ -61,10 +61,10 @@ export async function p12ToBase64(p12Cert: P12Certificate): Promise<string> {
 }
 
 
-export async function parseCertificate(
+export function parseCertificate(
   buffer: Buffer<ArrayBufferLike>,
   password: string,
-): Promise<P12Certificate> {
+): P12Certificate {
   const p12Asn1 = forge.asn1.fromDer(buffer.toString("binary"));
   const p12 = forge.pkcs12.pkcs12FromAsn1(p12Asn1, password);
 
@@ -72,7 +72,7 @@ export async function parseCertificate(
 }
 
 
-export async function getX509Certficate(p12Cert: P12Certificate): Promise<X509Certificate> {
+export function getX509Certficate(p12Cert: P12Certificate): X509Certificate {
   const certBags = p12Cert.getBags({ bagType: forge.pki.oids.certBag });
   const certBag = certBags[forge.pki.oids.certBag];
   if (!certBag || certBag.length === 0) {
@@ -107,4 +107,14 @@ export async function getPrivateKey(
   }
 
   return pk;
+}
+
+export function getSubjectAltName(p12Cert: P12Certificate): string {
+  const cert = getX509Certficate(p12Cert);
+  const subjectAltName = cert.subjectAltName;
+  if (!subjectAltName) {
+    throw new Error("No subject alternative name found in the provided P12 file");
+  }
+
+  return subjectAltName;
 }

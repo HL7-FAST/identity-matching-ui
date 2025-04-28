@@ -2,7 +2,7 @@ import { Router } from 'express';
 
 export const authRouter = Router();
 
-authRouter.get('/login', (req, res) => {
+authRouter.get('/login', async (req, res) => {
   // Implement login logic
   req.session.user = { id: 1, name: 'John Doe' };
   // console.log('Login endpoint', req.session.user, req.session.id);
@@ -10,7 +10,7 @@ authRouter.get('/login', (req, res) => {
 });
 
 
-authRouter.get('/userinfo', (req, res) => {
+authRouter.get('/userinfo', async (req, res) => {
   // console.log('User info endpoint', req.session, req.session.id);
   
   if (req.session.user) {

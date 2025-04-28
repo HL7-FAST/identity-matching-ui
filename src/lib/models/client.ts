@@ -1,25 +1,11 @@
 import { GrantType } from "./auth";
+import { clientsTable } from "@/db/schema/client";
 
-export interface Client {
-  id: string | null;
-  fhirServer: string;
-  clientId: string;
-  grantTypes: GrantType[];
-  scopes: string;
 
-  authorizationEndpoint?: string;
-  userinfoEndpoint?: string;
-  tokenEndpoint: string;
+export type Client = typeof clientsTable.$inferSelect;
+export type ClientInsert = typeof clientsTable.$inferInsert;
 
-  certificate: string;
-  certificatePass: string | null;
-
-  currentToken?: string;
-
-  createdAt: Date;
-  updatedAt: Date;
-  lastUsedAt?: Date | null;
-}
+export type ClientDTO = Omit<Client, "clientId" | "certificate" | "certificatePass">;
 
 export interface ClientConfig {
   fhirServer: string;
@@ -30,7 +16,6 @@ export interface ClientConfig {
   logoUri?: string;
   scopes?: string;
   redirectUris?: string[];
-
   certificate?: string;
   certificatePass?: string;
 }

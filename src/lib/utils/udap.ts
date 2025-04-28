@@ -1,14 +1,18 @@
 import { P12Certificate, UdapClientRequest, UdapMetadata, UdapRegistration, UdapRegistrationRequest, UdapRegistrationResponse, UdapSoftwareStatement, UdapX509Header } from "../models/auth";
-import { Client, ClientConfig, ClientRegistration } from "../models/client";
+import { Client, ClientConfig, ClientInsert, ClientRegistration } from "../models/client";
 import * as forge from "node-forge";
 import jwt from "jsonwebtoken";
 import { getPrivateKey, getX509Certficate, loadCertificate, p12ToBase64 } from "./cert";
+import { db } from "@/db";
+import { clientsTable } from "@/db/schema/client";
+import { eq } from "drizzle-orm";
+import { Request } from "express";
 
 
 /**
  * Registers a new client with the given registration request.
  */
-export async function registerClient(regReq: UdapClientRequest, certFile: string, certPassword: string): Promise<Client> {
+export async function registerClient(regReq: UdapClientRequest, certFile: string, certPassword: string, existingClient?: Client): Promise<Client> {
 
   // load the certificate
   const cert = await loadCertificate(certFile, certPassword);
@@ -28,22 +32,45 @@ export async function registerClient(regReq: UdapClientRequest, certFile: string
   // register client
   const regRes = await sendRegistrationRequest(udapMeta.registration_endpoint, regBody);
 
-  const client: Client = {
-    id: "",
-    fhirServer: regReq.fhirServer,
+
+  
+  const insertClient: ClientInsert = {
+    fhirBaseUrl: regReq.fhirServer,
     clientId: regRes.client_id,
-    grantTypes: regReq.grantTypes,
-    scopes: regRes.scope || regReq.scopes.join(" "),
+    grantTypes: regReq.grantTypes?.join(" ") || "",
+    scopesRequested: regReq.scopes?.join(" ") || "",
+    scopesGranted: regRes.scope || "",
     authorizationEndpoint: udapMeta.authorization_endpoint,
     userinfoEndpoint: udapMeta.userinfo_endpoint,
     tokenEndpoint: udapMeta.token_endpoint,
     certificate: certFile,
     certificatePass: certPassword,
-    createdAt: new Date(),
-    updatedAt: new Date(),
+    createdAt: new Date().toUTCString(),
+    updatedAt: new Date().toUTCString(),
   };
 
-  return client;
+
+  if (existingClient) {
+    // update existing client
+    const updatedClient = {
+      ...insertClient,
+      id: existingClient.id,
+      createdAt: existingClient.createdAt,
+    };
+
+    const res = await db.update(clientsTable).set(updatedClient).where(eq(clientsTable.id, existingClient.id)).returning();
+    if (!res) {
+      throw new Error(`Failed to update client: ${regRes}`);
+    }
+    return res[0];
+  }
+
+  const res = await db.insert(clientsTable).values(insertClient).returning();
+  if (!res) {
+    throw new Error(`Failed to register client: ${regRes}`);
+  }
+
+  return res[0];
   
 }
 
@@ -191,4 +218,56 @@ export async function getClientAssertion(
   // console.log('Client assertion:', token);
 
   return token;
+}
+
+
+
+export async function refreshClientToken(client: Client, req: Request): Promise<Client> {
+  // load the client certificate
+  const cert = await loadCertificate(client.certificate, client.certificatePass || "");
+
+  // get the client assertion
+  const assertion = await getClientAssertion(client.clientId, client.tokenEndpoint, cert);
+
+  const tokenParams = {
+    grant_type: client.grantTypes.includes("client_credentials") ? "client_credentials" : "authorization_code",
+    code: req.params["code"] || "",
+    client_assertion_type: "urn:ietf:params:oauth:client-assertion-type:jwt-bearer",
+    client_assertion: assertion,
+    redirect_uri: "",
+    udap: "1"
+  };
+
+  // request a new token
+  const tokenResponse = await fetch(client.tokenEndpoint, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+    },
+    body: new URLSearchParams(tokenParams).toString(),
+  });
+
+  if (!tokenResponse.ok) {
+    throw new Error(`Failed to get token: ${tokenResponse.statusText}`);
+  }
+
+  const tokenJson = await tokenResponse.json();
+  if (!tokenJson.access_token) {
+    throw new Error(`Failed to get token: ${tokenJson.error}: ${tokenJson.error_description}`);
+  }
+
+  // update the client with the new token
+  const updatedClient: Client = {
+    ...client,
+    currentToken: tokenJson.access_token,
+    updatedAt: new Date().toUTCString(),
+  };
+
+  // save the updated client to the database
+  const res = await db.update(clientsTable).set(updatedClient).where(eq(clientsTable.id, client.id)).returning();
+  if (!res) {
+    throw new Error(`Failed to update client: ${res}`);
+  }
+
+  return res[0];
 }
