@@ -1,5 +1,5 @@
 import { GrantType } from "./auth";
-import { clientsTable } from "@/db/schema/client";
+import { clientsTable } from "@/db/schema";
 
 
 export type Client = typeof clientsTable.$inferSelect;

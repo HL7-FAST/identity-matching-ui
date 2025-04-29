@@ -12,5 +12,7 @@ declare module 'express-session' {
      * ID of the client being used by this session
      */
     currentClient?: string;
+
+    currentToken?: string;
   }
 }

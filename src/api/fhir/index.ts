@@ -1,13 +1,13 @@
 import { appConfig } from '@/config';
 import { db } from '@/db';
-import { clientsTable } from '@/db/schema/client';
+import { clientsTable } from '@/db/schema';
 import { Client } from '@/lib/models/client';
 import { Request, Router } from 'express';
 import { eq } from "drizzle-orm";
 import {
   createProxyMiddleware,
 } from 'http-proxy-middleware';
-import { refreshClientToken } from '@/lib/utils/udap';
+import { refreshToken } from '@/lib/utils/udap';
 import jwt from 'jsonwebtoken';
 
 export const fhirRouter = Router();
@@ -49,10 +49,37 @@ async function getClient(req: Request): Promise<Client> {
     }
   }
 
+  // let isTokenExpired = false;
+  // if (client.currentToken) {
+  //   // parse the token to get the expiration time
+  //   const token = jwt.decode(client.currentToken);
+  //   if (token && typeof token === 'object' && token.exp) {
+  //     const exp = token.exp * 1000; // convert to milliseconds
+  //     const now = Date.now();
+  //     isTokenExpired = now > exp;
+  //   } else {
+  //     console.warn('Invalid token format or missing expiration time');
+  //   }    
+  // }
+
+  // // Ensure we have a valid access token
+  // if (!client.currentToken || isTokenExpired) {
+  //   client = await refreshClientToken(client, req);
+  //   // console.log('Refreshed client token:', client.currentToken);
+  // }
+
+
+  return client;
+
+}
+
+
+async function getAccessToken(req: Request, client: Client): Promise<string> {
+
   let isTokenExpired = false;
-  if (client.currentToken) {
+  if (req.session.currentToken) {
     // parse the token to get the expiration time
-    const token = jwt.decode(client.currentToken);
+    const token = jwt.decode(req.session.currentToken);
     if (token && typeof token === 'object' && token.exp) {
       const exp = token.exp * 1000; // convert to milliseconds
       const now = Date.now();
@@ -63,22 +90,23 @@ async function getClient(req: Request): Promise<Client> {
   }
 
   // Ensure we have a valid access token
-  if (!client.currentToken || isTokenExpired) {
-    client = await refreshClientToken(client, req);
+  if (!req.session.currentToken || isTokenExpired) {
+    req.session.currentToken = await refreshToken(client, req);
     // console.log('Refreshed client token:', client.currentToken);
   }
 
-
-  return client;
+  return req.session.currentToken;
 
 }
+
 
 fhirRouter.use(
   '/{*splat}',
   async (req, res, next) => {
     // Attach the target URL to the request object for use in the proxy
     const client = await getClient(req);
-    req.headers['Authorization'] = `Bearer ${client.currentToken}`;
+    const token = await getAccessToken(req, client);
+    req.headers['Authorization'] = `Bearer ${token}`;
     (req as any).targetFhirUrl = client.fhirBaseUrl + req.originalUrl.replace('/api/fhir', '');
     next();
   },

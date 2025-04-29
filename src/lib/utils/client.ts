@@ -1,7 +1,6 @@
 import { appConfig } from "@/config";
 import { UdapClientRequest } from "../models/auth";
 import { ClientConfig } from "../models/client";
-import { getBaseUrl } from "./http";
 
 export function clientConfigToClientRequest(config: ClientConfig): UdapClientRequest {
 

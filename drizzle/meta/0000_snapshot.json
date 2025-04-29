@@ -1,7 +1,7 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "6a862418-44a9-4d97-a2fe-9d93e2b92b6f",
+  "id": "382ed5e2-db05-45d8-97c3-392e6e839076",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "clients": {
@@ -79,13 +79,6 @@
         },
         "certificatePass": {
           "name": "certificatePass",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "currentToken": {
-          "name": "currentToken",
           "type": "text",
           "primaryKey": false,
           "notNull": false,

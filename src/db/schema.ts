@@ -1,8 +1,14 @@
+
 import { sqliteTable, text } from "drizzle-orm/sqlite-core";
-import { db } from "..";
-import { GrantType } from "@/lib/models/auth";
-import { and, eq } from "drizzle-orm";
-import { ClientConfig } from "@/lib/models/client";
+
+
+
+export const sessionsTable = sqliteTable("sessions", {
+  sid: text().primaryKey(),
+  expired: text().notNull(),
+  sess: text().notNull(),
+});
+
 
 
 export const clientsTable = sqliteTable("clients", {
@@ -38,28 +44,9 @@ export const clientsTable = sqliteTable("clients", {
   certificate: text().notNull(),
   certificatePass: text(),
 
-  // current access token
-  currentToken: text(),
-
   // timestamps
   createdAt: text().notNull().$default(() => new Date().toUTCString()),
   updatedAt: text().notNull().$default(() => new Date().toUTCString()),
   lastUsedAt: text()
 });
 
-
-
-export async function getClientsByConfig(clientConfig: ClientConfig) {
-  return await db
-    .select()
-    .from(clientsTable)
-    .where(
-      and(
-        eq(clientsTable.fhirBaseUrl, clientConfig.fhirServer),
-        eq(clientsTable.grantTypes, clientConfig.grantTypes?.join(" ") || ""),
-        eq(clientsTable.scopesRequested, clientConfig.scopes || "")
-      )
-    )
-    .all();
-
-}

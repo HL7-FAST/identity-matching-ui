@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { db } from '@/db';
-import { clientsTable } from '@/db/schema/client';
+import { clientsTable } from '@/db/schema';
 
 export const clientRouter = Router();
 

@@ -6,10 +6,9 @@ import drizzleConfig from 'drizzle.config';
 import { registerClient } from '@/lib/utils/udap';
 import { getGeneratedCertificate, getSubjectAltName, loadCertificate } from '@/lib/utils/cert';
 import { clientConfigToClientRequest } from '@/lib/utils/client';
-import { getClientsByConfig } from './schema/client';
+import { getClientsByConfig } from '@/db/client';
 import { isMainModule } from '@angular/ssr/node';
 import { isDevMode } from '@angular/core';
-import { GrantType, UdapClientRequest } from '@/lib/models/auth';
 import { Client } from '@/lib/models/client';
 
 export const db = getDatabase();

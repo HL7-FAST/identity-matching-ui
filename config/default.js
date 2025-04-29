@@ -1,10 +1,8 @@
-import { AppConfig } from "@/lib/models/config"
-
 
 const defaultAppPort = 4200;
 const defaultFhirBaseUrl = 'http://localhost:8080/fhir';
 
-export const config: AppConfig = {
+export const config = {
   env: 'development',
   port: defaultAppPort,
   appUrl: `http://localhost:${defaultAppPort}`,

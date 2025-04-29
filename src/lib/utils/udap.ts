@@ -4,7 +4,7 @@ import * as forge from "node-forge";
 import jwt from "jsonwebtoken";
 import { getPrivateKey, getX509Certficate, loadCertificate, p12ToBase64 } from "./cert";
 import { db } from "@/db";
-import { clientsTable } from "@/db/schema/client";
+import { clientsTable } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import { Request } from "express";
 
@@ -222,7 +222,7 @@ export async function getClientAssertion(
 
 
 
-export async function refreshClientToken(client: Client, req: Request): Promise<Client> {
+export async function refreshToken(client: Client, req: Request): Promise<string> {
   // load the client certificate
   const cert = await loadCertificate(client.certificate, client.certificatePass || "");
 
@@ -257,17 +257,19 @@ export async function refreshClientToken(client: Client, req: Request): Promise<
   }
 
   // update the client with the new token
-  const updatedClient: Client = {
-    ...client,
-    currentToken: tokenJson.access_token,
-    updatedAt: new Date().toUTCString(),
-  };
+  // const updatedClient: Client = {
+  //   ...client,
+  //   currentToken: tokenJson.access_token,
+  //   updatedAt: new Date().toUTCString(),
+  // };
 
-  // save the updated client to the database
-  const res = await db.update(clientsTable).set(updatedClient).where(eq(clientsTable.id, client.id)).returning();
-  if (!res) {
-    throw new Error(`Failed to update client: ${res}`);
-  }
+  // // save the updated client to the database
+  // const res = await db.update(clientsTable).set(updatedClient).where(eq(clientsTable.id, client.id)).returning();
+  // if (!res) {
+  //   throw new Error(`Failed to update client: ${res}`);
+  // }
 
-  return res[0];
+  // return res[0];
+
+  return tokenJson.access_token;
 }

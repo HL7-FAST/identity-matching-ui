@@ -10,7 +10,6 @@ CREATE TABLE `clients` (
 	`tokenEndpoint` text NOT NULL,
 	`certificate` text NOT NULL,
 	`certificatePass` text,
-	`currentToken` text,
 	`createdAt` text NOT NULL,
 	`updatedAt` text NOT NULL,
 	`lastUsedAt` text

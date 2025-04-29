@@ -23,6 +23,7 @@
     "@angular/platform-server": "^19.2.7",
     "@angular/router": "^19.2.7",
     "@angular/ssr": "^19.2.8",
+    "@libsql/client": "^0.15.4",
     "angular-oauth2-oidc": "^19.0.0",
     "config": "^3.3.12",
     "connect-sqlite3": "^0.9.15",
@@ -40,7 +41,7 @@
   "devDependencies": {
     "@angular-devkit/build-angular": "^19.2.8",
     "@angular/cli": "^19.2.8",
-    "@angular/compiler-cli": "^19.2.7",
+    "@angular/compiler-cli": "^19.2.8",
     "@types/config": "^3.3.5",
     "@types/express": "^5.0.1",
     "@types/express-session": "^1.18.1",
