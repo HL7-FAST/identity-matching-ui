@@ -1,6 +1,6 @@
 const defaultFhirBaseUrl = 'https://identity-matching.fast.hl7.org/fhir';
 
-export const config = {
+module.exports = {
   env: 'production',
   port: 4000,
   defaultFhirBaseUrl: defaultFhirBaseUrl,
@@ -29,4 +29,3 @@ export const config = {
     }
   ]
 }
-export default config;

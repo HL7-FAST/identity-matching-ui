@@ -40,6 +40,7 @@ export async function registerClient(regReq: UdapClientRequest, certFile: string
     grantTypes: regReq.grantTypes?.join(" ") || "",
     scopesRequested: regReq.scopes?.join(" ") || "",
     scopesGranted: regRes.scope || "",
+    redirectUris: regReq.redirectUris?.join(" "),
     authorizationEndpoint: udapMeta.authorization_endpoint,
     userinfoEndpoint: udapMeta.userinfo_endpoint,
     tokenEndpoint: udapMeta.token_endpoint,
@@ -222,7 +223,46 @@ export async function getClientAssertion(
 
 
 
-export async function refreshToken(client: Client, req: Request): Promise<string> {
+export async function getAccessToken(req: Request, client: Client): Promise<string> {
+
+  let isTokenExpired = false;
+  if (req.session.currentToken) {
+    // parse the token
+    const token = jwt.decode(req.session.currentToken);
+    
+    if (token && typeof token === 'object') {
+      // check that the client ID matches
+      if (token.client_id && token.client_id !== client.clientId) {
+        console.warn('Token client ID does not match the current client ID. Clearing token from session.');
+        req.session.currentToken = undefined;
+      } else {
+        // check the expiration time
+        if (token.exp) {
+          const exp = token.exp * 1000; // convert to milliseconds
+          const now = Date.now();
+          isTokenExpired = now > exp;
+        } else {
+          console.warn('Invalid token format or missing expiration time');
+        }
+      }
+    }
+  }
+
+  // Ensure we have a valid access token
+  if (!req.session.currentToken || isTokenExpired) {
+    req.session.currentToken = await getNewAccessToken(req, client);
+    // console.log('Refreshed client token:', req.session.currentToken);
+  }
+
+  return req.session.currentToken;
+
+}
+
+
+export async function getNewAccessToken(req: Request, client: Client): Promise<string> {
+
+  console.log("Getting new access token for client:", client.clientId);
+
   // load the client certificate
   const cert = await loadCertificate(client.certificate, client.certificatePass || "");
 
@@ -231,12 +271,14 @@ export async function refreshToken(client: Client, req: Request): Promise<string
 
   const tokenParams = {
     grant_type: client.grantTypes.includes("client_credentials") ? "client_credentials" : "authorization_code",
-    code: req.params["code"] || "",
+    code: req.query?.code?.toString() || "",
     client_assertion_type: "urn:ietf:params:oauth:client-assertion-type:jwt-bearer",
     client_assertion: assertion,
-    redirect_uri: "",
+    redirect_uri: client.redirectUris?.split(" ")[0] || "",
     udap: "1"
   };
+
+  // console.log("Token params:", new URLSearchParams(tokenParams).toString());
 
   // request a new token
   const tokenResponse = await fetch(client.tokenEndpoint, {

@@ -5,6 +5,7 @@ CREATE TABLE `clients` (
 	`grantTypes` text NOT NULL,
 	`scopesRequested` text NOT NULL,
 	`scopesGranted` text NOT NULL,
+	`redirectUris` text,
 	`authorizationEndpoint` text,
 	`userinfoEndpoint` text,
 	`tokenEndpoint` text NOT NULL,

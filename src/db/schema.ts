@@ -35,6 +35,8 @@ export const clientsTable = sqliteTable("clients", {
    */
   scopesGranted: text().notNull(),
 
+  redirectUris: text(),
+
   // endpoints
   authorizationEndpoint: text(),
   userinfoEndpoint: text(),

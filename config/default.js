@@ -2,7 +2,7 @@
 const defaultAppPort = 4200;
 const defaultFhirBaseUrl = 'http://localhost:8080/fhir';
 
-export const config = {
+module.exports = {
   env: 'development',
   port: defaultAppPort,
   appUrl: `http://localhost:${defaultAppPort}`,
@@ -37,4 +37,3 @@ export const config = {
     }
   ]
 }
-export default config;

@@ -9,6 +9,7 @@ import 'dotenv/config';
 import { appConfig } from '@/config';
 
 import session from 'express-session';
+import cookieParser from 'cookie-parser';
 
 import { dirname, resolve } from 'path';
 import { fileURLToPath } from 'url';
@@ -43,6 +44,7 @@ console.log('NODE_CONFIG:', JSON.parse(process.env.NODE_CONFIG || '{}'));
 
 server.use(express.json());
 server.use(express.urlencoded({ extended: true }));
+server.use(cookieParser());
 
 // Initialize the database and session store if this module is the main entry point or in development mode
 // This prevents a database from being created when building

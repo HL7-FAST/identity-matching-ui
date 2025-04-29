@@ -36,6 +36,10 @@ export class AppComponent {
     this.userProfile = await this.profileService.getProfile(); 
   }
 
+  login() {
+    window.location.href = '/api/auth/login';
+  }
+
   logout() {
     this.authService.logout();
   }
