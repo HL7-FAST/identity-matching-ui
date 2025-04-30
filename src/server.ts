@@ -28,7 +28,7 @@ const browserDistFolder = resolve(serverDistFolder, '../browser');
 const server = express();
 const angularApp = new AngularNodeAppEngine();
 
-console.log('NODE_CONFIG:', JSON.parse(process.env.NODE_CONFIG || '{}'));
+// console.log('NODE_CONFIG:', JSON.parse(process.env.NODE_CONFIG || '{}'));
 
 /**
  * Example Express Rest API endpoints can be defined here.

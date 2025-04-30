@@ -275,6 +275,7 @@ export async function getNewAccessToken(req: Request, client: Client): Promise<s
     client_assertion_type: "urn:ietf:params:oauth:client-assertion-type:jwt-bearer",
     client_assertion: assertion,
     redirect_uri: client.redirectUris?.split(" ")[0] || "",
+    code_verifier: req.session.codeVerifier || "",
     udap: "1"
   };
 

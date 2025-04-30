@@ -14,5 +14,8 @@ declare module 'express-session' {
     currentClient?: string;
 
     currentToken?: string;
+
+    state?: string;
+    codeVerifier?: string;
   }
 }
