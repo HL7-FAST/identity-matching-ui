@@ -13,6 +13,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { PatientService } from '@/ui/app/services/patient.service';
 import { FormMode } from '@/ui/app/models/FormMode.enum';
+import { MatNativeDateModule } from '@angular/material/core';
 
 @Component({
     selector: 'app-patient-form-dialog',
@@ -24,6 +25,7 @@ import { FormMode } from '@/ui/app/models/FormMode.enum';
         MatSelectModule,
         MatInputModule,
         MatDatepickerModule,
+        MatNativeDateModule,
         MatIconModule,
         ReactiveFormsModule,
         MatToolbarModule,

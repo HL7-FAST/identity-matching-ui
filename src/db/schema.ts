@@ -41,6 +41,7 @@ export const clientsTable = sqliteTable("clients", {
   authorizationEndpoint: text(),
   userinfoEndpoint: text(),
   tokenEndpoint: text().notNull(),
+  revocationEndpoint: text(),
 
   // certificate data
   certificate: text().notNull(),

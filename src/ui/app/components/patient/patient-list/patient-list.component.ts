@@ -60,6 +60,7 @@ export class PatientListComponent {
   }
 
   getPatients(queryString: string) {
+    console.log('Query string: ', queryString);
     this.patientService.list(queryString).subscribe(data => {
       this.patientBundle = data;
       this.patients = data.entry; 
@@ -77,6 +78,7 @@ export class PatientListComponent {
   }
 
   pagedEvent(event: PageEvent) {
+    console.log('Page event: ', event);
     if(this.pageSize != event.pageSize) {
       this.pageNumber = 0;
       this.pageSize = event.pageSize;

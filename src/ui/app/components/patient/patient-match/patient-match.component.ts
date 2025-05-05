@@ -20,6 +20,7 @@ import { CodeableConcept, Patient, Parameters, Bundle, BundleEntry, Identifier, 
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { PatientViewDialogComponent } from '../patient-view-dialog/patient-view-dialog.component';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { MatNativeDateModule } from '@angular/material/core';
 
 @Component({
     selector: 'app-patient-match',
@@ -37,6 +38,7 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
         MatCardModule,
         MatSnackBarModule,
         MatDatepickerModule,
+        MatNativeDateModule,
         MatExpansionModule,
         MatTabsModule,
         MatTableModule,

@@ -9,7 +9,7 @@ import { environment } from '@/ui/environments/environment';
   providedIn: 'root'
 })
 export class PatientService { 
-  private baseApiUrl = `${environment.baseApiUrl}`;
+  private baseApiUrl = `/api/fhir`;
 
   constructor(private http: HttpClient) { }
 
@@ -19,7 +19,10 @@ export class PatientService {
 
     if (queryString.startsWith(`${this.baseApiUrl}`)) {
       requestUrl = queryString;
-    }  
+    }
+    else if (queryString.match(/^https?:\/\//)) {
+      requestUrl = queryString;
+    }
     else {
       requestUrl = requestUrl.concat(queryString);
     }
@@ -80,7 +83,7 @@ export class PatientService {
 
   private handleError(err: HttpErrorResponse) {
     let errorMessage = '';
-    if (err.error instanceof ErrorEvent) {
+    if (err.error instanceof Error) {
       errorMessage = `An error occured: ${err.error.message}`;
     }
     else if (err.error instanceof Object && err.error.issue instanceof Array) {

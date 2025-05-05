@@ -1,23 +1,18 @@
-import { Injectable } from '@angular/core';
-import { HttpRequest, HttpHandler, HttpEvent, HttpInterceptor } from '@angular/common/http';
-import { Observable, throwError } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { HttpInterceptorFn } from '@angular/common/http';
+import { inject } from '@angular/core';
 import { Router } from '@angular/router';
+import { throwError } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 
-
-@Injectable()
-export class ErrorInterceptor implements HttpInterceptor {
-  constructor(private router: Router) { }
-
-  intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    return next.handle(request).pipe(catchError(err => {
+export const errorInterceptor: HttpInterceptorFn = (request, next) => {
+  const router = inject(Router);
+  return next(request).pipe(
+    catchError(err => {
       if ([401, 403].includes(err.status)) {
-        // route to unauthorized
-        this.router.navigate(['unauthorized']);
+        router.navigate(['unauthorized']);
       }
-
       console.error(err);
       return throwError(() => err);
-    }))
-  }
-}
+    })
+  );
+};

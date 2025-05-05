@@ -1,9 +1,13 @@
 import { getCurrentClient } from '@/lib/utils/client';
+import { getBaseUrl } from '@/lib/utils/http';
 import { getAccessToken } from '@/lib/utils/udap';
 import { Request, Router } from 'express';
 import {
   createProxyMiddleware,
+  fixRequestBody,
+  responseInterceptor,
 } from 'http-proxy-middleware';
+import { parseStringPromise } from 'xml2js';
 
 export const fhirRouter = Router();
 
@@ -12,7 +16,8 @@ fhirRouter.use(
   '/{*splat}',
   async (req, res, next) => {
     // Attach the target URL to the request object for use in the proxy
-    const client = await getCurrentClient(req);
+    // const client = await getCurrentClient(req, true, 'client_credentials');
+    const client = await getCurrentClient(req, false);
     if (!client) {
       res.status(400);
       res.json({ message: `No client available for ${req.session.fhirServer}` });
@@ -31,7 +36,61 @@ fhirRouter.use(
       console.log('Proxying FHIR request to', (req as any).targetFhirUrl);
       return (req as any).targetFhirUrl;
     },
-  })
+    selfHandleResponse: true,
+    on: {
+      proxyReq: fixRequestBody,
+      proxyRes: responseInterceptor(async (responseBuffer, proxyRes, req, res) => {
+        if (proxyRes.statusCode !== 200) {
+          // Handle non-200 responses here
+            console.error('Error response from FHIR server:', proxyRes.statusCode);
+          return responseBuffer;
+        }
+
+        // lack of client should've failed above, but...
+        const client = await getCurrentClient(req, false);
+        if (!client) {
+          return responseBuffer;
+        }
+
+        // attempt to parse the response (supporting JSON and XML responses)
+        try {
+          
+          const responseText = responseBuffer.toString('utf8');
+          const contentType = proxyRes.headers['content-type'];
+          let parsed;
+          if (contentType && (contentType.includes('application/json') || contentType.includes('application/fhir+json'))) {
+            parsed = JSON.parse(responseText);
+            if (parsed.link) {
+              // Modify the link URL(s) to point to this api proxy endpoint for paging
+              parsed.link = parsed.link.map((link: any) => {
+                console.log('Link:', link.url, link.url.startsWith(client.fhirBaseUrl));
+                if (link.url && link.url.startsWith(client.fhirBaseUrl)) {
+                  link.url = link.url.replace(client.fhirBaseUrl, getBaseUrl(req) + '/api/fhir');
+                }
+                return link;
+              });
+            }
+
+            return Buffer.from(JSON.stringify(parsed));            
+          }
+          else if (contentType && (contentType.includes('application/xml') || contentType.includes('application/fhir+xml') || contentType.includes('text/xml'))) {
+            parsed = await parseStringPromise(responseText);
+            console.log('Parsed XML:', parsed.Bundle.link);
+            
+            return responseBuffer;
+          }
+          else {
+            return responseBuffer;
+          }
+
+        } catch (err) {
+          console.error('Error parsing FHIR response:', err);
+          return responseBuffer;
+        }
+        
+      })
+    }
+  }),
 );
 
 // fhirRouter.use('/{*splat}', (req, res, next) => {

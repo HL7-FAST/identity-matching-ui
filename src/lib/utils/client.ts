@@ -5,6 +5,9 @@ import { db } from "@/db";
 import { clientsTable } from "@/db/schema";
 import { Request, Response } from "express";
 import { eq } from "drizzle-orm";
+import { getClientsByConfig } from "@/db/client";
+import { getGeneratedCertificate, getSubjectAltName, loadCertificate } from "./cert";
+import { registerClient } from "./udap";
 
 export function clientConfigToClientRequest(config: ClientConfig): UdapClientRequest {
 
@@ -25,6 +28,85 @@ export function clientConfigToClientRequest(config: ClientConfig): UdapClientReq
   }
 
   return request;
+}
+
+
+export async function createClient(client: ClientConfig): Promise<Client> {
+
+
+  console.log(`Creating client for ${client.fhirServer} (${client.grantTypes.join(',')})`);
+
+  // check if the client already exists in the database
+  // still need to run registration in the event the auth server doesn't have this client anymore
+  const existingClients = await getClientsByConfig(client);
+  let existingClient: Client | undefined = undefined;
+  if (existingClients.length > 0) {
+    existingClient = existingClients[0];
+
+    // client issuer needs to match the certificate subject alt name
+    const cert = await loadCertificate(existingClient.certificate, existingClient.certificatePass || appConfig.defaultCertPass);
+    const san = getSubjectAltName(cert);
+    console.log('Existing client SAN:', san);
+    if (san !== client.issuer) {
+      client.issuer = san.replace('URI:', '');
+    }
+  }
+  
+
+  try {
+    let certString = existingClient ? existingClient.certificate : client.certificate;
+    let certPassword = (existingClient ? existingClient.certificatePass : client.certificatePass) || appConfig.defaultCertPass;
+
+    // if a certificate is provided, attempt to load it
+    try {
+
+      if (!certString) {
+
+        const certProvider = appConfig.certGenerationProviders[0];
+
+        if (!certProvider) {
+          const msg = `No certificate configured for ${client.fhirServer} (${client.grantTypes.join(',')}) and no certificate provider configured.`;
+          console.error(msg);
+          throw new Error(msg);
+        }
+
+        const subjectAltName = `${new URL(appConfig.appUrl).href}#${crypto.randomUUID()}`;
+        client.issuer = subjectAltName;
+
+        certString = await getGeneratedCertificate(
+          [subjectAltName],
+          appConfig.defaultCertPass,
+          certProvider.endpoint
+        );
+
+        if (!certString) {
+          const msg = `Failed to generate certificate for ${client.fhirServer} (${client.grantTypes.join(',')}). Certificate provider returned empty string.`;
+          console.error(msg);
+          throw new Error(msg);
+        }
+
+        console.log(`Generated certificate for ${client.fhirServer}`);
+      }
+
+    } catch (error) {
+      // skip this client if the certificate cannot be loaded
+      const msg = `Error loading certificate for ${client.fhirServer} (${client.grantTypes.join(',')}): ${error}`;
+      console.error(msg);
+      throw new Error(msg);
+    }
+
+    const request = clientConfigToClientRequest(client);
+    const newClient = await registerClient(request, certString, certPassword, existingClient);
+    console.log(`Client ${newClient.id} with client ID ${newClient.clientId} registered for ${client.fhirServer}`);
+
+    return newClient;
+    
+  } catch (error) {
+    const msg = `Error registering client for ${client.fhirServer} (${client.grantTypes.join(',')}): ${error}`;
+    console.error(msg);
+    throw new Error(msg);
+  }
+
 }
 
 
@@ -50,12 +132,12 @@ export function getCurrentFhirServerUrl(req: Request): string {
 export async function getCurrentClient(req: Request, returnDefault: boolean = true, preferGrantType: 'authorization_code'|'client_credentials' = 'client_credentials'): Promise<Client | null> {
 
   // Get the client from the session
-  const clientId = req.session.currentClient;
+  const id = req.session.currentClient;
   
   let client: Client | null = null;
   
-  if (clientId) {
-    const clientsFound = await db.select().from(clientsTable).where(eq(clientsTable.clientId, clientId)).limit(1);
+  if (id) {
+    const clientsFound = await db.select().from(clientsTable).where(eq(clientsTable.id, id)).limit(1);
     if (clientsFound.length > 0) {
       client = clientsFound[0];
     }
@@ -84,12 +166,24 @@ export async function getCurrentClient(req: Request, returnDefault: boolean = tr
  * @param message Optional message to return.  Otherwise, a default message will be returned indicating why no client was found.
  */
 export function handleNoClient(req: Request, res: Response, message?: string) {
-  res.status(400);
-  if (message) {
-    res.json({ message });
-  } else {
-    res.json({ 
-      message: req.session.fhirServer ? `No client available for FHIR server: ${req.session.fhirServer}` : 'No FHIR server selected for current session'
-    });
+
+  if (!message) {
+
+    if (!req.session.currentClient && !req.session.fhirServer) {
+      message = 'No client or FHIR server selected for current session';
+    }
+    else if (!req.session.currentClient && req.session.fhirServer) {
+      message = `No client available for FHIR server: ${req.session.fhirServer}`;
+    }
+    else if (!req.session.fhirServer) {
+      message = `No FHIR server selected for current session`;
+    }
+    else {
+      message = 'No client available for current session';
+    }
   }
+
+  res.status(400);
+  res.json({ message });
+  
 }

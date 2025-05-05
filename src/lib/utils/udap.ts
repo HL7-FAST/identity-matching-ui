@@ -9,6 +9,11 @@ import { eq } from "drizzle-orm";
 import { Request } from "express";
 
 
+
+export const CLIENT_ASSERTION_TYPE = "urn:ietf:params:oauth:client-assertion-type:jwt-bearer";
+
+
+
 /**
  * Registers a new client with the given registration request.
  */
@@ -33,7 +38,6 @@ export async function registerClient(regReq: UdapClientRequest, certFile: string
   const regRes = await sendRegistrationRequest(udapMeta.registration_endpoint, regBody);
 
 
-  
   const insertClient: ClientInsert = {
     fhirBaseUrl: regReq.fhirServer,
     clientId: regRes.client_id,
@@ -44,6 +48,7 @@ export async function registerClient(regReq: UdapClientRequest, certFile: string
     authorizationEndpoint: udapMeta.authorization_endpoint,
     userinfoEndpoint: udapMeta.userinfo_endpoint,
     tokenEndpoint: udapMeta.token_endpoint,
+    revocationEndpoint: udapMeta.revocation_endpoint,
     certificate: certFile,
     certificatePass: certPassword,
     createdAt: new Date().toUTCString(),
@@ -272,7 +277,7 @@ export async function getNewAccessToken(req: Request, client: Client): Promise<s
   const tokenParams = {
     grant_type: client.grantTypes.includes("client_credentials") ? "client_credentials" : "authorization_code",
     code: req.query?.code?.toString() || "",
-    client_assertion_type: "urn:ietf:params:oauth:client-assertion-type:jwt-bearer",
+    client_assertion_type: CLIENT_ASSERTION_TYPE,
     client_assertion: assertion,
     redirect_uri: client.redirectUris?.split(" ")[0] || "",
     code_verifier: req.session.codeVerifier || "",

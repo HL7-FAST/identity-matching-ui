@@ -1,8 +1,9 @@
 import { getCurrentClient, handleNoClient } from '@/lib/utils/client';
 import { getBaseUrl } from '@/lib/utils/http';
-import { getAccessToken } from '@/lib/utils/udap';
+import { CLIENT_ASSERTION_TYPE, getAccessToken, getClientAssertion } from '@/lib/utils/udap';
 import { Router } from 'express';
 import crypto from 'crypto';
+import { loadCertificate } from '@/lib/utils/cert';
 
 export const authRouter = Router();
 
@@ -13,7 +14,8 @@ export const authRouter = Router();
  */
 authRouter.get('/login', async (req, res) => {
 
-  const client = await getCurrentClient(req, true, 'authorization_code');
+  // const client = await getCurrentClient(req, true, 'authorization_code');
+  const client = await getCurrentClient(req, false);
   if (!client) {
     handleNoClient(req, res);
     return;
@@ -60,13 +62,72 @@ authRouter.get('/login', async (req, res) => {
 });
 
 
+/**
+ * Logout endpoint for authorization code flow.
+ * This revokes the current access token
+ */
+authRouter.get('/logout', async (req, res) => {
+
+  // const client = await getCurrentClient(req, true, 'authorization_code');
+  const client = await getCurrentClient(req, false);
+  if (!client) {
+    handleNoClient(req, res);
+    return;
+  }
+
+  if (client.grantTypes === 'client_credentials') {
+    res.status(400);
+    res.json({ message: 'Current client for this session does not support authorization code flow.' });
+    return;
+  }
+
+
+  const token = req.session.currentToken;
+
+  // only need to do anything if we have a token
+  if (token) {
+    
+    // TODO: investigate further
+    // revoke the token if we have a known revocation endpoint
+    // if (client.revocationEndpoint) {
+    //   // get client assertion
+    //   const cert = await loadCertificate(client.certificate, client.certificatePass || "");
+    //   const assertion = await getClientAssertion(client.clientId, client.tokenEndpoint, cert);
+    //   try {
+    //     await fetch(client.revocationEndpoint, {
+    //       method: 'POST',
+    //       headers: {
+    //         'Content-Type': 'application/x-www-form-urlencoded',
+    //       },
+    //       body: new URLSearchParams({
+    //         token: token,
+    //         token_type_hint: 'access_token',
+    //         client_assertion: assertion,
+    //         client_assertion_type: CLIENT_ASSERTION_TYPE,
+    //       }).toString(),
+    //     });
+    //   } catch (error) {
+    //     console.error('Error revoking token:', error);
+    //   }
+    // }
+
+    // clear the token from the session
+    req.session.currentToken = undefined;
+  }
+
+  res.redirect(req.get('Referrer') || req.get('Referer') || getBaseUrl(req));
+
+});
+
+
 
 /**
  * Callback endpoint for authorization code flow.
  */
 authRouter.get('/callback', async (req, res) => {
 
-  const client = await getCurrentClient(req, true, 'authorization_code');
+  // const client = await getCurrentClient(req, true, 'authorization_code');
+  const client = await getCurrentClient(req, false);
   if (!client) {
     handleNoClient(req, res);
     return;

@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { OAuthService } from 'angular-oauth2-oidc';
 import { Subject } from 'rxjs';
 import { IUserProfile } from '@/ui/app/interfaces/user-profile.interface';
 import { UserProfile } from '@/ui/app/models/user-profile.model';
@@ -14,7 +13,6 @@ export class UserProfileService {
   private _userProfileUpdatedSubject = new Subject<UserProfile>();
   userProfileUpdated = this._userProfileUpdatedSubject.asObservable();
 
-  //private oauthService: OAuthService
   constructor(private sessionStorageSrv: SessionStorageService) { }
 
   setProfile(profile: IUserProfile) {

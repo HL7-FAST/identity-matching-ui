@@ -9,7 +9,7 @@ import { CapabilityStatement, Resource } from 'fhir/r4';
   providedIn: 'root'
 })
 export class ResourceService {
-    private baseApiUrl = `${environment.baseApiUrl}`;
+    private baseApiUrl = '/api/fhir';
     
     private availableResources: string[] = [
         'Patient',

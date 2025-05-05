@@ -10,6 +10,9 @@
   <span class="toolbar-divider">FAST Identity Matching</span>
   <span class="example-spacer"></span>
   <span class="toolbar-divider">
+    <app-current-settings></app-current-settings>
+  </span>
+  <span class="toolbar-divider">
     <button mat-icon-button matTooltip="Session Info" (click)="showSessionDialog($event)">
       <mat-icon>info</mat-icon>
     </button>
@@ -44,7 +47,15 @@
         <div class="side-nav-menu-title" matListItemTitle *ngIf="showMenuText">Dashboard</div>
       </a>
 
-      <!-- Notification Service Menu -->
+      <a mat-list-item routerLink="patient-list" routerLinkActive="active">
+        <mat-icon matListItemIcon [ngClass]="{'close-menu-icon' : !showMenuText}">personal_injury</mat-icon>
+        <div class="side-nav-menu-title" matListItemTitle *ngIf="showMenuText">Patient</div>
+      </a>
+      <a mat-list-item routerLink="patient-match" routerLinkActive="active">
+        <mat-icon matListItemIcon [ngClass]="{'close-menu-icon' : !showMenuText}">person_search</mat-icon>
+        <div class="side-nav-menu-title" matListItemTitle *ngIf="showMenuText">Patient Match</div>
+      </a>      
+
       <mat-accordion>
         <mat-expansion-panel style="box-shadow: none">
           <mat-expansion-panel-header style="margin-left: -8px">
@@ -69,18 +80,11 @@
         </mat-expansion-panel>
       </mat-accordion>
 
-      <a mat-list-item routerLink="patient-list" routerLinkActive="active">
-        <mat-icon matListItemIcon [ngClass]="{'close-menu-icon' : !showMenuText}">personal_injury</mat-icon>
-        <div class="side-nav-menu-title" matListItemTitle *ngIf="showMenuText">Patient</div>
-      </a>
-      <a mat-list-item routerLink="patient-match" routerLinkActive="active">
-        <mat-icon matListItemIcon [ngClass]="{'close-menu-icon' : !showMenuText}">person_search</mat-icon>
-        <div class="side-nav-menu-title" matListItemTitle *ngIf="showMenuText">Patient Match</div>
-      </a>   
       <a mat-list-item routerLink="capability-statement" routerLinkActive="active">
         <mat-icon matListItemIcon [ngClass]="{'close-menu-icon' : !showMenuText}">description</mat-icon>
         <div class="side-nav-menu-title" matListItemTitle *ngIf="showMenuText">Capability Statement</div>
       </a>
+
     </mat-nav-list>
   </mat-drawer>
   <mat-drawer-content class="main-content">

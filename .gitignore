@@ -46,6 +46,3 @@ Thumbs.db
 *.db
 *.sqlite
 config/local.*
-
-src/app/config/auth-code-flow.config.ts
-

@@ -1,0 +1,43 @@
+<h2 mat-dialog-title>Create New Client</h2>
+<mat-dialog-content>
+  <form [formGroup]="clientForm">
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>FHIR Server URL</mat-label>
+      <input matInput formControlName="fhirBaseUrl" placeholder="https://example.com/fhir">
+      @if (clientForm.get('fhirBaseUrl')?.hasError('required')) {
+        <mat-error>
+          FHIR Server URL is required
+        </mat-error>
+      }
+      @if (clientForm.get('fhirBaseUrl')?.hasError('pattern')) {
+        <mat-error>
+          Enter a valid URL (must start with http:// or https://)
+        </mat-error>
+      }
+      
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Grant Type</mat-label>
+      <mat-select formControlName="grantTypes">
+        <mat-option value="client_credentials">Client Credentials</mat-option>
+        <mat-option value="authorization_code">Authorization Code</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Scopes</mat-label>
+      <input matInput formControlName="scopesRequested" placeholder="Enter scopes (space separated)">
+    </mat-form-field>
+  </form>
+
+  @if (errorMessage) {
+    <div class="error-message">
+      <mat-error>{{ errorMessage }}</mat-error>
+    </div>
+  }
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button (click)="onCancel()">Cancel</button>
+  <button mat-raised-button color="primary" (click)="onSubmit()" [disabled]="!clientForm.valid">Create</button>
+</mat-dialog-actions>

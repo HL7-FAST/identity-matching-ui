@@ -7,13 +7,19 @@
   <mat-card class="resource-card">
     <mat-card-header>
       <mat-card-title>Auth Token</mat-card-title>
-      <button mat-icon-button matTooltip="Copy auth token to clipboard" (click)="copyToken()" *ngIf="!!currentToken">
-        <mat-icon>content_copy</mat-icon>
-      </button>
+      @if (currentToken) {
+        <button mat-icon-button matTooltip="Copy auth token to clipboard" (click)="copyToken()">
+          <mat-icon>content_copy</mat-icon>
+        </button>
+      }
     </mat-card-header>
     <mat-card-content>
-      <div class="auth-token" *ngIf="!!currentToken">{{ currentToken }}</div>
-      <div *ngIf="!currentToken">No token available</div>
+      @if (currentToken) {
+        <div class="auth-token">{{ currentToken }}</div>
+      } 
+      @else {
+        <div class="auth-token">No token available</div>
+      }
     </mat-card-content>
   </mat-card>
 

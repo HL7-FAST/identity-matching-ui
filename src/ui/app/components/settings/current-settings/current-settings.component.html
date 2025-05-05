@@ -1,0 +1,18 @@
+
+<span>
+  <span class="current-server">
+    <mat-icon>public</mat-icon>
+    @if (currentServer) {
+      {{ currentServer }}
+    }
+    @else if (message) {
+      {{ message }}
+    }
+    @else {
+      No server selected
+    }
+</span>
+
+<a mat-icon-button matTooltip="Change Settings" routerLink="settings" routerLinkActive="active">
+  <mat-icon>settings</mat-icon>
+</a>

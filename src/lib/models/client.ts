@@ -18,6 +18,7 @@ export interface ClientConfig {
   redirectUris?: string[];
   certificate?: string;
   certificatePass?: string;
+  certificateProvider?: string;
 }
 
 export type ClientRegistration = ClientConfig;
