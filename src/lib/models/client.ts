@@ -1,5 +1,6 @@
 import { GrantType } from "./auth";
 import { clientsTable } from "@/db/schema";
+import { CertGenerationProvider } from "./cert";
 
 
 export type Client = typeof clientsTable.$inferSelect;
@@ -18,7 +19,7 @@ export interface ClientConfig {
   redirectUris?: string[];
   certificate?: string;
   certificatePass?: string;
-  certificateProvider?: string;
+  certGenerationProvider?: CertGenerationProvider;
 }
 
 export type ClientRegistration = ClientConfig;

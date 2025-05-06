@@ -18,26 +18,14 @@ module.exports = {
       fhirServer: defaultFhirBaseUrl,
       grantTypes: ['client_credentials'],
       scopes: 'system/*.read system/*.rs',
-      certificateProvider: 'localhost',
+      certGenerationProvider: 'Local',
     },
     {
       fhirServer: defaultFhirBaseUrl,
       grantTypes: ['authorization_code'],
       scopes: 'openid profile email user/*.read user/*.rs',
-      certificateProvider: 'localhost',
+      certGenerationProvider: 'FhirLabs',
     },
   ],
-
-  certGenerationProviders: [
-    {
-      id: "localhost",
-      name: "FAST Security Server (localhost)",
-      endpoint: "https://localhost:5001/api/cert/generate",
-    },
-    {
-      id: "fhir-labs",
-      name: "FhirLabs UdapEd",
-      endpoint: "https://udaped.fhirlabs.net/Infrastructure/JitFhirlabsCommunityCertificate",
-    }
-  ]
+  certGenerationEndpoint: 'https://localhost:5001/api/cert/generate'
 }

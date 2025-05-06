@@ -29,6 +29,15 @@
       <mat-label>Scopes</mat-label>
       <input matInput formControlName="scopesRequested" placeholder="Enter scopes (space separated)">
     </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Certificate Generation Provider</mat-label>
+      <mat-select formControlName="certGenerationProvider">
+        <mat-option value="Local">FAST Security Reference Implementation CA</mat-option>
+        <mat-option value="FhirLabs">FhirLabs SureFhir-CA</mat-option>
+      </mat-select>
+    </mat-form-field>
+
   </form>
 
   @if (errorMessage) {

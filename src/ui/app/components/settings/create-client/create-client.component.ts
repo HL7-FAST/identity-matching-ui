@@ -44,7 +44,16 @@ export class CreateClientComponent {
     this.clientForm = this.fb.group({
       fhirBaseUrl: ['', [Validators.required, Validators.pattern('https?://.*')]],
       grantTypes: ['client_credentials', Validators.required],
-      scopesRequested: [''],
+      scopesRequested: 'system/*.read system/*.rs',
+      certGenerationProvider: ['Local'],
+    });
+
+    this.clientForm.get('grantTypes')?.valueChanges.subscribe((value) => {
+      if (value === 'authorization_code') {
+        this.clientForm.get('scopesRequested')?.setValue('openid profile user/*.read user/*.rs');
+      } else if (value === 'client_credentials') {
+        this.clientForm.get('scopesRequested')?.setValue('system/*.read system/*.rs');
+      }
     });
   }
 

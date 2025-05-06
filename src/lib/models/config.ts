@@ -15,6 +15,6 @@ export interface AppConfig {
   };
 
   defaultClients: ClientConfig[];
-  certGenerationProviders: CertGenerationProvider[];
+  certGenerationEndpoint: string;
 
 }

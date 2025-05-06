@@ -1,7 +1,7 @@
-import { Component, inject, Inject, OnInit } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA, MatDialogModule, MatDialog } from '@angular/material/dialog';
+import { Component, inject } from '@angular/core';
+import { MatDialogModule, MatDialog } from '@angular/material/dialog';
 import { HttpClient } from '@angular/common/http';
-import { Client } from '@/lib/models/client';
+import { ClientDTO } from '@/lib/models/client';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { MatTableModule } from '@angular/material/table';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
@@ -15,7 +15,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 
 
 
-type ClientListResponse = Client[] | { message: string };
+type ClientListResponse = ClientDTO[] | { message: string };
 
 @Component({
   selector: 'app-edit-settings',
@@ -34,7 +34,7 @@ type ClientListResponse = Client[] | { message: string };
 })
 export class EditSettingsComponent {
 
-  clients: Client[] = [];
+  clients: ClientDTO[] = [];
   displayedColumns: string[] = [ 'select', 'fhirBaseUrl', 'grantTypes', 'scopesRequested', 'scopesGranted'];
   loading = false;
 
@@ -97,7 +97,7 @@ export class EditSettingsComponent {
     }
   }
 
-  async selectClient(client: Client) {
+  async selectClient(client: ClientDTO) {
 
     try {
       // const data = await firstValueFrom(this.http.get<{ message: string }>(`/api/client/select/${client.id}`));

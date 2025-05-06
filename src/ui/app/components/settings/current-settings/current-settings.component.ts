@@ -1,4 +1,4 @@
-import { Client } from '@/lib/models/client';
+import { ClientDTO } from '@/lib/models/client';
 import { SettingsService } from '@/ui/app/services/settings.service';
 import { isPlatformBrowser } from '@angular/common';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
@@ -11,7 +11,7 @@ import { RouterModule } from '@angular/router';
 import { catchError, EMPTY, firstValueFrom } from 'rxjs';
 
 
-type CurrentClientResponse = Client | { message: string };
+type CurrentClientResponse = ClientDTO | { message: string };
 
 
 @Component({

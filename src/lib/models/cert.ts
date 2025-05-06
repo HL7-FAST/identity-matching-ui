@@ -1,6 +1,2 @@
 
-export interface CertGenerationProvider {
-  id: string;
-  name: string;
-  endpoint: string;
-}
+export type CertGenerationProvider = "Local" | "FhirLabs"

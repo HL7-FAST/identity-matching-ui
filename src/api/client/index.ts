@@ -30,13 +30,14 @@ clientRouter.get('/current', async (req, res) => {
 
 clientRouter.post('/', async (req, res) => {
   console.log('Creating client:', req.body);
-  const { fhirBaseUrl, grantTypes, scopesRequested } = req.body;
+  const { fhirBaseUrl, grantTypes, scopesRequested, certGenerationProvider } = req.body;
 
   try {
     const client = await createClient({
       fhirServer: fhirBaseUrl,
       grantTypes: [grantTypes],
       scopes: scopesRequested,
+      certGenerationProvider: certGenerationProvider || 'Local'
     });
     if (client) {
       res.status(201).json(clientToDTO(client));

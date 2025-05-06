@@ -1,8 +1,8 @@
 import { P12Certificate, UdapClientRequest, UdapMetadata, UdapRegistration, UdapRegistrationRequest, UdapRegistrationResponse, UdapSoftwareStatement, UdapX509Header } from "../models/auth";
-import { Client, ClientConfig, ClientInsert, ClientRegistration } from "../models/client";
+import { Client, ClientInsert } from "../models/client";
 import * as forge from "node-forge";
 import jwt from "jsonwebtoken";
-import { getPrivateKey, getX509Certficate, loadCertificate, p12ToBase64 } from "./cert";
+import { getPrivateKey, getX509Certficate, loadCertificate } from "./cert";
 import { db } from "@/db";
 import { clientsTable } from "@/db/schema";
 import { eq } from "drizzle-orm";
@@ -17,10 +17,10 @@ export const CLIENT_ASSERTION_TYPE = "urn:ietf:params:oauth:client-assertion-typ
 /**
  * Registers a new client with the given registration request.
  */
-export async function registerClient(regReq: UdapClientRequest, certFile: string, certPassword: string, existingClient?: Client): Promise<Client> {
+export async function registerClient(regReq: UdapClientRequest, certFile: string, encryptedCertPass: string, existingClient?: Client): Promise<Client> {
 
   // load the certificate
-  const cert = await loadCertificate(certFile, certPassword);
+  const cert = await loadCertificate(certFile, encryptedCertPass);
 
   // load udap endpoint for the FHIR base url
   const udapMeta = await discoverUdapEndpoint(regReq.fhirServer);
@@ -50,7 +50,7 @@ export async function registerClient(regReq: UdapClientRequest, certFile: string
     tokenEndpoint: udapMeta.token_endpoint,
     revocationEndpoint: udapMeta.revocation_endpoint,
     certificate: certFile,
-    certificatePass: certPassword,
+    certificatePass: encryptedCertPass,
     createdAt: new Date().toUTCString(),
     updatedAt: new Date().toUTCString(),
   };

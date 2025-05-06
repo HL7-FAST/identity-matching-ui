@@ -6,7 +6,7 @@ import { clientsTable } from "@/db/schema";
 import { Request, Response } from "express";
 import { eq } from "drizzle-orm";
 import { getClientsByConfig } from "@/db/client";
-import { getGeneratedCertificate, getSubjectAltName, loadCertificate } from "./cert";
+import { encryptCertificatePassword, getGeneratedCertificate, getSubjectAltName, loadCertificate } from "./cert";
 import { registerClient } from "./udap";
 
 export function clientConfigToClientRequest(config: ClientConfig): UdapClientRequest {
@@ -15,7 +15,7 @@ export function clientConfigToClientRequest(config: ClientConfig): UdapClientReq
     fhirServer: config.fhirServer,
     grantTypes: config.grantTypes,
     issuer: config.issuer ?? new URL(appConfig.appUrl).href,
-    clientName: config.clientName || "Identity Matching Client",
+    clientName: config.clientName || `Identity Matching Client ${Math.floor(new Date().getTime() / 1000)}`,
     contacts: config.contacts || ['mailto:tester@localhost'],
     scopes: config.scopes?.split(' ') || [
       config.grantTypes.includes('authorization_code') ? 'openid' : 'system/*read',
@@ -34,7 +34,7 @@ export function clientConfigToClientRequest(config: ClientConfig): UdapClientReq
 export async function createClient(client: ClientConfig): Promise<Client> {
 
 
-  console.log(`Creating client for ${client.fhirServer} (${client.grantTypes.join(',')})`);
+  console.log(`Creating client for ${client.fhirServer} (${client.grantTypes.join(',')}) using provider ${client.certGenerationProvider || 'not specified'}`);
 
   // check if the client already exists in the database
   // still need to run registration in the event the auth server doesn't have this client anymore
@@ -55,20 +55,21 @@ export async function createClient(client: ClientConfig): Promise<Client> {
 
   try {
     let certString = existingClient ? existingClient.certificate : client.certificate;
-    let certPassword = (existingClient ? existingClient.certificatePass : client.certificatePass) || appConfig.defaultCertPass;
+    let encryptedCertPass = (existingClient?.certificatePass) || encryptCertificatePassword(client.certificatePass || appConfig.defaultCertPass);
 
     // if a certificate is provided, attempt to load it
     try {
 
       if (!certString) {
-
-        const certProvider = appConfig.certGenerationProviders[0];
-
-        if (!certProvider) {
+        
+        if (!appConfig.certGenerationEndpoint) {
           const msg = `No certificate configured for ${client.fhirServer} (${client.grantTypes.join(',')}) and no certificate provider configured.`;
           console.error(msg);
           throw new Error(msg);
         }
+
+        const certProvider = client.certGenerationProvider || 'Local';
+        console.log(`Generating certificate for ${client.fhirServer} (${client.grantTypes.join(',')}) using ${certProvider}`);
 
         const subjectAltName = `${new URL(appConfig.appUrl).href}#${crypto.randomUUID()}`;
         client.issuer = subjectAltName;
@@ -76,7 +77,8 @@ export async function createClient(client: ClientConfig): Promise<Client> {
         certString = await getGeneratedCertificate(
           [subjectAltName],
           appConfig.defaultCertPass,
-          certProvider.endpoint
+          appConfig.certGenerationEndpoint,
+          certProvider
         );
 
         if (!certString) {
@@ -96,7 +98,7 @@ export async function createClient(client: ClientConfig): Promise<Client> {
     }
 
     const request = clientConfigToClientRequest(client);
-    const newClient = await registerClient(request, certString, certPassword, existingClient);
+    const newClient = await registerClient(request, certString, encryptedCertPass, existingClient);
     console.log(`Client ${newClient.id} with client ID ${newClient.clientId} registered for ${client.fhirServer}`);
 
     return newClient;
