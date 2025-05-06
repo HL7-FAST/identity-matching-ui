@@ -1,8 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, inject, PLATFORM_ID } from '@angular/core';
 import { UserProfile } from './models/user-profile.model';
 import { Breakpoints, BreakpointObserver } from '@angular/cdk/layout';
 import { Observable, map, shareReplay } from 'rxjs';
-import { UserProfileService } from './services/core/user-profile.service';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { SessionDialogComponent } from './components/core/session-dialog/session-dialog.component';
 import { RouterModule } from '@angular/router';
@@ -18,12 +17,14 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { CurrentSettingsComponent } from "./components/settings/current-settings/current-settings.component";
+import { SettingsService } from './services/settings.service';
+import { UserProfileComponent } from "./components/user-profile/user-profile.component";
 
 @Component({
-    selector: 'app-root',
-    templateUrl: './app.component.html',
-    styleUrls: ['./app.component.scss'],
-    imports: [
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.scss'],
+  imports: [
     CommonModule,
     RouterModule,
     MatToolbarModule,
@@ -37,39 +38,27 @@ import { CurrentSettingsComponent } from "./components/settings/current-settings
     MatMenuModule,
     MatNativeDateModule,
     LoadingIndicatorComponent,
-    CurrentSettingsComponent
-]
+    CurrentSettingsComponent,
+    UserProfileComponent
+],
 })
 export class AppComponent {
   title = 'fhir-client';
   userProfile: UserProfile | undefined;
   showMenuText: boolean = true;
 
-  isHandset$: Observable<boolean> = this.breakpointObserver.observe(Breakpoints.Handset)
+  breakpointObserver = inject(BreakpointObserver);
+  dialog = inject(MatDialog);
+  settingsService = inject(SettingsService);
+
+  platformId = inject(PLATFORM_ID);
+
+  isHandset$: Observable<boolean> = this.breakpointObserver
+    .observe(Breakpoints.Handset)
     .pipe(
-      map(result => result.matches),
+      map((result) => result.matches),
       shareReplay()
     );
-
-  constructor(private breakpointObserver: BreakpointObserver, private profileService: UserProfileService, private dialog: MatDialog) {
-
-    this.profileService.userProfileUpdated.subscribe(profile => {
-      this.userProfile = profile;
-    });    
-
-  }
-
-  async ngOnInit(): Promise<void> {
-    this.userProfile = await this.profileService.getProfile(); 
-  }
-
-  login() {
-    window.location.href = '/api/auth/login';
-  }
-
-  logout() {
-    window.location.href = '/api/auth/logout';
-  }
 
   toggleMenuText() {
     this.showMenuText = !this.showMenuText;
@@ -80,5 +69,4 @@ export class AppComponent {
 
     this.dialog.open(SessionDialogComponent, { minWidth: '50vw' });
   }
-
 }

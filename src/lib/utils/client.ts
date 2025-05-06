@@ -1,6 +1,6 @@
 import { appConfig } from "@/config";
 import { UdapClientRequest } from "../models/auth";
-import { Client, ClientConfig } from "../models/client";
+import { Client, ClientConfig, ClientDTO } from "../models/client";
 import { db } from "@/db";
 import { clientsTable } from "@/db/schema";
 import { Request, Response } from "express";
@@ -129,7 +129,7 @@ export function getCurrentFhirServerUrl(req: Request): string {
  * @param preferGrantType The grant type to prefer when selecting a default client
  * @returns 
  */
-export async function getCurrentClient(req: Request, returnDefault: boolean = true, preferGrantType: 'authorization_code'|'client_credentials' = 'client_credentials'): Promise<Client | null> {
+export async function getCurrentClient(req: Request, returnDefault: boolean = false, preferGrantType: 'authorization_code'|'client_credentials' = 'client_credentials'): Promise<Client | null> {
 
   // Get the client from the session
   const id = req.session.currentClient;
@@ -186,4 +186,23 @@ export function handleNoClient(req: Request, res: Response, message?: string) {
   res.status(400);
   res.json({ message });
   
+}
+
+
+export function clientToDTO(client: Client): ClientDTO {
+  return {
+    id: client.id,
+    fhirBaseUrl: client.fhirBaseUrl,
+    grantTypes: client.grantTypes,
+    scopesRequested: client.scopesRequested,
+    scopesGranted: client.scopesGranted,
+    redirectUris: client.redirectUris,
+    authorizationEndpoint: client.authorizationEndpoint,
+    userinfoEndpoint: client.userinfoEndpoint,
+    tokenEndpoint: client.tokenEndpoint,
+    revocationEndpoint: client.revocationEndpoint,
+    createdAt: client.createdAt,
+    updatedAt: client.updatedAt,
+    lastUsedAt: client.lastUsedAt,
+  };
 }

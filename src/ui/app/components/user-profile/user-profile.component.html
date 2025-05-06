@@ -1,0 +1,19 @@
+@if (clientIsAuthCodeFlow) {
+
+  @if (!userProfile) {
+    <button mat-button extended matTooltip="Login" (click)="login()">
+      Login
+      <mat-icon>login</mat-icon>
+    </button>
+  }
+  @else {
+    <button mat-button extended matTooltip="Logout" (click)="logout()">
+      Logout
+      <mat-icon>logout</mat-icon>
+    </button>
+  }
+
+  <!-- <div>
+    {{ userProfile?.name || userProfile?.given_name + ' ' + userProfile?.family_name || 'Unknown User' }}
+  </div> -->
+} 

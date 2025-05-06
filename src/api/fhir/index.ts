@@ -23,8 +23,18 @@ fhirRouter.use(
       res.json({ message: `No client available for ${req.session.fhirServer}` });
       return;
     }
-    const token = await getAccessToken(req, client);
-    req.headers['Authorization'] = `Bearer ${token}`;
+    try {
+      const token = await getAccessToken(req, client);
+      req.headers['Authorization'] = `Bearer ${token}`;
+    } catch (error) {
+      if (error instanceof Error) {
+        const msg = 'Error getting access token: ' + error.message;
+        res.status(401).json({ message: msg });
+        return;
+      }
+      res.status(401).json({ message: 'Error getting access token: ' + error });
+      return;      
+    }
     (req as any).targetFhirUrl = client.fhirBaseUrl + req.originalUrl.replace('/api/fhir', '');
     next();
   },

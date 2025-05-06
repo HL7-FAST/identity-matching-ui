@@ -2,21 +2,14 @@ import { Router } from 'express';
 import { db } from '@/db';
 import { clientsTable } from '@/db/schema';
 import { eq } from 'drizzle-orm';
-import { registerClient } from '@/lib/utils/udap';
-import { createClient } from '@/lib/utils/client';
-import { ClientDTO } from '@/lib/models/client';
+import { getNewAccessToken } from '@/lib/utils/udap';
+import { clientToDTO, createClient, getCurrentClient } from '@/lib/utils/client';
+import { Client } from '@/lib/models/client';
 
 export const clientRouter = Router();
 
 clientRouter.get('/list', async (req, res) => {
-  const clients = await db.select({
-    id: clientsTable.id,
-    fhirBaseUrl: clientsTable.fhirBaseUrl,
-    grantTypes: clientsTable.grantTypes,
-    scopesRequested: clientsTable.scopesRequested,
-    scopesGranted: clientsTable.scopesGranted,
-  }).from(clientsTable);
-
+  const clients = (await db.select().from(clientsTable)).map(client => clientToDTO(client));
   res.json(clients);
 });
 
@@ -28,14 +21,7 @@ clientRouter.get('/current', async (req, res) => {
   }
   const client = await db.select().from(clientsTable).where(eq(clientsTable.id, clientId)).limit(1);
   if (client.length > 0) {
-    res.json({
-      id: client[0].id,
-      fhirBaseUrl: client[0].fhirBaseUrl,
-      grantTypes: client[0].grantTypes,
-      scopesRequested: client[0].scopesRequested,
-      scopesGranted: client[0].scopesGranted,
-    });
-    res.json()
+    res.json(clientToDTO(client[0]));
   } else {
     res.status(404).json({ message: `Client ${clientId} not found` });
   }
@@ -53,13 +39,7 @@ clientRouter.post('/', async (req, res) => {
       scopes: scopesRequested,
     });
     if (client) {
-      res.status(201).json({
-        id: client.id,
-        fhirBaseUrl: client.fhirBaseUrl,
-        grantTypes: client.grantTypes,
-        scopesRequested: client.scopesRequested,
-        scopesGranted: client.scopesGranted,
-      });
+      res.status(201).json(clientToDTO(client));
     } else {
       res.status(400).json({ message: 'Error creating client' });
     }
@@ -88,28 +68,38 @@ clientRouter.delete('/:id', async (req, res) => {
 
 clientRouter.get('/select/:id', async (req, res) => {
   const { id } = req.params;
-  const client = await db.select().from(clientsTable).where(eq(clientsTable.id,id)).limit(1);
-  if (client.length > 0) {
-    req.session.currentClient = client[0].id;
-    req.session.currentToken = undefined;
 
-    const retVal: ClientDTO = {
-      id: client[0].id,
-      fhirBaseUrl: client[0].fhirBaseUrl,
-      grantTypes: client[0].grantTypes,
-      scopesRequested: client[0].scopesRequested,
-      scopesGranted: client[0].scopesGranted,
-      redirectUris: client[0].redirectUris,
-      authorizationEndpoint: client[0].authorizationEndpoint,
-      userinfoEndpoint: client[0].userinfoEndpoint,
-      tokenEndpoint: client[0].tokenEndpoint,
-      revocationEndpoint: client[0].revocationEndpoint,
-      createdAt: client[0].createdAt,
-      updatedAt: client[0].updatedAt,
-      lastUsedAt: null
+
+  let client: Client | null = null;
+
+  if (id === 'default') {
+    client = await getCurrentClient(req, true, 'client_credentials');
+    if (!client) {
+      res.status(400).json({ message: 'No default client found' });
+      return;
     }
-    res.json(retVal);
   } else {
-    res.status(404).json({ message: `Client ${id} not found` });
+    const clientRes = await db.select().from(clientsTable).where(eq(clientsTable.id,id)).limit(1);
+    if (clientRes.length > 0) {
+      client = clientRes[0];
+    } else {
+      res.status(404).json({ message: `Client ${id} not found` });
+      return;
+    }
   }
+
+  req.session.currentClient = client.id;
+  req.session.currentToken = undefined;
+
+  try {
+    if (client.grantTypes.includes('client_credentials')) {
+      req.session.currentToken = await getNewAccessToken(req, client);
+    }
+  } catch (error) {
+    console.error('Error getting new access token:', error);
+  }
+
+  const retVal = clientToDTO(client);
+  res.json(retVal);
+    
 });

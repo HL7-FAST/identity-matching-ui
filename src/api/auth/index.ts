@@ -149,14 +149,48 @@ authRouter.get('/callback', async (req, res) => {
 /**
  * User info endpoint.
  * This endpoint will return the user info from the session.
+ * 
  */
 authRouter.get('/userinfo', async (req, res) => {
   // console.log('User info endpoint', req.session, req.session.id);
+
+  if (!req.session.currentToken) {
+    res.status(204).send();
+    return;
+  }
+
+  const client = await getCurrentClient(req, false);
+  if (!client) {
+    handleNoClient(req, res);
+    return;
+  }
+
+  if (!client.userinfoEndpoint) {
+    res.status(200).json({
+      name: 'Unknown User',
+    });
+    return;
+  }
   
-  if (req.session.user) {
-    res.json({ user: req.session.user });
-  } else {
-    res.status(401).json({ message: 'Unauthorized' });
+  try {
+    const userInfo = await fetch(client.userinfoEndpoint, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${req.session.currentToken}`,
+        'Content-Type': 'application/json',
+      },
+    });
+    if (userInfo.status !== 200) {
+      res.status(userInfo.status).json({ message: 'Error getting user info' });
+      return;
+    }
+    const userInfoJson = await userInfo.json();
+    res.status(200).json(userInfoJson);
+  }
+  catch (error) {
+    console.error('Error getting user info:', error);
+    res.status(500).json({ message: 'Error getting user info', error });
+    return;
   }
 });
 

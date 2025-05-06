@@ -268,6 +268,13 @@ export async function getNewAccessToken(req: Request, client: Client): Promise<s
 
   console.log("Getting new access token for client:", client.clientId);
 
+  const grantType = client.grantTypes.includes("client_credentials") ? "client_credentials" : "authorization_code";
+  if (grantType === "authorization_code") {
+    if (!req.query?.code) {
+      throw new Error("Client uses authorization_code flow but no code was provided.  User needs to log in first.");
+    }
+  }
+
   // load the client certificate
   const cert = await loadCertificate(client.certificate, client.certificatePass || "");
 
@@ -275,7 +282,7 @@ export async function getNewAccessToken(req: Request, client: Client): Promise<s
   const assertion = await getClientAssertion(client.clientId, client.tokenEndpoint, cert);
 
   const tokenParams = {
-    grant_type: client.grantTypes.includes("client_credentials") ? "client_credentials" : "authorization_code",
+    grant_type: grantType,
     code: req.query?.code?.toString() || "",
     client_assertion_type: CLIENT_ASSERTION_TYPE,
     client_assertion: assertion,

@@ -1,6 +1,6 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, firstValueFrom, Observable } from 'rxjs';
+import { BehaviorSubject, firstValueFrom, Observable, tap } from 'rxjs';
 import { ClientDTO } from '@/lib/models/client';
 
 @Injectable({
@@ -14,11 +14,30 @@ export class SettingsService {
   // Observable that components can subscribe to
   public currentClient$ = this.currentClientSubject.asObservable();
 
-  constructor(private http: HttpClient) {}
+  http = inject(HttpClient);
 
   // Load current client data
-  loadCurrentClient(): Observable<any> {
-    return this.http.get<any>('/api/client/current');
+  async loadCurrentClient(): Promise<ClientDTO | undefined> {
+
+    if (this.currentClientSubject.value) {
+      return this.currentClientSubject.value;
+    }
+
+    const client = await firstValueFrom(this.http.get<ClientDTO | { message: string }>('/api/client/current'));
+
+    if (client instanceof Object && 'id' in client) {
+      this.updateCurrentClient(client);
+      return client;
+    }
+
+    if (client instanceof Object && 'message' in client) {
+      console.error(client.message);
+      this.updateCurrentClient(undefined);
+      return undefined;
+    }
+
+    this.updateCurrentClient(undefined);
+    return undefined;    
   }
 
   // Select a client and update the current client subject
@@ -55,7 +74,7 @@ export class SettingsService {
   }
 
   // Update the current client data (called after successful selection)
-  updateCurrentClient(client: ClientDTO) {
+  updateCurrentClient(client: ClientDTO | undefined) {
     this.currentClientSubject.next(client);
   }
 

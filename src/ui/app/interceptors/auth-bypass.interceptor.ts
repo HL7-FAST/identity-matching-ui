@@ -4,23 +4,38 @@ import { from } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { SessionStorageService } from '../services/core/session.service';
 import { environment } from '@/ui/environments/environment';
+import { SettingsService } from '../services/settings.service';
 
 export const authBypassInterceptor: HttpInterceptorFn = (request, next) => {
   const sessionService = inject(SessionStorageService);
-  return from(sessionService.getItem(environment.authBypassSessionKey)).pipe(
-    switchMap((bypassEnabled) => {
-      const bypassAuthentication = bypassEnabled === 'enabled';
-      if (
-        bypassAuthentication &&
-        environment.baseApiUrl &&
-        request.url.startsWith(environment.baseApiUrl)
-      ) {
-        let headers = request.headers.append('X-Allow-Public-Access', '');
-        const requestClone = request.clone({ headers });
-        return next(requestClone);
-      } else {
-        return next(request);
-      }
-    })
-  );
+  const settingsService = inject(SettingsService);
+
+  return next(request);
+
+  // return from(settingsService.currentClient$).pipe(
+  //   switchMap((client) => {
+  //     if (!client) {
+  //       return next(request);
+  //     }
+
+  //     return from(
+  //       sessionService.getItem(environment.authBypassSessionKey)
+  //     ).pipe(
+  //       switchMap((bypassEnabled) => {
+  //         const bypassAuthentication = bypassEnabled === 'enabled';
+  //         if (
+  //           bypassAuthentication &&
+  //           client.fhirBaseUrl &&
+  //           request.url.startsWith(client.fhirBaseUrl)
+  //         ) {
+  //           let headers = request.headers.append('X-Allow-Public-Access', '');
+  //           const requestClone = request.clone({ headers });
+  //           return next(requestClone);
+  //         } else {
+  //           return next(request);
+  //         }
+  //       })
+  //     );
+  //   })
+  // );
 };

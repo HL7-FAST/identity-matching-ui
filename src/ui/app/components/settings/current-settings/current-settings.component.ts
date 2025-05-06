@@ -48,9 +48,10 @@ export class CurrentSettingsComponent implements OnInit {
 
     // Subscribe to changes from the settings service
     this.clientSettingsService.currentClient$.subscribe(client => {
-      console.log('Current client settings updated', client);
+      // console.log('Current client settings updated', client);
       if (client) {
-        this.currentServer = client.fhirBaseUrl;
+        const grantType = client.grantTypes?.includes('client_credentials') ? 'CC' : 'AC';
+        this.currentServer = `${client.fhirBaseUrl} (${grantType})`;
         this.message = '';
       }
       else {
@@ -64,7 +65,8 @@ export class CurrentSettingsComponent implements OnInit {
       this.http.get<CurrentClientResponse>('/api/client/current').subscribe({
         next: (data: CurrentClientResponse) => {
           if (data instanceof Object && 'id' in data) {
-            this.currentServer = data.fhirBaseUrl;
+            const grantType = data.grantTypes?.includes('client_credentials') ? 'CC' : 'AC';
+            this.currentServer = `${data.fhirBaseUrl} (${grantType})`;
           }
           else if (data instanceof Object && 'message' in data) {
             this.message = data.message;

@@ -11,6 +11,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { SettingsService } from '@/ui/app/services/settings.service';
 import { CreateClientComponent } from '../create-client/create-client.component';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 
 
@@ -27,7 +28,8 @@ type ClientListResponse = Client[] | { message: string };
     MatProgressSpinner,
     MatSnackBarModule,
     MatTableModule,
-    MatToolbarModule
+    MatToolbarModule,
+    MatTooltipModule
   ],
 })
 export class EditSettingsComponent {
@@ -40,10 +42,22 @@ export class EditSettingsComponent {
   snackbar = inject(MatSnackBar);
   settingsService = inject(SettingsService);
   dialog = inject(MatDialog);
+  currentClientId = '';
 
 
   ngOnInit() {
-    this.loadClients();  
+    this.loadClients();
+
+    this.settingsService.currentClient$.subscribe(client => {
+      // console.log('Current client settings updated', client);
+      if (client) {
+        this.currentClientId = client.id;
+      }
+      else {
+        this.currentClientId = '';
+      }
+    });
+
   }
 
 

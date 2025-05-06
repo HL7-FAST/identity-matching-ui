@@ -1,7 +1,6 @@
 
-<span>
+<span class="current-settings">
   <span class="current-server">
-    <mat-icon>public</mat-icon>
     @if (currentServer) {
       {{ currentServer }}
     }
@@ -11,8 +10,9 @@
     @else {
       No server selected
     }
-</span>
+  </span>
 
-<a mat-icon-button matTooltip="Change Settings" routerLink="settings" routerLinkActive="active">
-  <mat-icon>settings</mat-icon>
-</a>
+  <a mat-icon-button matTooltip="Change Settings" routerLink="settings" routerLinkActive="active">
+    <mat-icon>settings</mat-icon>
+  </a>
+</span>

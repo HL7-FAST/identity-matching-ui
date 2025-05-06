@@ -7,6 +7,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { Clipboard } from '@angular/cdk/clipboard';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
     selector: 'app-session-dialog',
@@ -26,31 +27,22 @@ export class SessionDialogComponent implements OnInit {
 
   currentToken: string = '';
   snackBar = inject(MatSnackBar);
+  http = inject(HttpClient);
 
   constructor(private clipboard: Clipboard) {
   }
 
-  async ngOnInit(): Promise<void> {
-    this.currentToken = '';
+  ngOnInit() {
 
-    const res = await fetch('/api/auth/token');
-    if (res.ok) {
-      const data = await res.json();
-      this.currentToken = data.token;
-    } 
-    else if (res.status === 401) {
-      // nothing to do
-    }
-    else {
-      console.error('Error fetching token:', res.statusText);
-      this.snackBar.open(`Error fetching token: ${res.statusText}`, '', {
-        duration: 3500,
-        panelClass: 'error-snackbar',
-        horizontalPosition: 'end',
-        verticalPosition: 'top'
-      });
-    }
-
+    this.http.get('/api/auth/token').subscribe({
+      next: (data: any) => {
+        this.currentToken = data.token;
+      },
+      error: () => {
+        this.currentToken = '';
+      }
+    });
+    
   }
 
 
