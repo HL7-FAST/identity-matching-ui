@@ -1,6 +1,11 @@
 import { Request } from "express";
 
 
+export interface CustomHeader {
+  key: string;
+  value: string;
+}
+
 export function getBaseUrl(req: Request): string {
   const forwardedHost = req.headers['x-forwarded-host'] || req.get('host');
   const forwardedProto = req.headers['x-forwarded-proto'] || req.protocol;

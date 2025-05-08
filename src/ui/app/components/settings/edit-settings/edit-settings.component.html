@@ -1,63 +1,15 @@
 <div class="content">
 
-  <p>
-    <mat-toolbar class="page-header-bar" color="primary">
-      <span>Clients</span>
-      <button mat-mini-fab aria-label="Create a new client" matTooltip="Create Client" (click)="openCreateClientDialog()">
-        <mat-icon>add</mat-icon>
-      </button>
-    </mat-toolbar>
-  </p>
+  <mat-tab-group animationDuration="0ms">
 
-  @if (loading) {
-    <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
-  }
-  @else {
+    <mat-tab label="Clients">
+      <app-edit-clients></app-edit-clients>
+    </mat-tab>
 
-    @if (clients && clients.length > 0) {
-      <div class="table-container">
-        <table mat-table [dataSource]="clients">
-          <ng-container matColumnDef="select">
-            <th mat-header-cell *matHeaderCellDef></th>
-            <td mat-cell *matCellDef="let client">
-              <span class="select-cell">
-                @if (currentClientId === client.id) {
-                  <mat-icon color="primary" matTooltip="Currently selected client">check_circle</mat-icon>
-                }
-                @else {
-                  <button mat-flat-button color="primary" (click)="selectClient(client)">Select</button>
-                }
-              </span>
-            </td>
-          </ng-container>
-          <ng-container matColumnDef="fhirBaseUrl">
-            <th mat-header-cell *matHeaderCellDef>FHIR Base URL</th>
-            <td mat-cell *matCellDef="let client">{{ client.fhirBaseUrl }}</td>
-          </ng-container>
-          <ng-container matColumnDef="grantTypes">
-            <th mat-header-cell *matHeaderCellDef>Grant Type</th>
-            <td mat-cell *matCellDef="let client">{{ client.grantTypes }}</td>
-          </ng-container>
-          <ng-container matColumnDef="scopesRequested">
-            <th mat-header-cell *matHeaderCellDef>Scopes Requested</th>
-            <td mat-cell *matCellDef="let client">{{ client.scopesRequested }}</td>
-          </ng-container>
-          <ng-container matColumnDef="scopesGranted">
-            <th mat-header-cell *matHeaderCellDef>Scopes Granted</th>
-            <td mat-cell *matCellDef="let client">{{ client.scopesGranted }}</td>
-          </ng-container>
-          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-          <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-        </table>
-      </div>
+    <mat-tab label="Custom Browser Headers">
+      <app-edit-headers></app-edit-headers>
+    </mat-tab>
 
-    }
-
-    @else {
-      <div class="no-data">
-        <p>No clients found.</p>
-      </div>
-    }
-  }
+  </mat-tab-group>
 
 </div>

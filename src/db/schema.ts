@@ -48,8 +48,8 @@ export const clientsTable = sqliteTable("clients", {
   certificatePass: text().notNull(),
 
   // timestamps
-  createdAt: text().notNull().$default(() => new Date().toUTCString()),
-  updatedAt: text().notNull().$onUpdate(() => new Date().toUTCString()),
+  createdAt: text().notNull().$default(() => new Date().toISOString()),
+  updatedAt: text().notNull().$onUpdate(() => new Date().toISOString()),
   lastUsedAt: text()
 });
 

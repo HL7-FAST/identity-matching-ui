@@ -1,0 +1,126 @@
+<p>
+  <mat-toolbar class="page-header-bar" color="primary">
+    <span>Custom Browser Headers</span>
+    <button
+      mat-mini-fab
+      aria-label="Add a header"
+      matTooltip="Add a new header"
+      (click)="addHeader()"
+      [disabled]="editingRowIndex === 0"
+    >
+      <mat-icon>add</mat-icon>
+    </button>
+  </mat-toolbar>
+</p>
+
+<app-info-card>
+  <div class="mat-body-large">
+    Custom headers can be specified here to be sent with every request to the server.  This is only stored locally in the browser and will not be associated with the selected client.<br />
+    Some example headers supported by this client are:
+    <ul>
+      <li>Override the base FHIR server URL requests are sent to.
+        <ul>
+          <li>Key: <code>X-Fhir-Server</code></li>
+          <li>Value: <code>http://localhost:9000/fhir</code></li>
+        </ul>
+      </li>
+      <li>Ignore the currently selected session client.  This will prevent any auth header from being automatically added.
+        <ul>
+          <li>Key: <code>X-Ignore-Client</code></li>
+          <li>Value: <code>n/a</code></li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+</app-info-card>
+
+
+<table mat-table [dataSource]="dataSource">
+  <!-- Actions Column -->
+  <ng-container matColumnDef="actions">
+    <th mat-header-cell *matHeaderCellDef></th>
+    <td mat-cell *matCellDef="let header; let i = index">
+      @if (editingRowIndex === i) {
+      <div>
+        <button
+          mat-icon-button
+          color="primary"
+          matTooltip="Save changes"
+          (click)="saveHeader(i)"
+        >
+          <mat-icon>check</mat-icon>
+        </button>
+        <button
+          mat-icon-button
+          color="warn"
+          matTooltip="Cancel"
+          (click)="cancelEdit(i)"
+        >
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+      } @else {
+      <div>
+        <button
+          mat-icon-button
+          color="primary"
+          matTooltip="Edit header"
+          (click)="editHeader(i)"
+        >
+          <mat-icon>edit</mat-icon>
+        </button>
+        <button
+          mat-icon-button
+          color="warn"
+          matTooltip="Delete header"
+          (click)="deleteHeader(i)"
+        >
+          <mat-icon>delete</mat-icon>
+        </button>
+      </div>
+      }
+    </td>
+  </ng-container>
+
+  <!-- Header Key Column -->
+  <ng-container matColumnDef="key">
+    <th mat-header-cell *matHeaderCellDef>Header Key</th>
+    <td mat-cell *matCellDef="let header; let i = index">
+      @if(editingRowIndex === i) {
+      <div>
+        <mat-form-field appearance="outline" subscriptSizing="dynamic">
+          <input matInput [(ngModel)]="rowCopy.key" placeholder="Header key" />
+        </mat-form-field>
+      </div>
+      } @else {
+      <div>
+        {{ header.key }}
+      </div>
+      }
+    </td>
+  </ng-container>
+
+  <!-- Header Value Column -->
+  <ng-container matColumnDef="value">
+    <th mat-header-cell *matHeaderCellDef>Header Value</th>
+    <td mat-cell *matCellDef="let header; let i = index">
+      @if (editingRowIndex === i) {
+      <mat-form-field appearance="outline" subscriptSizing="dynamic">
+        <input matInput [(ngModel)]="rowCopy.value" placeholder="Header value" />
+      </mat-form-field>
+      } @else {
+      <div>
+        {{ header.value }}
+      </div>
+      }
+    </td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+
+  <!-- Row shown when there are no headers set -->
+  <tr class="mat-row" *matNoDataRow>
+    <td class="mat-cell" colspan="3">No custom headers defined yet.</td>
+  </tr>
+</table>

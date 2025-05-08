@@ -24,7 +24,7 @@ module.exports = {
       fhirServer: defaultFhirBaseUrl,
       grantTypes: ['authorization_code'],
       scopes: 'openid profile email user/*.read user/*.rs',
-      certGenerationProvider: 'FhirLabs',
+      certGenerationProvider: 'Local',
     },
   ],
   certGenerationEndpoint: 'https://localhost:5001/api/cert/generate'

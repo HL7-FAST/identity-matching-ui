@@ -50,9 +50,7 @@ export async function registerClient(regReq: UdapClientRequest, certFile: string
     tokenEndpoint: udapMeta.token_endpoint,
     revocationEndpoint: udapMeta.revocation_endpoint,
     certificate: certFile,
-    certificatePass: encryptedCertPass,
-    createdAt: new Date().toUTCString(),
-    updatedAt: new Date().toUTCString(),
+    certificatePass: encryptedCertPass
   };
 
 
@@ -310,21 +308,6 @@ export async function getNewAccessToken(req: Request, client: Client): Promise<s
   if (!tokenJson.access_token) {
     throw new Error(`Failed to get token: ${tokenJson.error}: ${tokenJson.error_description}`);
   }
-
-  // update the client with the new token
-  // const updatedClient: Client = {
-  //   ...client,
-  //   currentToken: tokenJson.access_token,
-  //   updatedAt: new Date().toUTCString(),
-  // };
-
-  // // save the updated client to the database
-  // const res = await db.update(clientsTable).set(updatedClient).where(eq(clientsTable.id, client.id)).returning();
-  // if (!res) {
-  //   throw new Error(`Failed to update client: ${res}`);
-  // }
-
-  // return res[0];
 
   return tokenJson.access_token;
 }

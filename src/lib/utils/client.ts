@@ -156,6 +156,10 @@ export async function getCurrentClient(req: Request, returnDefault: boolean = fa
     }
   }
 
+  if (client) {
+    await db.update(clientsTable).set({ lastUsedAt: new Date().toISOString() }).where(eq(clientsTable.id, client.id)).execute();
+  }
+
   return client;
 
 }

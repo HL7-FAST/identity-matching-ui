@@ -1,7 +1,7 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "b8ca9ba4-9d37-40d9-a967-83874acd891b",
+  "id": "707b687a-ca0f-495f-ae51-c4552fa0b43b",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "clients": {
@@ -77,6 +77,13 @@
           "notNull": true,
           "autoincrement": false
         },
+        "revocationEndpoint": {
+          "name": "revocationEndpoint",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
         "certificate": {
           "name": "certificate",
           "type": "text",
@@ -88,7 +95,7 @@
           "name": "certificatePass",
           "type": "text",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "autoincrement": false
         },
         "createdAt": {
