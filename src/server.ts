@@ -69,7 +69,7 @@ if (isMainModule(import.meta.url) || isDevMode()) {
     proxy: true,
     cookie: {
       httpOnly: true,
-      secure: appConfig.env === 'production',
+      // secure: appConfig.env === 'production',
       maxAge: 60 * 60 * 1000,
     },
   }));

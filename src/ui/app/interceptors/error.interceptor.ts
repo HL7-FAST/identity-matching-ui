@@ -15,13 +15,7 @@ export const errorInterceptor: HttpInterceptorFn = (request, next) => {
       let errMsg = '';
 
       if (err instanceof HttpErrorResponse) {
-        if (err.error instanceof ProgressEvent) {
-          errMsg = `ProgressEvent: ${err.message || 'Unknown error'}`;
-        }
-        else if (err.error instanceof DOMException) {
-          errMsg = `DOMException: ${err.error.message || 'Unknown error'}`;
-        }
-        else if (typeof err.error === 'string') {
+        if (typeof err.error === 'string') {
           errMsg = `Error: ${err.status} ${err.error}`;
         }
         else if (err.error instanceof Object) {

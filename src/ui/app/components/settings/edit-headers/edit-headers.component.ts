@@ -101,7 +101,7 @@ export class EditHeadersComponent implements OnInit {
   }
 
   saveHeader(index: number): void {
-    if (!this.dataSource.data[index].key) {
+    if (!this.rowCopy.key) {
       this.snackBar.open('Header key is required', 'Dismiss', { 
         duration: 5000,
         panelClass: 'error-snackbar'

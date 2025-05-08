@@ -25,7 +25,11 @@ export const appConfig: ApplicationConfig = {
       if (isPlatformBrowser(platformId)) {
         const client = await settingsService.loadCurrentClient();
         if (!client) {
-          await settingsService.selectClient('default');
+          try {
+            await settingsService.selectClient('default');
+          } catch (e) {
+            console.error('Failed to select default client', e);
+          }
         }
       }
 
