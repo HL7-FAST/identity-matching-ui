@@ -12,7 +12,7 @@
         </mat-card-header>
         <mat-card-content>
           
-          <ng-container *ngIf="serverStatuses && serverStatuses.length > 0; else noCurrentFhirServer">
+          @if (serverStatuses && serverStatuses.length > 0) {          
             <mat-nav-list>    
               <mat-list-item *ngFor="let serverStatus of serverStatuses">
                 <mat-icon *ngIf="serverStatus.status === 'pending'" matListItemIcon color="info" matTooltip="Attempting to retrieve capability statement">pending</mat-icon>
@@ -26,10 +26,10 @@
                 </a>
               </mat-list-item>
             </mat-nav-list>
-          </ng-container>
-          <ng-template #noCurrentFhirServer>
-            No FHIR server currently configured.
-          </ng-template>
+          }
+          @else {
+            <p>No FHIR server currently configured.</p>
+          }
     
         </mat-card-content>
       </mat-card>

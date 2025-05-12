@@ -15,9 +15,6 @@ fhirRouter.use(
   '/{*splat}',
   async (req, res, next) => {
     let fhirBaseUrl = req.session.fhirServer;
-    // Attach the target URL to the request object for use in the proxy
-    // const client = await getCurrentClient(req, true, 'client_credentials');
-    console.log('req.headers', Object.hasOwn(req.headers, 'x-allow-public-access'), Object.hasOwn(req.headers, 'x-ignore-client'));
 
     // If the request has the x-ignore-client header, don't try to get the client from the session
     if (!Object.hasOwn(req.headers, 'x-ignore-client')) {
@@ -51,6 +48,7 @@ fhirRouter.use(
       return;
     }
 
+    // Attach the target URL to the request object for use in the proxy
     (req as any).targetFhirUrl =
       fhirBaseUrl + req.originalUrl.replace('/api/fhir', '');
     next();
@@ -136,34 +134,3 @@ fhirRouter.use(
   })
 );
 
-// fhirRouter.use('/{*splat}', (req, res, next) => {
-//   createProxyMiddleware({
-//     target: getFhirServerUrl(req),
-//   });
-// });
-
-// Forward all requests to the FHIR server
-// fhirRouter.use('*', async (req, res, next) => {
-//   try {
-//     const baseUrl = getFhirServerUrl(req);
-//     const url = baseUrl + req.originalUrl.replace(/^\/fhir/, '');
-
-//     const fetchOptions: RequestInit = {
-//       method: req.method,
-//       // headers: { ...req.headers, host: undefined },
-//       body: ['GET', 'HEAD'].includes(req.method) ? undefined : req.body && JSON.stringify(req.body),
-//     };
-
-//     const fhirRes = await fetch(url, fetchOptions);
-
-//     // Forward status and headers
-//     res.status(fhirRes.status);
-//     fhirRes.headers.forEach((value, key) => res.setHeader(key, value));
-
-//     // Forward body
-//     const data = await fhirRes.arrayBuffer();
-//     res.send(Buffer.from(data));
-//   } catch (err) {
-//     next(err);
-//   }
-// });

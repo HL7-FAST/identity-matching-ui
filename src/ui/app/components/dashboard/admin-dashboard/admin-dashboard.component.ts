@@ -36,8 +36,11 @@ export class AdminDashboardComponent implements OnInit {
 
     const client = await firstValueFrom(this.settingsService.currentClient$);
 
+    if (!client) {
+      return;
+    }
     this.serverStatuses = [
-      { url: `${client?.fhirBaseUrl}/metadata`, status: 'pending' }
+      { url: `${client.fhirBaseUrl}/metadata`, status: 'pending' }
     ];    
 
     this.serverStatuses.forEach((server) => {

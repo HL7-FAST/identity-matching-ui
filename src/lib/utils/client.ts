@@ -69,7 +69,7 @@ export async function createClient(client: ClientConfig): Promise<Client> {
         }
 
         const certProvider = client.certGenerationProvider || 'Local';
-        console.log(`Generating certificate for ${client.fhirServer} (${client.grantTypes.join(',')}) using ${certProvider}`);
+        console.log(`Generating certificate for ${client.fhirServer} (${client.grantTypes.join(',')}) using ${certProvider} at ${appConfig.certGenerationEndpoint}`);
 
         const subjectAltName = `${new URL(appConfig.appUrl).href}#${crypto.randomUUID()}`;
         client.issuer = subjectAltName;

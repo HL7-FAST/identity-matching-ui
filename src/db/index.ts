@@ -30,7 +30,7 @@ export async function initDatabase() {
   // create default clients
   console.log('Creating default clients...');
   console.time('Default client initialization complete.');
-  for (const client of appConfig.defaultClients) {
+  for (const client of (appConfig.defaultClients || [])) {
 
     try {
       await createClient(client);

@@ -7,7 +7,6 @@ export const apiRouter = Router();
 
 
 // /api/auth endpoint
-// apiRouter.use("/auth", ExpressAuth({ providers: [GitHub] }));
 apiRouter.use('/auth', authRouter);
 
 
@@ -26,15 +25,7 @@ apiRouter.get('/health', async (req, res) => {
 });
 
 
-
-apiRouter.get('/redirect', async (req, res) => {
-  console.log('Redirecting to /home');
-  res.redirect(301, '/home');
-});
-
-
 // Catch all endpoint
 apiRouter.all<{ splat: string[] }>('/{*splat}', async (req, res) => {
-  console.log('Catch all api endpoint:', req.params.splat);
   res.status(404).json({ message: 'Not found' });
 });
