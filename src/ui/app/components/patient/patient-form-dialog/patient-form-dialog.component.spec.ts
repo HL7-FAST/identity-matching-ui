@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { PatientFormDialogComponent } from './patient-form-dialog.component';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 describe('PatientFormDialogComponent', () => {
   let component: PatientFormDialogComponent;
@@ -8,7 +9,11 @@ describe('PatientFormDialogComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [PatientFormDialogComponent]
+      imports: [PatientFormDialogComponent, HttpClientTestingModule],
+      providers: [
+        { provide: MAT_DIALOG_DATA, useValue: {} },
+        { provide: MatDialogRef, useValue: {} }
+      ]
     });
     fixture = TestBed.createComponent(PatientFormDialogComponent);
     component = fixture.componentInstance;

@@ -1,6 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { CurrentSettingsComponent } from './current-settings.component';
+import { provideRouter } from '@angular/router';
 
 describe('CurrentSettingsComponent', () => {
   let component: CurrentSettingsComponent;
@@ -8,7 +10,12 @@ describe('CurrentSettingsComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [CurrentSettingsComponent]
+      imports: [ CurrentSettingsComponent],
+      providers: [
+        provideRouter([]),
+        provideHttpClient(),
+        provideHttpClientTesting()
+      ]
     })
     .compileComponents();
 

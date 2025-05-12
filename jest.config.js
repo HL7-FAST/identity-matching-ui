@@ -9,6 +9,7 @@ module.exports = {
   // testEnvironment: 'jsdom'
   globalSetup: 'jest-preset-angular/global-setup',
   moduleNameMapper: {
+    '^@/(.*)$': '<rootDir>/src/$1',
     '^src/(.*)$': '<rootDir>/src/$1'
   }
 };

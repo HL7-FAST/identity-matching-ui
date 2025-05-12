@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { AuthBypassComponent } from './auth-bypass.component';
 
 describe('AuthBypassComponent', () => {
@@ -8,7 +8,7 @@ describe('AuthBypassComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [AuthBypassComponent]
+      imports: [AuthBypassComponent, HttpClientTestingModule]
     });
     fixture = TestBed.createComponent(AuthBypassComponent);
     component = fixture.componentInstance;

@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { SessionDialogComponent } from './session-dialog.component';
 
 describe('SessionDialogComponent', () => {
@@ -8,7 +8,7 @@ describe('SessionDialogComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [SessionDialogComponent]
+      imports: [SessionDialogComponent, HttpClientTestingModule]
     });
     fixture = TestBed.createComponent(SessionDialogComponent);
     component = fixture.componentInstance;

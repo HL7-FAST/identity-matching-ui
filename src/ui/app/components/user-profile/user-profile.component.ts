@@ -34,7 +34,7 @@ export class UserProfileComponent implements OnInit {
 
   async loadUserProfile() {
 
-    console.log('Loading user profile');
+    // console.log('Loading user profile');
 
     this.userProfile = undefined;
 

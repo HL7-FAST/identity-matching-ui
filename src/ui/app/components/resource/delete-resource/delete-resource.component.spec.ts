@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { DeleteResourceComponent } from './delete-resource.component';
 
 describe('DeleteResourceComponent', () => {
@@ -8,7 +8,7 @@ describe('DeleteResourceComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [DeleteResourceComponent]
+      imports: [DeleteResourceComponent, HttpClientTestingModule]
     });
     fixture = TestBed.createComponent(DeleteResourceComponent);
     component = fixture.componentInstance;

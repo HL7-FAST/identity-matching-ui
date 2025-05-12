@@ -60,7 +60,7 @@ export class PatientListComponent {
   }
 
   getPatients(queryString: string) {
-    console.log('Query string: ', queryString);
+    // console.log('Query string: ', queryString);
     this.patientService.list(queryString).subscribe(data => {
       this.patientBundle = data;
       this.patients = data.entry; 
