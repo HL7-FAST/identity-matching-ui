@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, firstValueFrom, Observable, tap } from 'rxjs';
+import { BehaviorSubject, firstValueFrom } from 'rxjs';
 import { ClientDTO } from '@/lib/models/client';
 
 @Injectable({

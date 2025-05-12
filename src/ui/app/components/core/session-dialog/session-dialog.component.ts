@@ -25,7 +25,7 @@ import { HttpClient } from '@angular/common/http';
 })
 export class SessionDialogComponent implements OnInit {
 
-  currentToken: string = '';
+  currentToken = '';
   snackBar = inject(MatSnackBar);
   http = inject(HttpClient);
 
@@ -34,8 +34,8 @@ export class SessionDialogComponent implements OnInit {
 
   ngOnInit() {
 
-    this.http.get('/api/auth/token').subscribe({
-      next: (data: any) => {
+    this.http.get<{ token: string }>('/api/auth/token').subscribe({
+      next: (data) => {
         this.currentToken = data.token;
       },
       error: () => {

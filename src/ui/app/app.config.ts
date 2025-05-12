@@ -7,8 +7,6 @@ import { provideHttpClient, withFetch, withInterceptors } from '@angular/common/
 import { httpInterceptorFns } from './interceptors/interceptor-barrel';
 import { isPlatformBrowser } from '@angular/common';
 import { SettingsService } from './services/settings.service';
-import { firstValueFrom } from 'rxjs';
-
 
 export const appConfig: ApplicationConfig = {
   providers: [

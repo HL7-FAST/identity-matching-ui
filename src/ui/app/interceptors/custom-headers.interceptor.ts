@@ -14,7 +14,7 @@ export function customHeadersInterceptor(req: HttpRequest<unknown>, next: HttpHa
   let reqWithHeader = req.clone();
   if (customHeaders) {
     try {
-      const headersObj: Array<CustomHeader> = JSON.parse(customHeaders);
+      const headersObj: CustomHeader[] = JSON.parse(customHeaders);
       let headers = req.headers;
       for (const header of headersObj) {
         if (!header.key) {
@@ -23,7 +23,7 @@ export function customHeadersInterceptor(req: HttpRequest<unknown>, next: HttpHa
         headers = headers.append(header.key, header.value);
       }
       reqWithHeader = req.clone({ headers });
-    } catch (e) {
+    } catch {
       // Invalid JSON, proceed without modifying headers
       reqWithHeader = req.clone();
     }

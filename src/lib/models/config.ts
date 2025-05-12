@@ -1,4 +1,3 @@
-import { CertGenerationProvider } from "./cert";
 import { ClientConfig } from "./client";
 
 export interface AppConfig {

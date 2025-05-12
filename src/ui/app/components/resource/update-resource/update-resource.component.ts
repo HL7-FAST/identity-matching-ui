@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule, FormGroup, FormControl, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -32,10 +32,10 @@ import { ResourceService } from '@/ui/app/services/core/resource.service';
     templateUrl: './update-resource.component.html',
     styleUrls: ['./update-resource.component.scss']
 })
-export class UpdateResourceComponent {
+export class UpdateResourceComponent implements OnInit {
   resourceForm!: FormGroup;
   resourceTypes: string[] = this.resourceService.AvailableResources;
-  resource: any;
+  resource: Resource | undefined;
 
   constructor(private resourceService: ResourceService, private snackBar: MatSnackBar) {}
 
@@ -62,11 +62,11 @@ export class UpdateResourceComponent {
   createResource() {
     if(this.resourceForm.valid) {
 
-      let newResource = <Resource>JSON.parse(this.resourceContentControl.value);  
+      const newResource = JSON.parse(this.resourceContentControl.value) as Resource;  
       newResource.id = this.resourceIdControl.value;      
 
       this.resourceService.updateResource(this.resourceTypeControl.value, this.resourceIdControl.value, newResource).subscribe(data => {
-        this.resource = data;
+        this.resource = data as Resource;
   
         this.snackBar.open(`${this.resourceTypeControl.value} resource was updated.`, '', {
           duration: 3500,

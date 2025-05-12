@@ -8,7 +8,6 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { RouterModule } from '@angular/router';
-import { catchError, EMPTY, firstValueFrom } from 'rxjs';
 
 
 type CurrentClientResponse = ClientDTO | { message: string };

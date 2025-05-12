@@ -24,7 +24,7 @@ export interface UdapMetadata {
   udap_authorization_extensions_required: string[];
   udap_certifications_supported: string[];
   udap_certifications_required: string[];
-  grant_types_supported: Array<"authorization_code" | "refresh_token" | "client_credentials">;
+  grant_types_supported: ("authorization_code" | "refresh_token" | "client_credentials")[];
   scopes_supported: string[];
   authorization_endpoint?: string;
   token_endpoint: string;
@@ -90,4 +90,12 @@ export interface UdapRegistrationResponse {
   response_types: string[];
   token_endpoint_auth_method: string;
   scope: string;
+}
+
+export interface UserInfo {
+  sub: string;
+  name: string;
+  given_name: string;
+  family_name: string;
+  email: string;
 }

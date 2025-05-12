@@ -5,6 +5,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButton } from '@angular/material/button';
 import { HttpClient } from '@angular/common/http';
 import { isPlatformBrowser } from '@angular/common';
+import { UserInfo } from '@/lib/models/auth';
 
 @Component({
   selector: 'app-user-profile',
@@ -18,7 +19,7 @@ import { isPlatformBrowser } from '@angular/common';
 export class UserProfileComponent implements OnInit {
 
   clientSettingsService = inject(SettingsService);
-  userProfile: any = undefined;
+  userProfile: UserInfo | undefined;
   clientIsAuthCodeFlow = false;
   http = inject(HttpClient);
   platformId = inject(PLATFORM_ID);
@@ -49,8 +50,8 @@ export class UserProfileComponent implements OnInit {
       return;
     }
 
-    this.http.get('/api/auth/userinfo').subscribe({
-      next: (data: any) => {
+    this.http.get<UserInfo>('/api/auth/userinfo').subscribe({
+      next: (data: UserInfo) => {
         this.userProfile = data;
       },
       error: () => {

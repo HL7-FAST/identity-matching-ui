@@ -1,14 +1,11 @@
 import { HttpInterceptorFn } from '@angular/common/http';
-import { inject } from '@angular/core';
-import { from } from 'rxjs';
-import { switchMap } from 'rxjs/operators';
-import { SessionStorageService } from '../services/core/session.service';
-import { environment } from '@/ui/environments/environment';
-import { SettingsService } from '../services/settings.service';
+// import { inject } from '@angular/core';
+// import { SessionStorageService } from '../services/core/session.service';
+// import { SettingsService } from '../services/settings.service';
 
 export const authBypassInterceptor: HttpInterceptorFn = (request, next) => {
-  const sessionService = inject(SessionStorageService);
-  const settingsService = inject(SettingsService);
+  // const sessionService = inject(SessionStorageService);
+  // const settingsService = inject(SettingsService);
 
   return next(request);
 

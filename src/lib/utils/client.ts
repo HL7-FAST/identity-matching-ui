@@ -55,7 +55,7 @@ export async function createClient(client: ClientConfig): Promise<Client> {
 
   try {
     let certString = existingClient ? existingClient.certificate : client.certificate;
-    let encryptedCertPass = (existingClient?.certificatePass) || encryptCertificatePassword(client.certificatePass || appConfig.defaultCertPass);
+    const encryptedCertPass = (existingClient?.certificatePass) || encryptCertificatePassword(client.certificatePass || appConfig.defaultCertPass);
 
     // if a certificate is provided, attempt to load it
     try {
@@ -131,7 +131,7 @@ export function getCurrentFhirServerUrl(req: Request): string {
  * @param preferGrantType The grant type to prefer when selecting a default client
  * @returns 
  */
-export async function getCurrentClient(req: Request, returnDefault: boolean = false, preferGrantType: 'authorization_code'|'client_credentials' = 'client_credentials'): Promise<Client | null> {
+export async function getCurrentClient(req: Request, returnDefault = false, preferGrantType: 'authorization_code'|'client_credentials' = 'client_credentials'): Promise<Client | null> {
 
   // Get the client from the session
   const id = req.session.currentClient;

@@ -14,7 +14,7 @@ import { environment } from '@/ui/environments/environment';
     styleUrls: ['./auth-bypass.component.scss']
 })
 export class AuthBypassComponent implements OnInit {
-  enableBypass: boolean = false;
+  enableBypass = false;
 
   constructor(private sessionService: SessionStorageService) {}
 

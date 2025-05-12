@@ -12,6 +12,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatCardModule } from '@angular/material/card';
 import {Clipboard} from '@angular/cdk/clipboard';
+import { Resource } from 'fhir/r4';
 
 @Component({
     selector: 'app-view-resource',
@@ -35,7 +36,7 @@ import {Clipboard} from '@angular/cdk/clipboard';
 export class ViewResourceComponent implements OnInit {
   resourceForm!: FormGroup;
   resourceTypes: string[] = this.resourceService.AvailableResources;
-  resource: any;
+  resource: Resource | undefined;
 
   constructor(private resourceService: ResourceService, private clipboard: Clipboard, private snackBar: MatSnackBar) {}
   
@@ -56,7 +57,7 @@ export class ViewResourceComponent implements OnInit {
 
   getResource() {
     this.resourceService.getResource(this.resourceTypeControl.value, this.resourceIdControl.value).subscribe(data => {
-      this.resource = data;
+      this.resource = data as Resource;
 
       this.snackBar.open(`${this.resourceTypeControl.value} resource was retrieved.`, '', {
         duration: 3500,

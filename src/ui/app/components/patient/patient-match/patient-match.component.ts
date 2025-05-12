@@ -203,8 +203,8 @@ export class PatientMatchComponent implements OnInit {
     this.telecomForms.updateValueAndValidity();
   }
   
-  compareTelecomTypes(object1: any, object2: any) {
-    return (object1 && object2) && object1 === object2;
+  compareTelecomTypes(object1: string, object2: string): boolean {
+    return !!object1 && !!object2 && object1 === object2;
   }
 
   get identifierForms() : FormArray {
@@ -219,9 +219,9 @@ export class PatientMatchComponent implements OnInit {
     });
 
     identifierFormGroup.get('type')?.valueChanges.subscribe(change => {
-      let concept: CodeableConcept = change as CodeableConcept;  
-      let systemValue: any = concept.coding ? concept.coding[0].system : '';
-      identifierFormGroup.get('system')?.setValue(systemValue);      
+      const concept: CodeableConcept = change as CodeableConcept;  
+      const systemValue = concept.coding ? concept.coding[0].system : undefined;
+      identifierFormGroup.get('system')?.setValue(systemValue ?? null);
     });
 
     this.identifierForms.push(identifierFormGroup);
@@ -233,8 +233,16 @@ export class PatientMatchComponent implements OnInit {
     this.identifierForms.updateValueAndValidity();
   }
   
-  compareIdentifierTypes(object1: any, object2: any) {
-    return (object1 && object2) && object1.coding[0].code === object2.coding[0].code;
+  compareIdentifierTypes(object1: CodeableConcept, object2: CodeableConcept): boolean {
+    return (
+      !!object1 &&
+      !!object2 &&
+      Array.isArray(object1.coding) &&
+      Array.isArray(object2.coding) &&
+      object1.coding.length > 0 &&
+      object2.coding.length > 0 &&
+      object1.coding[0].code === object2.coding[0].code
+    );
   }
 
   clearSearchParameters() {
@@ -250,7 +258,7 @@ export class PatientMatchComponent implements OnInit {
     if (this.patientForm.valid) {
       const patientData: Patient = this.patientForm.value;       
       
-      let matchParam: Parameters = { resourceType: "Parameters" };
+      const matchParam: Parameters = { resourceType: "Parameters" };
       matchParam.parameter = [];
       matchParam.parameter = [
         { name: "patient", resource: patientData },
@@ -300,9 +308,9 @@ export class PatientMatchComponent implements OnInit {
 
   getMRN(identifiers: Identifier[]) {
     if(identifiers) {
-      let mrn: String | undefined = '';
-      for(var identifier of identifiers) {
-        let mrnIndex = identifier.type?.coding?.map(x => x.code).indexOf('MR');
+      let mrn: string | undefined = '';
+      for(const identifier of identifiers) {
+        const mrnIndex = identifier.type?.coding?.map(x => x.code).indexOf('MR');
         if(mrnIndex != undefined && mrnIndex != -1) {
           mrn = identifier.value;      
           break;
@@ -316,7 +324,7 @@ export class PatientMatchComponent implements OnInit {
   }
 
   getGivenName(name: HumanName[]) {
-    let officialIndex = name.map(x => x.use).indexOf('official');
+    const officialIndex = name.map(x => x.use).indexOf('official');
     if(officialIndex != -1) {
       return name[officialIndex].given;  
     }
@@ -329,7 +337,7 @@ export class PatientMatchComponent implements OnInit {
   }
 
   getFamilyName(name: HumanName[]) {
-    let officialIndex = name.map(x => x.use).indexOf('official');
+    const officialIndex = name.map(x => x.use).indexOf('official');
     if(officialIndex != -1) {
       return name[officialIndex].family;  
     }
@@ -343,7 +351,7 @@ export class PatientMatchComponent implements OnInit {
 
   showPatientViewDialog($event: Event, row: BundleEntry<Patient>) : void {
 
-    let patient = row.resource;
+    const patient = row.resource;
 
     this.dialog.open(PatientViewDialogComponent,
       {

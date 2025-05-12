@@ -6,7 +6,6 @@ import { Injectable } from "@angular/core";
 
 @Injectable()
 export class StyleManagerService {
-  constructor() { }
 
   /**
    * Set the stylesheet with the specified key.

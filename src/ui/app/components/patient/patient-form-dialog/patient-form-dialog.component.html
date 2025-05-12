@@ -170,8 +170,8 @@
 </div>
 <div mat-dialog-actions align="end">
     <button mat-raised-button color="primary" [disabled]="patientForm.invalid" (click)="onSubmit()">
-        <mat-icon>{{ formMode == FormMode.Create ? 'save' : 'save_as'}}</mat-icon>
-        {{ formMode == FormMode.Create ? 'Create' : 'Update'}} Patient
+        <mat-icon>{{ formMode === FormMode.Create ? 'save' : 'save_as'}}</mat-icon>
+        {{ formMode === FormMode.Create ? 'Create' : 'Update'}} Patient
     </button>
     <button mat-raised-button mat-dialog-close>Close</button>
 </div>

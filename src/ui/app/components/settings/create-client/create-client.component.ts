@@ -11,6 +11,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
+import { Client } from '@/lib/models/client';
 
 @Component({
   selector: 'app-create-client',
@@ -67,10 +68,10 @@ export class CreateClientComponent {
     this.dialogRef.close();
   }
 
-  async createClient(clientData: any) {
+  async createClient(clientData: Client) {
     this.errorMessage = '';
     try {
-      const result = await firstValueFrom(this.http.post<any>('/api/client', clientData));
+      const result = await firstValueFrom(this.http.post<Client>('/api/client', clientData));
       if (result && result.id) {
         this.snackbar.open(`Client ${result.id} created successfully`, 'Close', {
           duration: 5000,

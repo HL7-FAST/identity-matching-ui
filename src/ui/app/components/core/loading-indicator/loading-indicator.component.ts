@@ -1,4 +1,4 @@
-import { AfterContentInit, AfterViewInit, Component } from '@angular/core';
+import { AfterViewInit, Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { LoadingService } from '@/ui/app/services/loading.service';
@@ -13,7 +13,7 @@ import { LoadingService } from '@/ui/app/services/loading.service';
     styleUrls: ['./loading-indicator.component.scss']
 })
 export class LoadingIndicatorComponent implements AfterViewInit {
-  loading: boolean = false;
+  loading = false;
 
   constructor(private loadingService: LoadingService) {    
   }

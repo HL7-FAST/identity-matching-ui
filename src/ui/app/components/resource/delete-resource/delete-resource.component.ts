@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule, FormGroup, FormControl, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -11,6 +11,7 @@ import { MatSnackBarModule, MatSnackBar } from '@angular/material/snack-bar';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { ResourceService } from '@/ui/app/services/core/resource.service';
+import { Resource } from 'fhir/r4';
 
 @Component({
     selector: 'app-delete-resource',
@@ -31,10 +32,10 @@ import { ResourceService } from '@/ui/app/services/core/resource.service';
     templateUrl: './delete-resource.component.html',
     styleUrls: ['./delete-resource.component.scss']
 })
-export class DeleteResourceComponent {
+export class DeleteResourceComponent implements OnInit {
   resourceForm!: FormGroup;
   resourceTypes: string[] = this.resourceService.AvailableResources;
-  resource: any;
+  resource: Resource | undefined;
 
   constructor(private resourceService: ResourceService, private snackBar: MatSnackBar) {}
   
@@ -56,7 +57,7 @@ export class DeleteResourceComponent {
   deleteResource() {
     if(this.resourceForm.valid) {
       this.resourceService.deleteResource(this.resourceTypeControl.value, this.resourceIdControl.value).subscribe(data => {
-        this.resource = data;
+        this.resource = data as Resource;
   
         this.snackBar.open(`${this.resourceTypeControl.value} resource was deleted.`, '', {
           duration: 3500,

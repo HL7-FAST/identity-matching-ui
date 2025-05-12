@@ -7,12 +7,11 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { environment } from '@/ui/environments/environment';
 import { SettingsService } from '@/ui/app/services/settings.service';
 import { firstValueFrom } from 'rxjs';
 
 @Component({
-    selector: 'fc-admin-dashboard',
+    selector: 'app-admin-dashboard',
     imports: [
         CommonModule,
         MatButtonModule,
@@ -28,7 +27,7 @@ import { firstValueFrom } from 'rxjs';
 })
 export class AdminDashboardComponent implements OnInit {
 
-  serverStatuses: Array<{ url: string; status: 'pending' | 'online' | 'offline'; }> = [];
+  serverStatuses: { url: string; status: 'pending' | 'online' | 'offline'; }[] = [];
 
   settingsService = inject(SettingsService);
 

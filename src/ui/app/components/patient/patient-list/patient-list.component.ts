@@ -42,12 +42,12 @@ import { PaginationMetadata } from '@/ui/app/models/pagination-metadata.model';
     styleUrls: ['./patient-list.component.scss']
 })
 export class PatientListComponent {
-  pageSize: number = 20;
-  pageNumber: number = 0;
-  totalCount: number = 0;
-  defaultLink: string = `?_count=${this.pageSize}`;
-  nextLink: string = '';
-  prevLink: string = '';
+  pageSize = 20;
+  pageNumber = 0;
+  totalCount = 0;
+  defaultLink = `?_count=${this.pageSize}`;
+  nextLink = '';
+  prevLink = '';
   patientBundle!: Bundle<Patient>;
   patients: BundleEntry<Patient>[] | undefined = [];
   paginationMetadata: PaginationMetadata = new PaginationMetadata;
@@ -68,10 +68,10 @@ export class PatientListComponent {
       this.totalCount = data.total ? data.total : 0;
       
       if(data.link) {
-        let next = data.link.find(x => x.relation === "next");
+        const next = data.link.find(x => x.relation === "next");
         this.nextLink = next ? next.url : '';
 
-        let prev = data.link.find(x => x.relation === "previous");
+        const prev = data.link.find(x => x.relation === "previous");
         this.prevLink = prev ? prev.url : '';
       }
     });
@@ -95,9 +95,9 @@ export class PatientListComponent {
 
   getMRN(identifiers: Identifier[]) {
     if(identifiers) {
-      let mrn: String | undefined = '';
-      for(var identifier of identifiers) {
-        let mrnIndex = identifier.type?.coding?.map(x => x.code).indexOf('MR');
+      let mrn: string | undefined = '';
+      for(const identifier of identifiers) {
+        const mrnIndex = identifier.type?.coding?.map(x => x.code).indexOf('MR');
         if(mrnIndex != undefined && mrnIndex != -1) {
           mrn = identifier.value;      
           break;
@@ -111,7 +111,7 @@ export class PatientListComponent {
   }
 
   getGivenName(name: HumanName[]) {
-    let officialIndex = name.map(x => x.use).indexOf('official');
+    const officialIndex = name.map(x => x.use).indexOf('official');
     if(officialIndex != -1) {
       return name[officialIndex].given;  
     }
@@ -124,7 +124,7 @@ export class PatientListComponent {
   }
 
   getFamilyName(name: HumanName[]) {
-    let officialIndex = name.map(x => x.use).indexOf('official');
+    const officialIndex = name.map(x => x.use).indexOf('official');
     if(officialIndex != -1) {
       return name[officialIndex].family;  
     }
@@ -138,7 +138,7 @@ export class PatientListComponent {
 
   showPatientViewDialog($event: Event, row: BundleEntry<Patient>) : void {
 
-    let patient = row.resource;
+    const patient = row.resource;
 
     this.dialog.open(PatientViewDialogComponent,
       {
@@ -172,7 +172,7 @@ export class PatientListComponent {
     //prevent the row from expanding
     $event.stopPropagation();
 
-    let patient = row.resource;
+    const patient = row.resource;
 
     if(patient) {
       this.dialog.open(PatientFormDialogComponent,
@@ -207,8 +207,8 @@ export class PatientListComponent {
     //prevent the row from expanding
     $event.stopPropagation();
 
-    let patient = row.resource;
-    let patientId = patient?.id ? patient.id : '';
+    const patient = row.resource;
+    const patientId = patient?.id ? patient.id : '';
 
     if(patient && patientId.length > 0) {
       this.dialog.open(DeleteItemDialogComponent,
@@ -220,7 +220,7 @@ export class PatientListComponent {
           }
         }).afterClosed().subscribe(res => {
           if (res) {
-            this.patientService.delete(patientId).subscribe(outcome => {
+            this.patientService.delete(patientId).subscribe(() => {
               this.getPatients(this.defaultLink);
               this.snackBar.open(`Successfully deleted the notification configuration for ${patient && patient.name ? patient.name[0]._given + ' ' +  patient.name[0].family : 'unknown'}`, '', {
                 duration: 3500,
@@ -240,8 +240,6 @@ export class PatientListComponent {
         verticalPosition: 'top'
       });
     }
-
-    
   }
   
 }

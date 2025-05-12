@@ -7,10 +7,10 @@ import { isPlatformBrowser } from '@angular/common';
 })
 export class SessionStorageService {
   private sessionKey: CryptoKey | null = null;
-  private keyString: string = 'mySuperDuperSecureKey';
+  private keyString = 'mySuperDuperSecureKey';
   private iv: Uint8Array = new Uint8Array(16);
 
-  constructor(@Inject(PLATFORM_ID) private platformId: Object) {
+  constructor(@Inject(PLATFORM_ID) private platformId: object) {
     if (isPlatformBrowser(this.platformId)) {
       this.initKey();
     }
@@ -29,7 +29,7 @@ export class SessionStorageService {
     );
   }
 
-  async storeItem(key: string, value: any): Promise<void> {
+  async storeItem(key: string, value: string): Promise<void> {
     if (!isPlatformBrowser(this.platformId)) return;
     if (!this.sessionKey) await this.initKey();
 

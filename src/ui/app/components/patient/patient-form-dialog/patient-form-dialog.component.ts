@@ -1,7 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { CommonModule, KeyValue } from '@angular/common';
 import { FormArray, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { CodeableConcept, Patient } from 'fhir/r4';
+import { CodeableConcept, ContactPoint, Patient } from 'fhir/r4';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
@@ -127,21 +127,21 @@ export class PatientFormDialogComponent implements OnInit {
 
     //add identifiers if any exist
     if(this.data.patient && this.data.patient.identifier != undefined && this.data.patient.identifier.length > 0) {
-      for(var identifier of this.data.patient.identifier) {
+      for(const identifier of this.data.patient.identifier) {
 
-        let identifierFormGroup = new FormGroup({
+        const identifierFormGroup = new FormGroup({
           type: new FormControl({}, Validators.required),
           system: new FormControl(identifier.system, Validators.required),
           value: new FormControl(identifier.value, Validators.required)
         });
     
         identifierFormGroup.get('type')?.valueChanges.subscribe(change => {
-          let concept: CodeableConcept = change as CodeableConcept;  
-          let systemValue: any = concept.coding ? concept.coding[0].system : '';
-          identifierFormGroup.get('system')?.setValue(systemValue);      
+          const concept: CodeableConcept = change as CodeableConcept;  
+          const systemValue: string | null = concept.coding ? concept.coding[0].system ?? null : null;
+          identifierFormGroup.get('system')?.setValue(systemValue);
         });
 
-        let codeableConceptIndex = this.identifierTypes.findIndex(x => x.value.text === identifier.type?.text);        
+        const codeableConceptIndex = this.identifierTypes.findIndex(x => x.value.text === identifier.type?.text);        
         if(codeableConceptIndex != -1) {
           identifierFormGroup.get('type')?.setValue(this.identifierTypes[codeableConceptIndex].value);
           identifierFormGroup.get('type')?.updateValueAndValidity();
@@ -154,9 +154,9 @@ export class PatientFormDialogComponent implements OnInit {
 
     //add telecoms if any exist
     if(this.data.patient && this.data.patient.telecom != undefined && this.data.patient.telecom.length > 0) {
-      for(var telecom of this.data.patient.telecom) {
+      for(const telecom of this.data.patient.telecom) {
 
-        let telecomFormGroup = new FormGroup({
+        const telecomFormGroup = new FormGroup({
           system: new FormControl(telecom.system, Validators.required),
           use: new FormControl(telecom.use, Validators.required),
           value: new FormControl(telecom.value, Validators.required)
@@ -243,7 +243,7 @@ export class PatientFormDialogComponent implements OnInit {
     this.telecomForms.updateValueAndValidity();
   }
   
-  compareTelecomTypes(object1: any, object2: any) {
+  compareTelecomTypes(object1: ContactPoint, object2: ContactPoint) {
     return (object1 && object2) && object1 === object2;
   }
 
@@ -259,9 +259,9 @@ export class PatientFormDialogComponent implements OnInit {
     });
 
     identifierFormGroup.get('type')?.valueChanges.subscribe(change => {
-      let concept: CodeableConcept = change as CodeableConcept;  
-      let systemValue: any = concept.coding ? concept.coding[0].system : '';
-      identifierFormGroup.get('system')?.setValue(systemValue);      
+      const concept: CodeableConcept = change as CodeableConcept;  
+      const systemValue: string | null = concept.coding ? concept.coding[0].system ?? null : null;
+      identifierFormGroup.get('system')?.setValue(systemValue);
     });
 
     this.identifierForms.push(identifierFormGroup);
@@ -273,8 +273,8 @@ export class PatientFormDialogComponent implements OnInit {
     this.identifierForms.updateValueAndValidity();
   }
   
-  compareIdentifierTypes(object1: any, object2: any) {
-    return (object1 && object2) && object1.coding[0].code === object2.coding[0].code;
+  compareIdentifierTypes(object1: CodeableConcept, object2: CodeableConcept): boolean {
+    return !!(object1?.coding && object1.coding.length > 0 && object2?.coding && object2.coding.length > 0) && object1.coding[0].system === object2.coding[0].system;
   }
 
   // validateEmailAddress(email: string) {

@@ -1,5 +1,5 @@
 
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { MatDialogModule, MatDialog } from '@angular/material/dialog';
 import { HttpClient } from '@angular/common/http';
 import { ClientDTO } from '@/lib/models/client';
@@ -33,7 +33,7 @@ type ClientListResponse = ClientDTO[] | { message: string };
     MatTooltipModule
   ],
 })
-export class EditClientsComponent {
+export class EditClientsComponent implements OnInit {
 
   clients: ClientDTO[] = [];
   displayedColumns: string[] = [ 'select', 'fhirBaseUrl', 'grantTypes', 'scopesRequested', 'scopesGranted'];

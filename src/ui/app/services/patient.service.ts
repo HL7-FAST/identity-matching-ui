@@ -2,8 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
-import { Bundle, Patient, Resource, Parameters } from 'fhir/r4';
-import { environment } from '@/ui/environments/environment';
+import { Bundle, Patient, Parameters, OperationOutcome, OperationOutcomeIssue } from 'fhir/r4';
 
 @Injectable({
   providedIn: 'root'
@@ -29,7 +28,7 @@ export class PatientService {
 
     return this.http.get<Bundle<Patient>>(`${requestUrl}`)
     .pipe(
-      tap(_ => console.log(`fetched audit logs.`)),
+      tap(() => console.log(`fetched audit logs.`)),
       map((response: Bundle<Patient>) => {        
         return response;
       }),
@@ -37,33 +36,33 @@ export class PatientService {
     )
   }
 
-  create(patient: Patient) : Observable<any> {    
-    return this.http.post<any>(`${this.baseApiUrl}/Patient`, patient)
+  create(patient: Patient) : Observable<Patient> {    
+    return this.http.post<Patient>(`${this.baseApiUrl}/Patient`, patient)
       .pipe(
-        tap(_ => console.log(`submit patient for creation`)),
-        map((response: any) => {
+        tap(() => console.log(`submit patient for creation`)),
+        map((response: Patient) => {
           return response;
         }),
         catchError(this.handleError)
       );
   }
 
-  update(patient: Patient) : Observable<any> {
-    return this.http.put<any>(`${this.baseApiUrl}/Patient/${patient.id}`, patient)
+  update(patient: Patient) : Observable<Patient> {
+    return this.http.put<Patient>(`${this.baseApiUrl}/Patient/${patient.id}`, patient)
       .pipe(
-        tap(_ => console.log(`submit patient for update`)),
-        map((response: any) => {
+        tap(() => console.log(`submit patient for update`)),
+        map((response: Patient) => {
           return response;
         }),
         catchError(this.handleError)
       );
   }
 
-  delete(patientId: string) : Observable<any> {
-    return this.http.delete<any>(`${this.baseApiUrl}/Patient/${patientId}`)
+  delete(patientId: string) : Observable<OperationOutcome> {
+    return this.http.delete<OperationOutcome>(`${this.baseApiUrl}/Patient/${patientId}`)
       .pipe(
-        tap(_ => console.log(`submit patient for deletion`)),
-        map((response: any) => {
+        tap(() => console.log(`submit patient for deletion`)),
+        map((response: OperationOutcome) => {
           return response;
         }),
         catchError(this.handleError)
@@ -73,8 +72,8 @@ export class PatientService {
   match(parameters: Parameters) : Observable<Bundle> {
     return this.http.post<Bundle>(`${this.baseApiUrl}/Patient/$idi-match`, parameters)
     .pipe(
-      tap(_ => console.log(`submit patient for deletion`)),
-      map((response: any) => {
+      tap(() => console.log(`submit patient for match`)),
+      map((response: Bundle) => {
         return response;
       }),
       catchError(this.handleError)
@@ -87,7 +86,7 @@ export class PatientService {
       errorMessage = `An error occured: ${err.error.message}`;
     }
     else if (err.error instanceof Object && err.error.issue instanceof Array) {
-      errorMessage = (err.error.issue || []).filter((issue: any) => issue.severity === 'error').map((issue: any) => issue.diagnostics).join('\n');
+      errorMessage = (err.error.issue || []).filter((issue: OperationOutcomeIssue) => issue.severity === 'error').map((issue: OperationOutcomeIssue) => issue.diagnostics).join('\n');
     }
     else {
       errorMessage = `Server returned code: ${err.status}, error message is: ${err.message}`;

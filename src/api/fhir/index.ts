@@ -1,7 +1,8 @@
 import { getCurrentClient } from '@/lib/utils/client';
 import { getBaseUrl } from '@/lib/utils/http';
 import { getAccessToken } from '@/lib/utils/udap';
-import { Request, Router } from 'express';
+import { NextFunction, Request, Response, Router } from 'express';
+import { BundleLink } from 'fhir/r4';
 import {
   createProxyMiddleware,
   fixRequestBody,
@@ -10,10 +11,11 @@ import {
 import { parseStringPromise } from 'xml2js';
 
 export const fhirRouter = Router();
+export type FhirProxyRequest = Request & { targetFhirUrl?: string };
 
 fhirRouter.use(
   '/{*splat}',
-  async (req, res, next) => {
+  async (req: FhirProxyRequest, res: Response, next: NextFunction) => {
     let fhirBaseUrl = req.session.fhirServer;
 
     // If the request has the x-ignore-client header, don't try to get the client from the session
@@ -49,7 +51,7 @@ fhirRouter.use(
     }
 
     // Attach the target URL to the request object for use in the proxy
-    (req as any).targetFhirUrl =
+    (req).targetFhirUrl =
       fhirBaseUrl + req.originalUrl.replace('/api/fhir', '');
     next();
   },
@@ -57,15 +59,15 @@ fhirRouter.use(
     changeOrigin: true,
     // pathRewrite: (path, req) => path,
     ignorePath: true,
-    router: (req) => {
-      console.log('Proxying FHIR request to', (req as any).targetFhirUrl);
-      return (req as any).targetFhirUrl;
+    router: (req: FhirProxyRequest) => {
+      console.log('Proxying FHIR request to', (req).targetFhirUrl);
+      return (req).targetFhirUrl;
     },
     selfHandleResponse: true,
     on: {
       proxyReq: fixRequestBody,
       proxyRes: responseInterceptor(
-        async (responseBuffer, proxyRes, req, res) => {
+        async (responseBuffer, proxyRes, req) => {
           if (proxyRes.statusCode !== 200) {
             // Handle non-200 responses here
             console.error(
@@ -94,7 +96,7 @@ fhirRouter.use(
               parsed = JSON.parse(responseText);
               if (parsed.link) {
                 // Modify the link URL(s) to point to this api proxy endpoint for paging
-                parsed.link = parsed.link.map((link: any) => {
+                parsed.link = parsed.link.map((link: BundleLink) => {
                   console.log(
                     'Link:',
                     link.url,

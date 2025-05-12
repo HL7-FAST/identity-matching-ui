@@ -38,8 +38,8 @@ export class CapabilityStatementComponent implements OnInit {
   capabilityStatement!: CapabilityStatement;
   
   patientResourceCapabilities!: CapabilityStatementRestResource;
-  patientEverythingOperationCapability: boolean = false;
-  patientFastIdentityMatchingOperationCapability: boolean = false;
+  patientEverythingOperationCapability = false;
+  patientFastIdentityMatchingOperationCapability = false;
 
   constructor(private resourceService: ResourceService, private snackBar: MatSnackBar, private clipboard: Clipboard) {}
   
@@ -104,7 +104,7 @@ export class CapabilityStatementComponent implements OnInit {
 
   get patientReourceCapabilities() : CapabilityStatementRestResource | null {
     if(this.capabilityStatement && this.capabilityStatement.rest) {
-      let patientResourceCapabilities = this.capabilityStatement.rest[0].resource?.filter(x => x.type === "Patient");
+      const patientResourceCapabilities = this.capabilityStatement.rest[0].resource?.filter(x => x.type === "Patient");
       if(patientResourceCapabilities != undefined) {
         this.patientResourceCapabilities = patientResourceCapabilities[0];    
         return this.patientResourceCapabilities;    
@@ -139,7 +139,7 @@ export class CapabilityStatementComponent implements OnInit {
   }
 
   serverHasOperation(operations: CapabilityStatementRestResourceOperation[], operationName: string) : boolean {
-    let operationIndex = operations.findIndex(x => x.name === operationName);
+    const operationIndex = operations.findIndex(x => x.name === operationName);
     return operationIndex == -1 ? false : true;
   }
 

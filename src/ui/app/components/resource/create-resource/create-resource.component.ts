@@ -35,7 +35,7 @@ import { Resource } from 'fhir/r4';
 export class CreateResourceComponent implements OnInit {  
   resourceForm!: FormGroup;
   resourceTypes: string[] = this.resourceService.AvailableResources;
-  resource: any;
+  resource: Resource | undefined;
 
   constructor(private resourceService: ResourceService, private snackBar: MatSnackBar) {}
 
@@ -62,11 +62,11 @@ export class CreateResourceComponent implements OnInit {
   createResource() {
     if(this.resourceForm.valid) {
 
-      let newResource = <Resource>JSON.parse(this.resourceContentControl.value);  
+      const newResource = JSON.parse(this.resourceContentControl.value) as Resource;  
       newResource.id = this.resourceIdControl.value;      
 
       this.resourceService.createResource(this.resourceTypeControl.value, newResource).subscribe(data => {
-        this.resource = data;
+        this.resource = data as Resource;
   
         this.snackBar.open(`${this.resourceTypeControl.value} resource was created.`, '', {
           duration: 3500,

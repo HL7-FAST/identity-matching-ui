@@ -45,7 +45,7 @@ import { UserProfileComponent } from "./components/user-profile/user-profile.com
 export class AppComponent {
   title = 'fhir-client';
   userProfile: UserProfile | undefined;
-  showMenuText: boolean = true;
+  showMenuText = true;
 
   breakpointObserver = inject(BreakpointObserver);
   dialog = inject(MatDialog);

@@ -9,7 +9,7 @@ import { SessionStorageService } from './session.service';
 })
 export class UserProfileService {
 
-  private profileKey: string = "user-profile";
+  private profileKey = "user-profile";
   private _userProfileUpdatedSubject = new Subject<UserProfile>();
   userProfileUpdated = this._userProfileUpdatedSubject.asObservable();
 

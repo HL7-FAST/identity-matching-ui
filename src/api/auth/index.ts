@@ -1,9 +1,8 @@
 import { getCurrentClient, handleNoClient } from '@/lib/utils/client';
 import { getBaseUrl } from '@/lib/utils/http';
-import { CLIENT_ASSERTION_TYPE, getAccessToken, getClientAssertion } from '@/lib/utils/udap';
+import { getAccessToken } from '@/lib/utils/udap';
 import { Router } from 'express';
 import crypto from 'crypto';
-import { loadCertificate } from '@/lib/utils/cert';
 
 export const authRouter = Router();
 
@@ -134,7 +133,7 @@ authRouter.get('/callback', async (req, res) => {
   }
 
   try {
-    const token = await getAccessToken(req, client);
+    await getAccessToken(req, client);
   } catch (error) {
     console.error('Error getting access token:', error);
     res.status(500).json({ message: 'Error getting access token', error });
