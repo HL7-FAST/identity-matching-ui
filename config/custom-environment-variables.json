@@ -1,6 +1,7 @@
 {
   "env": "NODE_ENV",
   "port": "PORT",
+  "appUrl": "APP_URL",
   "defaultFhirBaseUrl": "DEFAULT_FHIR_BASE_URL",
   "defaultCertPass": "DEFAULT_CERT_PASS",
   "authSecret": "AUTH_SECRET",

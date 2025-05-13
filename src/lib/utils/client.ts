@@ -8,6 +8,7 @@ import { eq } from "drizzle-orm";
 import { getClientsByConfig } from "@/db/client";
 import { encryptCertificatePassword, getGeneratedCertificate, getSubjectAltName, loadCertificate } from "./cert";
 import { registerClient } from "./udap";
+import { trimSlash } from "./http";
 
 export function clientConfigToClientRequest(config: ClientConfig): UdapClientRequest {
 
@@ -23,7 +24,7 @@ export function clientConfigToClientRequest(config: ClientConfig): UdapClientReq
   };
 
   if (config.grantTypes.includes('authorization_code')) {
-    request.redirectUris = config.redirectUris ?? [appConfig.appUrl + '/api/auth/callback'];
+    request.redirectUris = config.redirectUris ?? [trimSlash(appConfig.appUrl) + '/api/auth/callback'];
     request.logoUri = config.logoUri || 'https://build.fhir.org/icon-fhir-16.png';
   }
 
