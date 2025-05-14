@@ -4,8 +4,8 @@ const defaultFhirBaseUrl = 'http://localhost:8080/fhir';
 
 module.exports = {
   env: 'development',
-  port: defaultAppPort,
-  appUrl: `http://localhost:${defaultAppPort}`,
+  port: process.env.PORT ?? defaultAppPort,
+  appUrl: `http://localhost${ (process.env.PORT ?? defaultAppPort) == 80 ? '' : ':' + (process.env.PORT ?? defaultAppPort) }`,
   defaultFhirBaseUrl: defaultFhirBaseUrl,
   defaultCertPass: 'udap-test',
   authSecret: 'secret_key_that_should_be_changed',
