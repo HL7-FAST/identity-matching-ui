@@ -1,0 +1,43 @@
+@use '@angular/material' as mat;
+@use '../styles/hl7-blue-theme-colors.scss' as hl7Blue;
+@include mat.elevation-classes();
+@include mat.app-background();
+
+$my-primary: mat.m2-define-palette(hl7Blue.$hl7-blue-primary, 700, 500, 300);
+$my-accent: mat.m2-define-palette(hl7Blue.$hl7-blue-accent, 600, 400, 200);
+// $my-warn: mat.define-palette(hl7Blue.$hl7-blue-warn, 400);
+
+$hl7-blue-theme: mat.m2-define-light-theme((
+    color: (
+      primary: $my-primary,
+      accent: $my-accent,
+      // warn: $my-warn
+    )
+  ));
+
+// @include mat.all-component-themes($hl7-blue-theme);
+
+.hl7-blue {
+  @include mat.all-component-colors($hl7-blue-theme);
+}
+
+.hl7-blue .mat-mdc-checkbox.auth-bypass-cb .mdc-form-field {
+  color: #FFFFFF;
+}
+
+$my-primary-dark: mat.m2-define-palette(hl7Blue.$hl7-blue-primary, 900, 700, 500);
+$my-accent-dark: mat.m2-define-palette(hl7Blue.$hl7-blue-accent, 900, 700, 500);
+//$my-warn-dark: mat.define-palette(hl7Blue.$hl7-blue-warn, 900);
+
+
+$hl7-blue-dark-theme: mat.m2-define-dark-theme((
+    color: (
+      primary: $my-primary-dark,
+      accent: $my-accent-dark,
+      //warn: $my-warn-dark
+    )
+  ));
+
+.hl7-blue-dark {
+  @include mat.all-component-colors($hl7-blue-dark-theme);
+}

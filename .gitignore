@@ -40,4 +40,9 @@ testem.log
 # System files
 .DS_Store
 Thumbs.db
-src/app/config/auth-code-flow.config.ts
+
+
+.env
+*.db
+*.sqlite
+config/local.*

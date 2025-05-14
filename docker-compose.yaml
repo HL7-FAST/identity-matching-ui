@@ -3,3 +3,19 @@ services:
     build: .
     ports:
       - 80:80
+    # useful if also running a local FHIR server that uses localhost for auth
+    # network_mode: host
+    environment:
+      # useful when running a local auth server with self-signed certs
+      - NODE_TLS_REJECT_UNAUTHORIZED=0
+
+      # unique secret can be generated with`openssl rand -base64 32`
+      - AUTH_SECRET=NN1sSrt7LOekmZQ+rzy1UUoIpTnNrm8UBz94L4Cqyts=
+
+      # if not using local FHIR and auth servers, set to production to use the hosted FAST servers
+      # - NODE_ENV=production
+
+      # can also override full config with NODE_CONFIG
+      # Reference: https://github.com/node-config/node-config/wiki/Command-Line-Overrides
+      # - NODE_CONFIG={"authSecret":"actual_secret_key_here"}
+      
