@@ -1,6 +1,6 @@
 import { getCurrentClient, handleNoClient } from '@/lib/utils/client';
 import { getBaseUrl } from '@/lib/utils/http';
-import { getAccessToken } from '@/lib/utils/udap';
+import { getAccessToken, getNewAccessToken } from '@/lib/utils/udap';
 import { Router } from 'express';
 import crypto from 'crypto';
 
@@ -204,4 +204,28 @@ authRouter.get('/token', async (req, res) => {
   } else {
     res.status(401).json({ message: 'Unauthorized' });
   }
+});
+
+
+/**
+ * Refresh the current access token for the current session.
+ */
+authRouter.get('/refresh', async (req, res) => {
+
+  const client = await getCurrentClient(req, false);
+  if (!client) {
+    handleNoClient(req, res);
+    return;
+  }
+
+  const oldToken = req.session.currentToken;
+
+  const newToken = await getNewAccessToken(req, client);
+  
+  res.status(200).json({
+    oldToken,
+    newToken,
+    check: oldToken !== newToken,
+  });
+
 });

@@ -1,4 +1,4 @@
-import { P12Certificate, UdapClientRequest, UdapMetadata, UdapRegistration, UdapRegistrationRequest, UdapRegistrationResponse, UdapSoftwareStatement, UdapX509Header } from "../models/auth";
+import { GrantType, P12Certificate, UdapClientRequest, UdapMetadata, UdapRegistration, UdapRegistrationRequest, UdapRegistrationResponse, UdapSoftwareStatement, UdapX509Header } from "../models/auth";
 import { Client, ClientInsert } from "../models/client";
 import * as forge from "node-forge";
 import jwt from "jsonwebtoken";
@@ -7,6 +7,7 @@ import { db } from "@/db";
 import { clientsTable } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import { Request } from "express";
+import { createClient } from "./client";
 
 
 
@@ -262,7 +263,14 @@ export async function getAccessToken(req: Request, client: Client): Promise<stri
 }
 
 
-export async function getNewAccessToken(req: Request, client: Client): Promise<string> {
+/**
+ * Gets a new access token for the given client.  Only returns the new token, does not set the token in the session.
+ * @param req Incoming express request
+ * @param client Client to get the access token for
+ * @param isRetry If true, this is a retry after an invalid client error
+ * @returns Auth token
+ */
+export async function getNewAccessToken(req: Request, client: Client, isRetry = false): Promise<string> {
 
   console.log("Getting new access token for client:", client.clientId);
 
@@ -301,7 +309,31 @@ export async function getNewAccessToken(req: Request, client: Client): Promise<s
   });
 
   if (!tokenResponse.ok) {
-    throw new Error(`Failed to get token: ${tokenResponse.statusText}`);
+
+    // we have already retried once, so throw an error
+    if (isRetry) {
+      throw new Error(`Failed to get token: ${tokenResponse.statusText}`);
+    }
+
+    const tokenJson = await tokenResponse.json();
+
+    // if the error is invalid_client, try to register the client again
+    if (tokenJson.error === "invalid_client") {
+
+      console.error("Invalid client. Attempting to register client again.");
+      
+      client = await createClient({
+        fhirServer: client.fhirBaseUrl,
+        grantTypes: client.grantTypes.split(" ") as GrantType[],
+        scopes: client.scopesRequested,
+        redirectUris: client.redirectUris?.split(" ")
+      });
+
+      // retry the request
+      return getNewAccessToken(req, client, true);
+
+    }
+
   }
 
   const tokenJson = await tokenResponse.json();
