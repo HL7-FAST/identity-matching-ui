@@ -6,6 +6,7 @@ import drizzleConfig from 'drizzle.config';
 import { createClient } from '@/lib/utils/client';
 import { isMainModule } from '@angular/ssr/node';
 import { isDevMode } from '@angular/core';
+import { ClientConfig } from '@/lib/models/client';
 
 export const db = getDatabase();
 
@@ -16,6 +17,34 @@ export function getDatabase(): LibSQLDatabase {
   }
 
   return drizzle(':memory:');
+}
+
+/**
+ * Retry client creation with configurable attempts and delay
+ */
+async function createClientWithRetry(client: ClientConfig): Promise<void> {
+
+  const maxAttempts = appConfig.clientCreationRetry.maxAttempts || 10;
+  const delay = appConfig.clientCreationRetry.delay || 5000;
+
+  let lastError: unknown;
+  
+  for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+    try {
+      await createClient(client);
+      return;
+    } catch (error) {
+      lastError = error;
+      
+      if (attempt < maxAttempts) {
+        console.log(`Client creation failed for ${client.fhirServer} (attempt ${attempt}/${maxAttempts}), retrying in ${delay}ms...`);
+        await new Promise(resolve => setTimeout(resolve, delay));
+      }
+    }
+  }
+  
+  // If we get here, all attempts failed
+  throw lastError;
 }
 
 export async function initDatabase() {
@@ -30,14 +59,15 @@ export async function initDatabase() {
   // create default clients
   console.log('Creating default clients...');
   console.time('Default client initialization complete.');
+  console.log('Default clients:', appConfig.defaultClients);
   for (const client of (appConfig.defaultClients || [])) {
 
     try {
-      await createClient(client);
+      await createClientWithRetry(client);
     }
     catch (error) {
       console.error(
-        `Error creating client for ${client.fhirServer}:`,
+        `Failed to create client for ${client.fhirServer} after all retry attempts:`,
         error
       );
     }

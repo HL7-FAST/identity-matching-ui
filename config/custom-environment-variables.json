@@ -7,5 +7,10 @@
   "authSecret": "AUTH_SECRET",
   "database": {
     "url": "DATABASE_URL"
-  }
+  },
+  "clientCreationRetry": {
+    "maxAttempts": "CLIENT_CREATION_RETRY_MAX_ATTEMPTS",
+    "delay": "CLIENT_CREATION_RETRY_DELAY"
+  },
+  "certGenerationEndpoint": "CERT_GENERATION_ENDPOINT"
 }

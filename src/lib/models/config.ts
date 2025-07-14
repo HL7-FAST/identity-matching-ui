@@ -16,4 +16,11 @@ export interface AppConfig {
   defaultClients: ClientConfig[];
   certGenerationEndpoint: string;
 
+  clientCreationRetry: {
+    // maximum number of attempts to create a client
+    maxAttempts: number;
+    // delay between retries in milliseconds
+    delay: number;
+  };
+
 }
