@@ -1,5 +1,7 @@
 # Identity Matching Client
 
+[![Build Status](https://ci.hl7.org/api/badges/HL7-FAST/identity-matching-ui/status.svg)](https://ci.hl7.org/HL7-FAST/identity-matching-ui)
+
 This is an Angular 19 client for the the [Identity Matching Server RI.](https://github.com/HL7-FAST/identity-matching)
 
 ## Foundry
