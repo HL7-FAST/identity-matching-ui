@@ -6,7 +6,7 @@ import drizzleConfig from 'drizzle.config';
 import { createClient } from '@/lib/utils/client';
 import { isMainModule } from '@angular/ssr/node';
 import { isDevMode } from '@angular/core';
-import { ClientConfig } from '@/lib/models/client';
+import { Client, ClientConfig } from '@/lib/models/client';
 
 export const db = getDatabase();
 
@@ -22,7 +22,7 @@ export function getDatabase(): LibSQLDatabase {
 /**
  * Retry client creation with configurable attempts and delay
  */
-async function createClientWithRetry(client: ClientConfig): Promise<void> {
+async function createClientWithRetry(client: ClientConfig): Promise<Client> {
 
   const maxAttempts = appConfig.clientCreationRetry.maxAttempts || 10;
   const delay = appConfig.clientCreationRetry.delay || 5000;
@@ -31,8 +31,8 @@ async function createClientWithRetry(client: ClientConfig): Promise<void> {
   
   for (let attempt = 1; attempt <= maxAttempts; attempt++) {
     try {
-      await createClient(client);
-      return;
+      const createdClient = await createClient(client);
+      return createdClient;
     } catch (error) {
       lastError = error;
       
@@ -55,15 +55,20 @@ export async function initDatabase() {
     migrationsFolder: drizzleConfig.out || 'drizzle',
   });
   console.timeEnd('Database migrations complete.');
+}
 
+export async function createDefaultClients(): Promise<Client[]> {
   // create default clients
   console.log('Creating default clients...');
   console.time('Default client initialization complete.');
   console.log('Default clients:', appConfig.defaultClients);
+
+  const createdClients: Client[] = [];
   for (const client of (appConfig.defaultClients || [])) {
 
     try {
-      await createClientWithRetry(client);
+      const createdClient = await createClientWithRetry(client);
+      createdClients.push(createdClient);
     }
     catch (error) {
       console.error(
@@ -73,6 +78,7 @@ export async function initDatabase() {
     }
   }
   
-  console.timeEnd('Default client initialization complete.');
-
+  console.timeEnd(`Default client initialization complete.`);
+  console.log(`Created ${createdClients.length} default clients.`);
+  return createdClients;
 }

@@ -116,7 +116,7 @@ export async function createClient(client: ClientConfig): Promise<Client> {
 
 export function getCurrentFhirServerUrl(req: Request): string {
   // Should use the current server from the session if available
-  if (req.session.fhirServer) {
+  if (req.session?.fhirServer) {
     return req.session.fhirServer;
   }
 
@@ -135,7 +135,7 @@ export function getCurrentFhirServerUrl(req: Request): string {
 export async function getCurrentClient(req: Request, returnDefault = false, preferGrantType: 'authorization_code'|'client_credentials' = 'client_credentials'): Promise<Client | null> {
 
   // Get the client from the session
-  const id = req.session.currentClient;
+  const id = req.session?.currentClient;
   
   let client: Client | null = null;
   

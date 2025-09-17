@@ -14,7 +14,7 @@ clientRouter.get('/list', async (req, res) => {
 });
 
 clientRouter.get('/current', async (req, res) => {
-  const clientId = req.session.currentClient;
+  const clientId = req.session?.currentClient;
   if (!clientId) {
     res.json({ message: 'No client selected' });
     return;

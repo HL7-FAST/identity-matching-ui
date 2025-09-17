@@ -16,7 +16,7 @@ import { fileURLToPath } from 'url';
 import { apiRouter } from './api';
 
 import { createRequire } from 'module';
-import { initDatabase } from '@/db';
+import { createDefaultClients, initDatabase } from '@/db';
 import { isDevMode } from '@angular/core';
 const require = createRequire(import.meta.url);
 
@@ -57,12 +57,22 @@ if (isMainModule(import.meta.url) || isDevMode()) {
   /**
    * Session management
    */
-  const SQLiteStore = require('connect-sqlite3')(session);
-  server.use(session({
-    store: new SQLiteStore({
-      db: appConfig.database.url.replace('file:', ''),
-      table: 'sessions',
+  const KnexSessionStoreFactory = require('connect-session-knex');
+  const KnexSessionStore = typeof KnexSessionStoreFactory === 'function'
+    ? KnexSessionStoreFactory(session)
+    : (KnexSessionStoreFactory?.ConnectSessionKnexStore ?? KnexSessionStoreFactory);
+  const knexConstructor = require('knex');
+  const sessionStore = new KnexSessionStore({
+    knex: knexConstructor({
+      client: "better-sqlite3",
+      connection: {
+        filename: appConfig.database.url.replace('file:', '')
+      },
     }),
+    cleanupInterval: 0, // disable session cleanup
+  });
+  server.use(session({
+    store: sessionStore,
     secret: appConfig.authSecret,
     resave: false,
     saveUninitialized: false,
@@ -73,6 +83,18 @@ if (isMainModule(import.meta.url) || isDevMode()) {
       maxAge: 60 * 60 * 1000,
     },
   }));
+}
+
+/**
+ * Helper to initialize default clients
+ */
+async function initDefaultClients(): Promise<void> {
+  try {
+    const clients = await createDefaultClients();
+    console.log(`Initialized ${clients?.length} default clients.`);
+  } catch (error) {
+    console.error('Error initializing default clients:', error);
+  }
 }
 
 
@@ -112,12 +134,24 @@ server.all('/{*splat}', async (req, res, next) => {
  * The server listens on the port defined by the `PORT` environment variable, or defaults to 4000.
  */
 if (isMainModule(import.meta.url)) {
-
   const port = appConfig.port || 4000;
-  server.listen(port, () => {
+  server.listen(port, async () => {
     console.log(`Node Express server listening on http://localhost:${port}`);
+    // Initialize default clients after server starts
+    await initDefaultClients();
   });
 }
+
+
+/**
+ * In dev mode initialize default clients as soon as possible without blocking module evaluation.
+ */
+if (isDevMode() && !isMainModule(import.meta.url)) {
+  setImmediate(async () => {
+    await initDefaultClients();
+  });
+}
+
 
 /**
  * Request handler used by the Angular CLI (for dev-server and during build) or Firebase Cloud Functions.
