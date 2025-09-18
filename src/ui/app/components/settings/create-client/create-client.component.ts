@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
@@ -17,7 +17,6 @@ import { Client } from '@/lib/models/client';
   selector: 'app-create-client',
   standalone: true,
   imports: [
-    CommonModule,
     ReactiveFormsModule,
     MatDialogModule,
     MatButtonModule,
@@ -26,7 +25,7 @@ import { Client } from '@/lib/models/client';
     MatSelectModule,
     MatChipsModule,
     MatIconModule
-  ],
+],
   templateUrl: './create-client.component.html',
   styleUrls: ['./create-client.component.scss']
 })

@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { CommonModule, KeyValue } from '@angular/common';
+import { KeyValue } from '@angular/common';
 import { FormArray, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CodeableConcept, ContactPoint, Patient } from 'fhir/r4';
 import { MatInputModule } from '@angular/material/input';
@@ -18,19 +18,18 @@ import { MatNativeDateModule } from '@angular/material/core';
 @Component({
     selector: 'app-patient-form-dialog',
     imports: [
-        CommonModule,
-        MatDialogModule,
-        MatButtonModule,
-        MatFormFieldModule,
-        MatSelectModule,
-        MatInputModule,
-        MatDatepickerModule,
-        MatNativeDateModule,
-        MatIconModule,
-        ReactiveFormsModule,
-        MatToolbarModule,
-        MatSnackBarModule
-    ],
+    MatDialogModule,
+    MatButtonModule,
+    MatFormFieldModule,
+    MatSelectModule,
+    MatInputModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatIconModule,
+    ReactiveFormsModule,
+    MatToolbarModule,
+    MatSnackBarModule
+],
     templateUrl: './patient-form-dialog.component.html',
     styleUrls: ['./patient-form-dialog.component.scss']
 })

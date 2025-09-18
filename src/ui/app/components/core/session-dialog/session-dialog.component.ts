@@ -1,5 +1,5 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatCardModule } from '@angular/material/card';
@@ -12,14 +12,13 @@ import { HttpClient } from '@angular/common/http';
 @Component({
     selector: 'app-session-dialog',
     imports: [
-        CommonModule,
-        MatButtonModule,
-        MatCardModule,
-        MatDialogModule,
-        MatIconModule,
-        MatSnackBarModule,
-        MatTooltipModule
-    ],
+    MatButtonModule,
+    MatCardModule,
+    MatDialogModule,
+    MatIconModule,
+    MatSnackBarModule,
+    MatTooltipModule
+],
     templateUrl: './session-dialog.component.html',
     styleUrls: ['./session-dialog.component.scss']
 })

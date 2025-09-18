@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { MatDialogModule, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -7,11 +7,10 @@ import { MatIconModule } from '@angular/material/icon';
 @Component({
     selector: 'app-delete-item-dialog',
     imports: [
-        CommonModule,
-        MatDialogModule,
-        MatButtonModule,
-        MatIconModule,
-    ],
+    MatDialogModule,
+    MatButtonModule,
+    MatIconModule
+],
     templateUrl: './delete-item-dialog.component.html',
     styleUrls: ['./delete-item-dialog.component.scss']
 })

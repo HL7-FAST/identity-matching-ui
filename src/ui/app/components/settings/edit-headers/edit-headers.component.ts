@@ -6,7 +6,7 @@ import { FormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
-import { CommonModule, isPlatformBrowser } from '@angular/common';
+import { isPlatformBrowser } from '@angular/common';
 import { MatInputModule } from '@angular/material/input';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { CustomHeader } from '@/lib/utils/http';
@@ -18,7 +18,6 @@ import { InfoCardComponent } from "../../core/info-card/info-card.component";
   templateUrl: './edit-headers.component.html',
   styleUrls: ['./edit-headers.component.scss'],
   imports: [
-    CommonModule,
     FormsModule,
     MatButtonModule,
     MatCardModule,

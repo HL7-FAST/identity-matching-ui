@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { FormsModule, ReactiveFormsModule, FormGroup, FormControl, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -16,19 +16,18 @@ import { ResourceService } from '@/ui/app/services/core/resource.service';
 @Component({
     selector: 'app-update-resource',
     imports: [
-        CommonModule,
-        FormsModule,
-        ReactiveFormsModule,
-        MatFormFieldModule,
-        MatSelectModule,
-        MatInputModule,
-        MatIconModule,
-        MatButtonModule,
-        MatTooltipModule,
-        MatToolbarModule,
-        MatCardModule,
-        MatSnackBarModule
-    ],
+    FormsModule,
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatSelectModule,
+    MatInputModule,
+    MatIconModule,
+    MatButtonModule,
+    MatTooltipModule,
+    MatToolbarModule,
+    MatCardModule,
+    MatSnackBarModule
+],
     templateUrl: './update-resource.component.html',
     styleUrls: ['./update-resource.component.scss']
 })

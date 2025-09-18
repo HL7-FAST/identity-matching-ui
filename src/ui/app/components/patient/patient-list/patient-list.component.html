@@ -1,53 +1,47 @@
 <div class="content">
 
-    <p>
-      <mat-toolbar class="page-header-bar" color="primary">
-        <span>Patients</span>
-        <button mat-mini-fab aria-label="Create a new patient dialog" matTooltip="Create Patient" (click)="showCreatePatientDialog()">
-          <mat-icon>add</mat-icon>
-        </button>
-      </mat-toolbar>
-    </p>
+  <p>
+    <mat-toolbar class="page-header-bar" color="primary">
+      <span>Patients</span>
+      <button mat-mini-fab aria-label="Create a new patient dialog" matTooltip="Create Patient" (click)="showCreatePatientDialog()">
+        <mat-icon>add</mat-icon>
+      </button>
+    </mat-toolbar>
+  </p>
 
-    <div class="table-container" *ngIf="patients && patients.length > 0; else no_patients_found">    
+  @if (patients && patients.length > 0) {
+    <div class="table-container">
       <table mat-table [dataSource]="patients">
-
         <!-- Id Column -->
         <ng-container matColumnDef="id">
           <th mat-header-cell *matHeaderCellDef> FHIR Id </th>
           <td mat-cell *matCellDef="let patient"> {{patient.resource.id}} </td>
         </ng-container>
-
         <!-- MRN Column -->
         <ng-container matColumnDef="mrn">
           <th mat-header-cell *matHeaderCellDef> MRN </th>
           <td mat-cell *matCellDef="let patient"> {{getMRN(patient.resource.identifier)}} </td>
         </ng-container>
-  
         <!-- Given Name Column -->
         <ng-container matColumnDef="givenName">
           <th mat-header-cell *matHeaderCellDef> Given Name </th>
           <td mat-cell *matCellDef="let patient"> {{getGivenName(patient.resource.name)}} </td>
         </ng-container>
-
-         <!-- Family Name Column -->
-         <ng-container matColumnDef="familyName">
+        <!-- Family Name Column -->
+        <ng-container matColumnDef="familyName">
           <th mat-header-cell *matHeaderCellDef> Family Name </th>
           <td mat-cell *matCellDef="let patient"> {{getFamilyName(patient.resource.name)}} </td>
         </ng-container>
-
-         <!-- Gender Column -->
-         <ng-container matColumnDef="gender">
+        <!-- Gender Column -->
+        <ng-container matColumnDef="gender">
           <th mat-header-cell *matHeaderCellDef> Gender </th>
           <td mat-cell *matCellDef="let patient"> {{patient.resource.gender}} </td>
         </ng-container>
-
         <!-- Birthdate Column -->
         <ng-container matColumnDef="birthDate">
           <th mat-header-cell *matHeaderCellDef> Birth Date </th>
           <td mat-cell *matCellDef="let patient"> {{patient.resource.birthDate | date : 'mediumDate'}} </td>
         </ng-container>
-
         <ng-container matColumnDef="actions">
           <th mat-header-cell *matHeaderCellDef aria-label="row actions">&nbsp;</th>
           <td mat-cell *matCellDef="let record">
@@ -59,25 +53,23 @@
             </button>
           </td>
         </ng-container>
-  
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="showPatientViewDialog($event, row)"></tr>
-  
-      </table>   
+      </table>
       <mat-paginator [length]="totalCount"
-                 [pageIndex]="pageNumber"
-                 [pageSize]="pageSize"
-                 [pageSizeOptions]="[5, 10, 20, 50]"
-                 (page)="pagedEvent($event)"                 
-                 aria-label="Select page of patients">
-      </mat-paginator>  
+        [pageIndex]="pageNumber"
+        [pageSize]="pageSize"
+        [pageSizeOptions]="[5, 10, 20, 50]"
+        (page)="pagedEvent($event)"
+        aria-label="Select page of patients">
+      </mat-paginator>
     </div>
-    <ng-template #no_patients_found>
-      <div class="no-results-found-container">
-        <span>No patients found.</span>
-      </div>    
-    </ng-template>
+  } @else {
+    <div class="no-results-found-container">
+      <span>No patients found.</span>
+    </div>
+  }
 
-    <!-- {{patientBundle | json}} -->
+  <!-- {{patientBundle | json}} -->
 
-</div>  
+</div>

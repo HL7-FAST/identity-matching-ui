@@ -11,30 +11,38 @@
           <mat-card-title>FHIR Server Status</mat-card-title>
         </mat-card-header>
         <mat-card-content>
-          
-          @if (serverStatuses && serverStatuses.length > 0) {          
-            <mat-nav-list>    
-              <mat-list-item *ngFor="let serverStatus of serverStatuses">
-                <mat-icon *ngIf="serverStatus.status === 'pending'" matListItemIcon color="info" matTooltip="Attempting to retrieve capability statement">pending</mat-icon>
-                <mat-icon *ngIf="serverStatus.status === 'offline'" matListItemIcon color="warn" matTooltip="Cannot retrieve capability statement">error</mat-icon>
-                <mat-icon *ngIf="serverStatus.status === 'online'" matListItemIcon color="primary" matTooltip="Server is online">check_circle_outline</mat-icon>
-                <a matListItemTitle href="{{ serverStatus.url }}" target="_blank">
-                  {{ serverStatus.url }}
-                  <button mat-icon-button>
-                    <mat-icon>open_in_new</mat-icon>
-                  </button>
-                </a>
-              </mat-list-item>
+
+          @if (serverStatuses && serverStatuses.length > 0) {
+            <mat-nav-list>
+              @for (serverStatus of serverStatuses; track serverStatus) {
+                <mat-list-item>
+                  @if (serverStatus.status === 'pending') {
+                    <mat-icon matListItemIcon color="info" matTooltip="Attempting to retrieve capability statement">pending</mat-icon>
+                  }
+                  @if (serverStatus.status === 'offline') {
+                    <mat-icon matListItemIcon color="warn" matTooltip="Cannot retrieve capability statement">error</mat-icon>
+                  }
+                  @if (serverStatus.status === 'online') {
+                    <mat-icon matListItemIcon color="primary" matTooltip="Server is online">check_circle_outline</mat-icon>
+                  }
+                  <a matListItemTitle href="{{ serverStatus.url }}" target="_blank">
+                    {{ serverStatus.url }}
+                    <button mat-icon-button>
+                      <mat-icon>open_in_new</mat-icon>
+                    </button>
+                  </a>
+                </mat-list-item>
+              }
             </mat-nav-list>
           }
           @else {
-            <p>No FHIR server currently configured.</p>
-          }
-    
-        </mat-card-content>
-      </mat-card>
-    </mat-grid-tile>
+          <p>No FHIR server currently configured.</p>
+        }
 
-  </mat-grid-list>
-  
+      </mat-card-content>
+    </mat-card>
+  </mat-grid-tile>
+
+</mat-grid-list>
+
 </div>

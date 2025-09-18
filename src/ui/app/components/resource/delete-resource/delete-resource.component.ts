@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { FormsModule, ReactiveFormsModule, FormGroup, FormControl, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -16,19 +16,18 @@ import { Resource } from 'fhir/r4';
 @Component({
     selector: 'app-delete-resource',
     imports: [
-        CommonModule,
-        FormsModule,
-        ReactiveFormsModule,
-        MatFormFieldModule,
-        MatSelectModule,
-        MatInputModule,
-        MatIconModule,
-        MatButtonModule,
-        MatTooltipModule,
-        MatToolbarModule,
-        MatCardModule,
-        MatSnackBarModule
-    ],
+    FormsModule,
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatSelectModule,
+    MatInputModule,
+    MatIconModule,
+    MatButtonModule,
+    MatTooltipModule,
+    MatToolbarModule,
+    MatCardModule,
+    MatSnackBarModule
+],
     templateUrl: './delete-resource.component.html',
     styleUrls: ['./delete-resource.component.scss']
 })

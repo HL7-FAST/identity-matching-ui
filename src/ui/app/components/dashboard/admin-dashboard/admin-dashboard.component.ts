@@ -1,5 +1,5 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatGridListModule } from '@angular/material/grid-list';
@@ -13,15 +13,14 @@ import { firstValueFrom } from 'rxjs';
 @Component({
     selector: 'app-admin-dashboard',
     imports: [
-        CommonModule,
-        MatButtonModule,
-        MatCardModule,
-        MatGridListModule,
-        MatIconModule,
-        MatListModule,
-        MatToolbarModule,
-        MatTooltipModule
-    ],
+    MatButtonModule,
+    MatCardModule,
+    MatGridListModule,
+    MatIconModule,
+    MatListModule,
+    MatToolbarModule,
+    MatTooltipModule
+],
     templateUrl: './admin-dashboard.component.html',
     styleUrls: ['./admin-dashboard.component.css']
 })
