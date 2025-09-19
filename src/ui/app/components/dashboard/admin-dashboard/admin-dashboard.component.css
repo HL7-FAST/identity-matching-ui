@@ -1,0 +1,14 @@
+mat-card {
+  background-color: var(--mat-sys-surface-container-low);
+  border-radius: 16px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+}
+
+mat-card-header {
+  color: var(--mat-sys-on-surface);
+}
+
+mat-card-title {
+  color: var(--mat-sys-on-surface);
+  font-weight: 500;
+}

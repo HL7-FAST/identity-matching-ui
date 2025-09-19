@@ -37,7 +37,7 @@ export class SessionStorageService {
     const data = enc.encode(value);
 
     const encrypted = await window.crypto.subtle.encrypt(
-      { name: 'AES-CBC', iv: this.iv },
+      { name: 'AES-CBC', iv: this.iv as BufferSource },
       this.sessionKey as CryptoKey,
       data
     );
@@ -59,7 +59,7 @@ export class SessionStorageService {
     const encryptedBytes = Uint8Array.from(atob(encryptedBase64), c => c.charCodeAt(0));
     try {
       const decrypted = await window.crypto.subtle.decrypt(
-        { name: 'AES-CBC', iv: this.iv },
+        { name: 'AES-CBC', iv: this.iv as BufferSource },
         this.sessionKey as CryptoKey,
         encryptedBytes
       );

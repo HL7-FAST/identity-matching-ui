@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule, KeyValue } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { FormArray, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -48,6 +48,11 @@ import { MatNativeDateModule } from '@angular/material/core';
     styleUrls: ['./patient-match.component.scss']
 })
 export class PatientMatchComponent implements OnInit {
+  private patientService = inject(PatientService);
+  private dialog = inject(MatDialog);
+  private snackBar = inject(MatSnackBar);
+  private clipboard = inject(Clipboard);
+
   patientForm!: FormGroup;
   matchResults!: Bundle;
   patients: BundleEntry<Patient>[] | undefined = [];
@@ -111,7 +116,6 @@ export class PatientMatchComponent implements OnInit {
     }
     }
   ];
-  constructor(private patientService: PatientService, private dialog: MatDialog, private snackBar: MatSnackBar, private clipboard: Clipboard) {}
   
   ngOnInit(): void {
     
@@ -355,7 +359,9 @@ export class PatientMatchComponent implements OnInit {
 
     this.dialog.open(PatientViewDialogComponent,
       {
-        width: '75%',
+        width: '85%',
+        maxWidth: '90rem',
+        minWidth: '50vw',
         data: { dialogTitle: `Patient record for ${patient && patient.name ? patient.name[0].given + ' ' +  patient.name[0].family : 'unknown'}`, patient: patient }
       });
   }

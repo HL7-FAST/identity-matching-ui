@@ -1,5 +1,5 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Observable, catchError } from 'rxjs';
 import { ErrorHandlingService } from './error-handling.service';
 import { CapabilityStatement, Resource } from 'fhir/r4';
@@ -8,14 +8,15 @@ import { CapabilityStatement, Resource } from 'fhir/r4';
   providedIn: 'root'
 })
 export class ResourceService {
+    private http = inject(HttpClient);
+    private errorHandler = inject(ErrorHandlingService);
+
     private baseApiUrl = '/api/fhir';
     
     private availableResources: string[] = [
         'Patient',
         'Organization'
     ];
-
-    constructor(private http: HttpClient, private errorHandler: ErrorHandlingService) {}
 
     get AvailableResources(): string[] {
         return this.availableResources;

@@ -36,7 +36,7 @@
 
 </mat-toolbar>
 <mat-drawer-container class="sidenav-container" autosize>
-  <mat-drawer #drawer mode="side" opened>
+  <mat-drawer #drawer mode="side" [opened]="true" [class.collapsed]="!showMenuText">
     <mat-nav-list>
       <a mat-list-item routerLink="" routerLinkActive="active">
         <mat-icon matListItemIcon [ngClass]="{'close-menu-icon' : !showMenuText}">dashboard</mat-icon>
@@ -58,37 +58,37 @@
         }
       </a>
 
-      <mat-accordion>
-        <mat-expansion-panel style="box-shadow: none">
-          <mat-expansion-panel-header style="margin-left: -8px">
-            <mat-panel-title> <mat-icon>category</mat-icon>&nbsp;Resource </mat-panel-title>
-          </mat-expansion-panel-header>
-          <a mat-list-item routerLink="view-resource" routerLinkActive="active">
-            <mat-icon matListItemIcon>search</mat-icon>
-            @if (showMenuText) {
-              <div class="side-nav-menu-title" matListItemTitle>View</div>
-            }
-          </a>
-          <a mat-list-item routerLink="create-resource" routerLinkActive="active">
-            <mat-icon matListItemIcon>add</mat-icon>
-            @if (showMenuText) {
-              <div class="side-nav-menu-title" matListItemTitle>Create</div>
-            }
-          </a>
-          <a mat-list-item routerLink="update-resource" routerLinkActive="active">
-            <mat-icon matListItemIcon>edit</mat-icon>
-            @if (showMenuText) {
-              <div class="side-nav-menu-title" matListItemTitle>Update</div>
-            }
-          </a>
-          <a mat-list-item routerLink="delete-resource" routerLinkActive="active">
-            <mat-icon matListItemIcon>delete_outline</mat-icon>
-            @if (showMenuText) {
-              <div class="side-nav-menu-title" matListItemTitle>Delete</div>
-            }
-          </a>
-        </mat-expansion-panel>
-      </mat-accordion>
+      @if (showMenuText) {
+        <mat-divider></mat-divider>
+        <h3 mat-subheader>Resource</h3>
+      }
+      
+      <a mat-list-item routerLink="view-resource" routerLinkActive="active">
+        <mat-icon matListItemIcon [ngClass]="{'close-menu-icon' : !showMenuText}">search</mat-icon>
+        @if (showMenuText) {
+          <div class="side-nav-menu-title" matListItemTitle>View Resource</div>
+        }
+      </a>
+      <a mat-list-item routerLink="create-resource" routerLinkActive="active">
+        <mat-icon matListItemIcon [ngClass]="{'close-menu-icon' : !showMenuText}">add</mat-icon>
+        @if (showMenuText) {
+          <div class="side-nav-menu-title" matListItemTitle>Create Resource</div>
+        }
+      </a>
+      <a mat-list-item routerLink="update-resource" routerLinkActive="active">
+        <mat-icon matListItemIcon [ngClass]="{'close-menu-icon' : !showMenuText}">edit</mat-icon>
+        @if (showMenuText) {
+          <div class="side-nav-menu-title" matListItemTitle>Update Resource</div>
+        }
+      </a>
+      <a mat-list-item routerLink="delete-resource" routerLinkActive="active">
+        <mat-icon matListItemIcon [ngClass]="{'close-menu-icon' : !showMenuText}">delete_outline</mat-icon>
+        @if (showMenuText) {
+          <div class="side-nav-menu-title" matListItemTitle>Delete Resource</div>
+        }
+      </a>
+
+      <mat-divider></mat-divider>
 
       <a mat-list-item routerLink="capability-statement" routerLinkActive="active">
         <mat-icon matListItemIcon [ngClass]="{'close-menu-icon' : !showMenuText}">description</mat-icon>

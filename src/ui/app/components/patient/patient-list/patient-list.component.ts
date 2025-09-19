@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
@@ -19,29 +19,35 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { DeleteItemDialogComponent } from '../../core/delete-item-dialog/delete-item-dialog.component';
 import { PatientViewDialogComponent } from '../patient-view-dialog/patient-view-dialog.component';
 import { PaginationMetadata } from '@/ui/app/models/pagination-metadata.model';
+import { MatCardModule } from "@angular/material/card";
 
 @Component({
     selector: 'app-patient-list',
     imports: [
-        CommonModule,
-        MatTableModule,
-        MatPaginatorModule,
-        MatExpansionModule,
-        FormsModule,
-        MatFormFieldModule,
-        MatSelectModule,
-        MatInputModule,
-        MatIconModule,
-        MatButtonModule,
-        MatTooltipModule,
-        MatToolbarModule,
-        MatDialogModule,
-        MatSnackBarModule
-    ],
+    CommonModule,
+    MatTableModule,
+    MatPaginatorModule,
+    MatExpansionModule,
+    FormsModule,
+    MatFormFieldModule,
+    MatSelectModule,
+    MatInputModule,
+    MatIconModule,
+    MatButtonModule,
+    MatTooltipModule,
+    MatToolbarModule,
+    MatDialogModule,
+    MatSnackBarModule,
+    MatCardModule
+],
     templateUrl: './patient-list.component.html',
     styleUrls: ['./patient-list.component.scss']
 })
 export class PatientListComponent {
+  private patientService = inject(PatientService);
+  private dialog = inject(MatDialog);
+  private snackBar = inject(MatSnackBar);
+
   pageSize = 20;
   pageNumber = 0;
   totalCount = 0;
@@ -55,7 +61,7 @@ export class PatientListComponent {
   displayedColumns: string[] = [ "id", 'mrn', 'givenName', 'familyName', 'gender', 'birthDate', 'actions' ];
   dataSource = new MatTableDataSource<BundleEntry<Patient>>(this.patients);
 
-  constructor(private patientService: PatientService, private dialog: MatDialog, private snackBar: MatSnackBar) {
+  constructor() {
     this.getPatients(this.defaultLink);
   }
 
@@ -142,7 +148,9 @@ export class PatientListComponent {
 
     this.dialog.open(PatientViewDialogComponent,
       {
-        width: '75%',
+        width: '85%',
+        maxWidth: '90rem',
+        minWidth: '50vw',
         data: { dialogTitle: `Patient record for ${patient && patient.name ? patient.name[0].given + ' ' +  patient.name[0].family : 'unknown'}`, patient: patient }
       });
   }
@@ -151,7 +159,9 @@ export class PatientListComponent {
 
     this.dialog.open(PatientFormDialogComponent,
       {
-        width: '75%',
+        width: '85%',
+        maxWidth: '80rem',
+        minWidth: '50vw',
         data: { dialogTitle: `Create a new Patient`, patient: null }
       }).afterClosed().subscribe(res => {
         console.log(res)
@@ -177,7 +187,9 @@ export class PatientListComponent {
     if(patient) {
       this.dialog.open(PatientFormDialogComponent,
         {
-          width: '75%',
+          width: '85%',
+          maxWidth: '80rem',
+          minWidth: '50vw',
           data: { dialogTitle: `Edit patient record for ${patient && patient.name ? patient.name[0]._given + ' ' +  patient.name[0].family : 'unknown'}`, patient: patient }
         }).afterClosed().subscribe(res => {       
           if (res) {
@@ -213,7 +225,9 @@ export class PatientListComponent {
     if(patient && patientId.length > 0) {
       this.dialog.open(DeleteItemDialogComponent,
         {
-          width: '50%',
+          width: '70%',
+          maxWidth: '50rem',
+          minWidth: '30vw',
           data: {
             dialogTitle: 'Delete Patient',
             dialogMessage: `Are you sure you want to delete the patient record '${patientId}'?`

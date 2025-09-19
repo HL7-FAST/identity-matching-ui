@@ -1,26 +1,239 @@
+/* Core Material 3 styles */
+
 .page-header-bar span {
-  font-size: 1.5em;
-  font-weight: 300;
+  font-size: 1.5rem;
+  font-weight: 400;
+  color: var(--mat-sys-on-surface);
+}
+
+/* Prevent mat-grid-list from creating unnecessary scrollbars */
+.mat-grid-list {
+  height: auto;
+  max-height: 100%;
+}
+
+/* Enhanced dialog styling for Material 3 */
+.mat-mdc-dialog-container {
+  border-radius: 24px !important;
+  padding: 0 !important;
+}
+
+.mat-mdc-dialog-content {
+  padding: 24px !important;
+  margin: 0 !important;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+.mat-mdc-dialog-actions {
+  padding: 16px 24px 24px 24px !important;
+  margin: 0 !important;
+  min-height: auto !important;
+}
+
+/* Responsive dialog sizing */
+@media (max-width: 768px) {
+  .mat-mdc-dialog-container {
+    width: 95vw !important;
+    max-width: 95vw !important;
+    margin: 16px !important;
+  }
 }
 
 .no-results-found-container {
-  border: solid 1px rgba(0, 0, 0, 0.12);
+  border: 1px solid rgba(0,0,0,.15);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+  border-radius: 16px;
   display: flex;
   align-items: center;
   justify-content: center;
   height: 250px;
   width: 100%;
+  background-color: var(--mat-sys-surface-container-low);
+  color: var(--mat-sys-on-surface-variant);
 }
 
 .no-results-found-container span {
-    font-size: 1.5em;
-    font-weight: 300;
+  font-size: 1.25rem;
+  font-weight: 400;
 }
 
 .mat-column-actions mat-icon {
-  color: rgba(0,0,0,.50);
+  color: var(--mat-sys-on-surface-variant);
+}
+
+/* Default icon styling - should be visible */
+.mat-icon {
+  color: var(--mat-sys-on-surface-variant);
+}
+
+/* Icons in specific contexts */
+.mat-mdc-form-field .mat-icon {
+  color: var(--mat-sys-on-surface-variant);
+}
+
+/* Icon buttons should have proper icon colors */
+.mat-mdc-icon-button:not([color]) .mat-icon {
+  color: var(--mat-sys-on-surface-variant);
 }
 
 .form-actions {
-  margin-top: 2em;
+  margin-top: 2rem;
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+}
+
+/* Material 3 card styling */
+.mat-mdc-card {
+  border-radius: var(--mat-card-border-radius);
+  background-color: var(--mat-sys-surface-container-low);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+}
+
+/* Material 3 button styling */
+.mat-mdc-button,
+.mat-mdc-unelevated-button,
+.mat-mdc-raised-button {
+  border-radius: var(--mat-button-border-radius);
+  font-weight: 500;
+}
+
+/* Primary button styling - should have blue background with white text/icons */
+.mat-mdc-raised-button.mat-primary,
+.mat-mdc-unelevated-button.mat-primary,
+button[color="primary"] {
+  background-color: var(--mat-sys-primary) !important;
+  color: #ffffff !important;
+  
+  .mat-icon {
+    color: #ffffff !important;
+  }
+  
+  .mat-button-wrapper {
+    color: #ffffff !important;
+  }
+  
+  &:hover {
+    background-color: #005a94 !important;
+  }
+  
+  &:disabled {
+    background-color: rgba(0, 105, 170, 0.3) !important;
+    color: rgba(255, 255, 255, 0.7) !important;
+    
+    .mat-icon {
+      color: rgba(255, 255, 255, 0.7) !important;
+    }
+  }
+}
+
+.mat-mdc-fab {
+  border-radius: var(--mat-fab-border-radius);
+}
+
+/* Enhanced toolbar - only main app toolbar gets white text */
+.mat-toolbar {
+  background-color: var(--mat-sys-primary);
+  color: var(--mat-sys-on-primary);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+}
+
+/* Specific styling for primary colored toolbars only */
+.mat-toolbar.mat-primary {
+  background-color: var(--mat-sys-primary);
+  color: #ffffff;
+  
+  .mat-icon,
+  .mat-mdc-icon-button .mat-icon,
+  .mat-mdc-button,
+  .mat-button-wrapper,
+  span,
+  .toolbar-divider {
+    color: #ffffff !important;
+  }
+  
+  .mat-mdc-icon-button {
+    color: #ffffff !important;
+    
+    &:hover {
+      background-color: rgba(255, 255, 255, 0.08);
+    }
+  }
+  
+  .mat-mdc-button:hover {
+    background-color: rgba(255, 255, 255, 0.08);
+  }
+}
+
+/* Clean list styling */
+.mat-mdc-list-item {
+  border-radius: 12px;
+  margin-bottom: 4px;
+}
+
+.mat-mdc-list-item:hover {
+  background-color: var(--mat-sys-surface-container-high);
+}
+
+/* Clean table styling */
+.mat-mdc-table {
+  border-radius: 12px;
+  overflow: hidden;
+  background-color: var(--mat-sys-surface);
+}
+
+.mat-mdc-header-row {
+  background-color: var(--mat-sys-surface-container);
+}
+
+/* Form field improvements */
+.mat-mdc-form-field {
+  width: 100%;
+}
+
+.mat-mdc-text-field-wrapper {
+  border-radius: 8px;
+}
+
+/* Dialog improvements */
+.mat-mdc-dialog-container {
+  border-radius: 16px;
+}
+
+/* Menu improvements */
+.mat-mdc-menu-panel {
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Chip improvements */
+.mat-mdc-chip {
+  border-radius: 16px;
+}
+
+/* Progress bar improvements */
+.mat-mdc-progress-bar {
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+/* Scrollbar styling for webkit browsers */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--mat-sys-surface-variant);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--mat-sys-on-surface-variant);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--mat-sys-on-surface);
 }

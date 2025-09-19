@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
@@ -7,10 +7,10 @@ import { Bundle, Patient, Parameters, OperationOutcome, OperationOutcomeIssue } 
 @Injectable({
   providedIn: 'root'
 })
-export class PatientService { 
+export class PatientService {
+  private http = inject(HttpClient);
+ 
   private baseApiUrl = `/api/fhir`;
-
-  constructor(private http: HttpClient) { }
 
   list(queryString: string): Observable<Bundle<Patient>> {
 

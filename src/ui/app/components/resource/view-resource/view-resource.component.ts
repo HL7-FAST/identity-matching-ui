@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ResourceService } from '@/ui/app/services/core/resource.service';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -34,11 +34,13 @@ import { Resource } from 'fhir/r4';
     styleUrls: ['./view-resource.component.scss']
 })
 export class ViewResourceComponent implements OnInit {
+  private resourceService = inject(ResourceService);
+  private clipboard = inject(Clipboard);
+  private snackBar = inject(MatSnackBar);
+
   resourceForm!: FormGroup;
   resourceTypes: string[] = this.resourceService.AvailableResources;
   resource: Resource | undefined;
-
-  constructor(private resourceService: ResourceService, private clipboard: Clipboard, private snackBar: MatSnackBar) {}
   
   ngOnInit(): void {
     this.resourceForm = new FormGroup({

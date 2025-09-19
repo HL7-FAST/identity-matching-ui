@@ -1,43 +1,190 @@
 @use '@angular/material' as mat;
-@use '../styles/hl7-blue-theme-colors.scss' as hl7Blue;
-@include mat.elevation-classes();
-@include mat.app-background();
+@use 'sass:map';
 
-$my-primary: mat.m2-define-palette(hl7Blue.$hl7-blue-primary, 700, 500, 300);
-$my-accent: mat.m2-define-palette(hl7Blue.$hl7-blue-accent, 600, 400, 200);
-// $my-warn: mat.define-palette(hl7Blue.$hl7-blue-warn, 400);
+// Material 3 theme definition
+$_palettes: (
+  primary: (
+    0: #000000,
+    10: #001d36,
+    20: #003258,
+    25: #003f6b,
+    30: #004c7f,
+    35: #005a94,
+    40: #0069aa,
+    50: #2889c4,
+    60: #4ba9df,
+    70: #6fc4fb,
+    80: #94ddff,
+    90: #c9edff,
+    95: #e5f6ff,
+    98: #f6fbff,
+    99: #fcfcff,
+    100: #ffffff,
+  ),
+  secondary: (
+    0: #000000,
+    10: #0f1b2b,
+    20: #243041,
+    25: #2f3b4c,
+    30: #3b4758,
+    35: #475364,
+    40: #535f71,
+    50: #6c788b,
+    60: #8591a5,
+    70: #a0acc0,
+    80: #bbc7db,
+    90: #d7e3f7,
+    95: #e5f1ff,
+    98: #f6fbff,
+    99: #fcfcff,
+    100: #ffffff,
+  ),
+  tertiary: (
+    0: #000000,
+    10: #1d1135,
+    20: #34264c,
+    25: #403157,
+    30: #4c3d63,
+    35: #59496f,
+    40: #66557c,
+    50: #806e96,
+    60: #9b87b0,
+    70: #b6a2cb,
+    80: #d2bde6,
+    90: #eed9ff,
+    95: #f8ebff,
+    98: #fef7ff,
+    99: #fffbff,
+    100: #ffffff,
+  ),
+  neutral: (
+    0: #000000,
+    4: #0d0e11,
+    6: #121316,
+    10: #1b1c20,
+    12: #1f2024,
+    17: #292a2d,
+    20: #30313b,
+    22: #343540,
+    24: #383945,
+    25: #3a3b46,
+    30: #464751,
+    35: #52535d,
+    40: #5e5f6a,
+    50: #777883,
+    60: #90919d,
+    70: #ababb7,
+    80: #c7c6d2,
+    87: #dadae6,
+    90: #e3e2ee,
+    92: #e9e8f4,
+    94: #eff0fc,
+    95: #f2f1fd,
+    96: #f5f4ff,
+    98: #faf9ff,
+    99: #fefcff,
+    100: #ffffff,
+  ),
+  neutral-variant: (
+    0: #000000,
+    10: #181c22,
+    20: #2d3137,
+    25: #383c42,
+    30: #43474e,
+    35: #4f535a,
+    40: #5b5f66,
+    50: #73777f,
+    60: #8d9199,
+    70: #a7abb4,
+    80: #c3c6cf,
+    90: #dfe2eb,
+    95: #edf0f9,
+    98: #f8faff,
+    99: #fcfcff,
+    100: #ffffff,
+  ),
+  error: (
+    0: #000000,
+    10: #410002,
+    20: #690005,
+    25: #7e0007,
+    30: #93000a,
+    35: #a80710,
+    40: #ba1a1a,
+    50: #de3730,
+    60: #ff5449,
+    70: #ff897d,
+    80: #ffb4ab,
+    90: #ffdad6,
+    95: #ffedea,
+    98: #fff8f7,
+    99: #fffbff,
+    100: #ffffff,
+  ),
+);
 
-$hl7-blue-theme: mat.m2-define-light-theme((
-    color: (
-      primary: $my-primary,
-      accent: $my-accent,
-      // warn: $my-warn
-    )
-  ));
+$_rest: (
+  secondary: map.get($_palettes, secondary),
+  neutral: map.get($_palettes, neutral),
+  neutral-variant: map.get($_palettes, neutral-variant),
+  error: map.get($_palettes, error),
+);
+$_primary: map.merge(map.get($_palettes, primary), $_rest);
+$_tertiary: map.merge(map.get($_palettes, tertiary), $_rest);
 
-// @include mat.all-component-themes($hl7-blue-theme);
+$hl7-blue-theme: mat.define-theme((
+  color: (
+    theme-type: light,
+    primary: $_primary,
+    tertiary: $_tertiary,
+  ),
+  typography: (
+    use-system-variables: true,
+  ),
+  density: (
+    scale: 0,
+  )
+));
 
-.hl7-blue {
-  @include mat.all-component-colors($hl7-blue-theme);
+@include mat.core();
+@include mat.all-component-themes($hl7-blue-theme);
+
+// Override specific components for better Material 3 experience
+:root {
+  // Primary colors
+  --mat-sys-primary: #0069aa;
+  --mat-sys-on-primary: #ffffff;
+  --mat-sys-primary-container: #c9edff;
+  --mat-sys-on-primary-container: #001d36;
+  
+  // Surface colors
+  --mat-sys-surface: #fcfcff;
+  --mat-sys-on-surface: #1b1c20;
+  --mat-sys-surface-variant: #dfe2eb;
+  --mat-sys-on-surface-variant: #43474e;
+  
+  // Background
+  --mat-sys-background: #fcfcff;
+  --mat-sys-on-background: #1b1c20;
+  
+  // Custom elevation and border radius for M3 look
+  --mat-card-border-radius: 16px;
+  --mat-button-border-radius: 20px;
+  --mat-fab-border-radius: 16px;
+  
+  // Toolbar specific overrides for better contrast
+  --mat-toolbar-title-text-color: #ffffff;
+  --mat-toolbar-button-text-color: #ffffff;
+  
+  // Button overrides for proper primary styling
+  --mdc-filled-button-container-color: #0069aa;
+  --mdc-filled-button-label-text-color: #ffffff;
+  --mdc-filled-button-icon-color: #ffffff;
+  --mdc-protected-button-container-color: #0069aa;
+  --mdc-protected-button-label-text-color: #ffffff;
 }
 
-.hl7-blue .mat-mdc-checkbox.auth-bypass-cb .mdc-form-field {
+// Auth bypass checkbox specific styling
+.mat-mdc-checkbox.auth-bypass-cb .mdc-form-field {
   color: #FFFFFF;
-}
-
-$my-primary-dark: mat.m2-define-palette(hl7Blue.$hl7-blue-primary, 900, 700, 500);
-$my-accent-dark: mat.m2-define-palette(hl7Blue.$hl7-blue-accent, 900, 700, 500);
-//$my-warn-dark: mat.define-palette(hl7Blue.$hl7-blue-warn, 900);
-
-
-$hl7-blue-dark-theme: mat.m2-define-dark-theme((
-    color: (
-      primary: $my-primary-dark,
-      accent: $my-accent-dark,
-      //warn: $my-warn-dark
-    )
-  ));
-
-.hl7-blue-dark {
-  @include mat.all-component-colors($hl7-blue-dark-theme);
 }

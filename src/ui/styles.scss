@@ -1,77 +1,125 @@
-/* You can add global styles to this file, and also import other style files */
-@use 'styles/custom-themes/hl7-blue-theme.scss' as hl7Blue;
+/* Global styles for Material 3 design - theme imported via angular.json */
+@use 'styles/core.scss';
+@use 'styles/custom-themes/hl7-blue-theme.scss';
 
-/* Make height account for the 64px fixed position toolbar */
-html, body { height: calc(100vh - 64px); }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
-
-:root {
-  --primary-color: #153d77;
-  --secondary-color: #6c757d;
-  --white-color: #fff;
-  --success-color: #198754;
-  --error-color: #dc3545;
-  --info-color: #398eb4;
-  --background-color: #f2f2f2;
+html, body { 
+  height: 100vh; 
+  margin: 0; 
+  overflow: hidden; /* Prevent body scrollbars */
+  font-family: 'Roboto', system-ui, -apple-system, sans-serif;
+  background-color: var(--mat-sys-background);
+  color: var(--mat-sys-on-background);
 }
 
-.info-snackbar {
-  color: white;
-  --mdc-snackbar-container-color: var(--info-color) !important;
+/* Ensure root element also doesn't scroll */
+#root {
+  height: 100vh;
+  overflow: hidden;
+}
 
-  .mat-simple-snackbar-action {
-    color: white;
+/* Material 3 Design Tokens */
+:root {
+  --primary-color: var(--mat-sys-primary);
+  --on-primary-color: var(--mat-sys-on-primary);
+  --surface-color: var(--mat-sys-surface);
+  --on-surface-color: var(--mat-sys-on-surface);
+  --error-color: var(--mat-sys-error);
+  --success-color: #146c43;
+  --warning-color: #664d03;
+  --info-color: var(--mat-sys-primary);
+}
+
+/* Simplified snackbar styles */
+.info-snackbar {
+  --mdc-snackbar-container-color: var(--info-color);
+  --mdc-snackbar-supporting-text-color: white;
+  
+  .mat-mdc-snack-bar-action {
+    --mat-mdc-snack-bar-button-color: white;
   }
 }
 
 .success-snackbar {
-  color: white;
-  --mdc-snackbar-container-color: var(--success-color) !important;
-
-  .mat-simple-snackbar-action {
-    color: white;
+  --mdc-snackbar-container-color: var(--success-color);
+  --mdc-snackbar-supporting-text-color: white;
+  
+  .mat-mdc-snack-bar-action {
+    --mat-mdc-snack-bar-button-color: white;
   }
 }
 
 .error-snackbar {
-  max-width: max-content !important;
-  color: white;
-  --mdc-snackbar-container-color: var(--error-color) !important;
-  border-color: #f5c6cb;
-
-  .mat-simple-snackbar-action {
-    color: white;
-  }
-
-  .mdc-button__label {
-    color: white;
+  --mdc-snackbar-container-color: var(--error-color);
+  --mdc-snackbar-supporting-text-color: white;
+  
+  .mat-mdc-snack-bar-action {
+    --mat-mdc-snack-bar-button-color: white;
   }
 }
 
-.light-success-snackbar {
-  color: #155724;
-  --mdc-snackbar-container-color: #d4edda !important;
-
-  .mat-simple-snackbar-action {
-    color: darkgreen;
-  }
-}
-
-.light-error-snackbar {
-  color: #721c24;
-  --mdc-snackbar-container-color: #f8d7da !important;
-  border-color: #f5c6cb;
-
-  .mat-simple-snackbar-action {
-    color: darkred;
-  }
-}
-
-
+/* Content layout */
 .content {
-  margin: 2em;
+  margin: 2rem;
+  padding: 1rem;
 }
 
 .page-header-bar button {
   margin-left: auto;
+}
+
+/* High contrast fixes for primary color backgrounds - ONLY for toolbars */
+.mat-toolbar.mat-primary {
+  .mat-icon,
+  .mat-mdc-icon-button,
+  .mat-mdc-button,
+  span,
+  div {
+    color: #ffffff !important;
+  }
+  
+  .mat-mdc-icon-button:hover,
+  .mat-mdc-button:hover {
+    background-color: rgba(255, 255, 255, 0.08) !important;
+  }
+}
+
+/* Ensure proper contrast for Material icons in toolbars only */
+.mat-toolbar .mat-icon {
+  color: #ffffff !important;
+}
+
+/* Primary buttons should have blue background with white text/icons */
+.mat-mdc-raised-button[color="primary"],
+.mat-mdc-unelevated-button[color="primary"],
+.mat-mdc-button[color="primary"] {
+  background-color: var(--mat-sys-primary) !important;
+  color: #ffffff !important;
+  
+  .mat-icon {
+    color: #ffffff !important;
+  }
+  
+  .mdc-button__label {
+    color: #ffffff !important;
+  }
+}
+
+/* Ensure primary icon buttons outside toolbars have proper styling */
+.mat-mdc-icon-button[color="primary"]:not(.mat-toolbar .mat-mdc-icon-button) {
+  background-color: var(--mat-sys-primary);
+  color: #ffffff;
+  
+  .mat-icon {
+    color: #ffffff !important;
+  }
+}
+
+/* Fix for standalone icons with mat-primary class - they should be dark, not white */
+.mat-icon.mat-primary:not(.mat-toolbar .mat-icon):not(.mat-mdc-button .mat-icon):not(.mat-mdc-icon-button .mat-icon) {
+  color: var(--mat-sys-primary) !important;
+}
+
+/* General mat-icon styling - should be dark by default unless in specific contexts */
+.mat-icon:not(.mat-toolbar .mat-icon):not(.mat-mdc-raised-button .mat-icon):not(.mat-mdc-unelevated-button .mat-icon):not(.mat-mdc-icon-button .mat-icon) {
+  color: var(--mat-sys-on-surface) !important;
 }

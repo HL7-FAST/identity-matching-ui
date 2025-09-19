@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
@@ -13,6 +13,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatExpansionModule } from '@angular/material/expansion';
+import { firstValueFrom } from 'rxjs';
+import { SettingsService } from '../../services/settings.service';
 
 @Component({
     selector: 'app-capability-statement',
@@ -34,6 +36,11 @@ import { MatExpansionModule } from '@angular/material/expansion';
     styleUrls: ['./capability-statement.component.scss']
 })
 export class CapabilityStatementComponent implements OnInit {
+  private resourceService = inject(ResourceService);
+  private snackBar = inject(MatSnackBar);
+  private clipboard = inject(Clipboard);
+  private settingsService = inject(SettingsService);
+
   fhirServerForm!: FormGroup;
   capabilityStatement!: CapabilityStatement;
   
@@ -41,12 +48,22 @@ export class CapabilityStatementComponent implements OnInit {
   patientEverythingOperationCapability = false;
   patientFastIdentityMatchingOperationCapability = false;
 
-  constructor(private resourceService: ResourceService, private snackBar: MatSnackBar, private clipboard: Clipboard) {}
-  
-  ngOnInit(): void {
+  constructor() {
     this.fhirServerForm = new FormGroup({
       fhirSever: new FormControl('', Validators.required)
     });
+  }
+
+  async ngOnInit(): Promise<void> {
+
+    const client = await firstValueFrom(this.settingsService.currentClient$);
+    let fhirServer = '';
+    
+    if (client) {
+      fhirServer = client.fhirBaseUrl;
+    }
+
+    this.fhirServerControl.setValue(fhirServer);
   }
 
   get fhirServerControl() : FormControl {

@@ -131,7 +131,9 @@ export class EditClientsComponent implements OnInit {
   
   openCreateClientDialog(): void {
     const dialogRef = this.dialog.open(CreateClientComponent, {
-      width: '600px'
+      width: '80%',
+      maxWidth: '80rem',
+      minWidth: '50vw'
     });
 
     dialogRef.afterClosed().subscribe(result => {

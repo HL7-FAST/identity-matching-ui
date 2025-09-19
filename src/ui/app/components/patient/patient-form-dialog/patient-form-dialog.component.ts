@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { KeyValue } from '@angular/common';
 import { FormArray, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CodeableConcept, ContactPoint, Patient } from 'fhir/r4';
@@ -33,7 +33,15 @@ import { MatNativeDateModule } from '@angular/material/core';
     templateUrl: './patient-form-dialog.component.html',
     styleUrls: ['./patient-form-dialog.component.scss']
 })
-export class PatientFormDialogComponent implements OnInit { 
+export class PatientFormDialogComponent implements OnInit {
+  data = inject<{
+    dialogTitle: string;
+    patient: Patient;
+}>(MAT_DIALOG_DATA);
+  private dialogRef = inject<MatDialogRef<PatientFormDialogComponent>>(MatDialogRef);
+  private snackBar = inject(MatSnackBar);
+  private patientService = inject(PatientService);
+ 
   patientForm!: FormGroup;
   formMode!: FormMode;
 
@@ -93,13 +101,6 @@ export class PatientFormDialogComponent implements OnInit {
     }
     }
   ];
-
-  
-  constructor(
-    @Inject(MAT_DIALOG_DATA) public data: { dialogTitle: string, patient: Patient },
-    private dialogRef: MatDialogRef<PatientFormDialogComponent>, 
-    private snackBar: MatSnackBar, 
-    private patientService: PatientService) {}
 
   ngOnInit(): void {
 

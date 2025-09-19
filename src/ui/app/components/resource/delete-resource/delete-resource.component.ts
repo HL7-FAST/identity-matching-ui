@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 
 import { FormsModule, ReactiveFormsModule, FormGroup, FormControl, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -32,11 +32,12 @@ import { Resource } from 'fhir/r4';
     styleUrls: ['./delete-resource.component.scss']
 })
 export class DeleteResourceComponent implements OnInit {
+  private resourceService = inject(ResourceService);
+  private snackBar = inject(MatSnackBar);
+
   resourceForm!: FormGroup;
   resourceTypes: string[] = this.resourceService.AvailableResources;
   resource: Resource | undefined;
-
-  constructor(private resourceService: ResourceService, private snackBar: MatSnackBar) {}
   
   ngOnInit(): void {
     this.resourceForm = new FormGroup({

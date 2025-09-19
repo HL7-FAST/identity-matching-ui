@@ -23,13 +23,12 @@ import { HttpClient } from '@angular/common/http';
     styleUrls: ['./session-dialog.component.scss']
 })
 export class SessionDialogComponent implements OnInit {
+  private clipboard = inject(Clipboard);
+
 
   currentToken = '';
   snackBar = inject(MatSnackBar);
   http = inject(HttpClient);
-
-  constructor(private clipboard: Clipboard) {
-  }
 
   ngOnInit() {
 

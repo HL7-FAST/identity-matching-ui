@@ -1,4 +1,4 @@
-import { Component, Inject } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { Patient } from 'fhir/r4';
@@ -26,13 +26,19 @@ import { MatCardModule } from '@angular/material/card';
     styleUrls: ['./patient-view-dialog.component.scss']
 })
 export class PatientViewDialogComponent {
+  data = inject<{
+    dialogTitle: string;
+    patient: Patient;
+}>(MAT_DIALOG_DATA);
+  private dialogRef = inject<MatDialogRef<PatientViewDialogComponent>>(MatDialogRef);
+  private snackBar = inject(MatSnackBar);
+  private patientService = inject(PatientService);
+
   patient!: Patient;
 
-  constructor(
-    @Inject(MAT_DIALOG_DATA) public data: { dialogTitle: string, patient: Patient },
-    private dialogRef: MatDialogRef<PatientViewDialogComponent>, 
-    private snackBar: MatSnackBar, 
-    private patientService: PatientService) {
+  constructor() {
+      const data = this.data;
+
       this.patient = data.patient;
     }
     

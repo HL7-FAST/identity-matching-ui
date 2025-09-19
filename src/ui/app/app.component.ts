@@ -7,7 +7,6 @@ import { SessionDialogComponent } from './components/core/session-dialog/session
 import { RouterModule } from '@angular/router';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatListModule } from '@angular/material/list';
-import { MatExpansionModule } from '@angular/material/expansion';
 import { MatIconModule } from '@angular/material/icon';
 import { LoadingIndicatorComponent } from './components/core/loading-indicator/loading-indicator.component';
 import { MatToolbarModule } from '@angular/material/toolbar';
@@ -16,6 +15,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatDividerModule } from '@angular/material/divider';
 import { CurrentSettingsComponent } from "./components/settings/current-settings/current-settings.component";
 import { SettingsService } from './services/settings.service';
 import { UserProfileComponent } from "./components/user-profile/user-profile.component";
@@ -29,7 +29,6 @@ import { UserProfileComponent } from "./components/user-profile/user-profile.com
     RouterModule,
     MatToolbarModule,
     MatTooltipModule,
-    MatExpansionModule,
     MatButtonModule,
     MatDialogModule,
     MatSidenavModule,
@@ -37,6 +36,7 @@ import { UserProfileComponent } from "./components/user-profile/user-profile.com
     MatListModule,
     MatMenuModule,
     MatNativeDateModule,
+    MatDividerModule,
     LoadingIndicatorComponent,
     CurrentSettingsComponent,
     UserProfileComponent
@@ -67,6 +67,10 @@ export class AppComponent {
   showSessionDialog($event: Event) {
     $event.stopPropagation();
 
-    this.dialog.open(SessionDialogComponent, { minWidth: '50vw' });
+    this.dialog.open(SessionDialogComponent, { 
+      width: '80%',
+      maxWidth: '70rem',
+      minWidth: '40vw'
+    });
   }
 }
